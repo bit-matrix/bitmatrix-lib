@@ -2,13 +2,6 @@ const path = require("path");
 const os = require("os");
 const IS_BROWSER = os.platform() === "browser";
 
-let crypto;
-if (IS_BROWSER) {
-  crypto = window.crypto;
-} else {
-  crypto = require("crypto");
-}
-
 module.exports = (env) => {
   // eslint-disable-next-line no-console
   // console.log(env.mod);
@@ -16,7 +9,7 @@ module.exports = (env) => {
   return {
     // mode: env.mod,
     entry: {
-      scriptWiz: "./src/index.ts",
+      bitMatrixLib: "./src/index.ts",
     },
     output: {
       filename: "index.js",
@@ -37,9 +30,6 @@ module.exports = (env) => {
     },
     resolve: {
       extensions: [".ts", ".js", ".d.ts"],
-    },
-    externals: {
-      crypto: "crypto",
-    },
+    }
   };
 };
