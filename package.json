@@ -35,6 +35,5 @@
   },
   "homepage": "https://github.com/bit-matrix/bit-matrix-lib#readme",
   "dependencies": {
-    "@script-wiz/wiz-data": "^0.1.1"
   }
 }
