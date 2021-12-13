@@ -2,7 +2,6 @@
   "name": "@bit-matrix/lib",
   "version": "0.0.0",
   "description": "",
-  "main": "index.ts",
   "scripts": {
     "wp-umd": "npx webpack --mode production --config webpack.config.umd.js",
     "wp-umd-dev": "npx webpack --mode development --config webpack.config.umd.js",
