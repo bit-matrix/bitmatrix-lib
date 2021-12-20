@@ -24,13 +24,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bit-matrix/bit-matrix-lib.git"
+    "url": "git+https://github.com/bit-matrix/bitmatrix-lib.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/bit-matrix/bit-matrix-lib/issues"
+    "url": "https://github.com/bit-matrix/bitmatrix-lib/issues"
   },
-  "homepage": "https://github.com/bit-matrix/bit-matrix-lib#readme",
+  "homepage": "https://github.com/bit-matrix/bitmatrix-lib#readme",
   "dependencies": {}
 }
