@@ -3,12 +3,10 @@
   "version": "0.0.0",
   "description": "",
   "scripts": {
-    "wp-umd": "npx webpack --mode production --config webpack.config.umd.js",
-    "wp-umd-dev": "npx webpack --mode development --config webpack.config.umd.js",
     "wp-common": "npx webpack --mode production --config webpack.config.js",
     "wp-common-dev": "npx webpack --mode development --config webpack.config.js",
-    "wp": "yarn wp-umd && yarn wp-common",
-    "wpdev": "yarn wp-umd-dev && yarn wp-common-dev",
+    "wp": "yarn wp-common",
+    "wpdev": "yarn wp-common-dev",
     "test": "jest"
   },
   "devDependencies": {
@@ -34,6 +32,5 @@
     "url": "https://github.com/bit-matrix/bit-matrix-lib/issues"
   },
   "homepage": "https://github.com/bit-matrix/bit-matrix-lib#readme",
-  "dependencies": {
-  }
+  "dependencies": {}
 }
