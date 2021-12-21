@@ -3,14 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.tokenToLBtcSwap = exports.tokenToLbtcSwapAmountCalculate = exports.lbtcToTokenSwapAmountCalculate = exports.lbtcToTokenSwap = void 0;
 var env_1 = require("./env");
 var helper_1 = require("./utils/helper");
-var lbtcToTokenSwap = function (lbtcAmount, baseFee, serviceFee, commitmentTxFee, orderingFee) {
+var lbtcToTokenSwap = function (lbtcAmount, fundingOutputAdress, quoteAssetId, baseFee, serviceFee, commitmentTxFee, orderingFee) {
     // lbtc satoshi amount with slippage
     var fundingOutput1Value = lbtcAmount;
     var fundingOutput2Value = baseFee + serviceFee + commitmentTxFee + orderingFee;
-    var fundingOutput1Address = "tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg";
-    var fundingOutput2Address = "tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg";
-    var fundingOutput1AssetId = "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49";
-    var fundingOutput2AssetId = "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49";
+    var fundingOutput1Address = fundingOutputAdress;
+    var fundingOutput2Address = fundingOutputAdress;
+    var fundingOutput1AssetId = quoteAssetId;
+    var fundingOutput2AssetId = quoteAssetId;
     return {
         fundingOutput1Value: fundingOutput1Value,
         fundingOutput2Value: fundingOutput2Value,
@@ -22,10 +22,10 @@ var lbtcToTokenSwap = function (lbtcAmount, baseFee, serviceFee, commitmentTxFee
 };
 exports.lbtcToTokenSwap = lbtcToTokenSwap;
 // all amounts satoshi
-var lbtcToTokenSwapAmountCalculate = function (lbtcAmount, slippage) {
+var lbtcToTokenSwapAmountCalculate = function (lbtcAmount, slippage, minRemainingSupply) {
     // validation
-    if (lbtcAmount < 1000) {
-        console.log("Lbtc amount must greater or at least minimum equal 1000");
+    if (lbtcAmount < Number(minRemainingSupply)) {
+        console.log("Lbtc amount must greater or at least minimum equal ".concat(minRemainingSupply));
         return 0;
     }
     // step1   (lp fee calculate)
@@ -35,17 +35,17 @@ var lbtcToTokenSwapAmountCalculate = function (lbtcAmount, slippage) {
     // step 3 (poolLbtcLiquidity  + lbtcAmountSubFee)
     var lbtcPoolTotalAmount = env_1.poolLbtcLiquidity + lbtcAmountSubFee;
     // step 4 (lbtPoolTotalAmount with rate 16)
-    var lbtcPoolTotalAmountWithRate = (0, helper_1.div)(lbtcPoolTotalAmount, 16);
+    var lbtcPoolTotalAmountWithRate = (0, helper_1.div)(lbtcPoolTotalAmount, env_1.quotePrecisionCoefficient);
     // step 5 (lbtPoolAmount  with rate 16)
-    var lbtcPoolAmountWithRate = (0, helper_1.div)(env_1.poolLbtcLiquidity, 16);
+    var lbtcPoolAmountWithRate = (0, helper_1.div)(env_1.poolLbtcLiquidity, env_1.quotePrecisionCoefficient);
     // step 6 (usdtPoolAmount  with rate 2 million)
-    var usdtPoolAmountWithRate = (0, helper_1.div)(env_1.poolTokenLiquidity, 2000000);
+    var usdtPoolAmountWithRate = (0, helper_1.div)(env_1.poolTokenLiquidity, env_1.tokenPrecisionCoefficient);
     // step 7 (mul step 5 , step6)
     var poolRateMul = lbtcPoolAmountWithRate * usdtPoolAmountWithRate;
     // step 8 (div step7  step4)
     var poolRateMulWithLbtcPoolRate = (0, helper_1.div)(poolRateMul, lbtcPoolTotalAmountWithRate);
     // step 9  (step8 * 2 million)
-    var poolRateMulWithLbtcPoolRateMul = poolRateMulWithLbtcPoolRate * 2000000;
+    var poolRateMulWithLbtcPoolRateMul = poolRateMulWithLbtcPoolRate * env_1.tokenPrecisionCoefficient;
     // step 10  (Pool Token liquidity - 9.step)
     var finalTokenPoolLiquidity = env_1.poolTokenLiquidity - poolRateMulWithLbtcPoolRateMul;
     //step11 ( step 10 - 1milion)
@@ -56,10 +56,10 @@ var lbtcToTokenSwapAmountCalculate = function (lbtcAmount, slippage) {
     return finalAmount;
 };
 exports.lbtcToTokenSwapAmountCalculate = lbtcToTokenSwapAmountCalculate;
-var tokenToLbtcSwapAmountCalculate = function (usdtAmount, slippage) {
+var tokenToLbtcSwapAmountCalculate = function (usdtAmount, slippage, minTokenValue) {
     // validation
-    if (usdtAmount < 50000000) {
-        console.log("Usdt amount must greater or at least minimum equal 50000000");
+    if (usdtAmount < Number(minTokenValue)) {
+        console.log("Usdt amount must greater or at least minimum equal ".concat(minTokenValue));
         return 0;
     }
     // step1 (fee calculation)
@@ -69,17 +69,17 @@ var tokenToLbtcSwapAmountCalculate = function (usdtAmount, slippage) {
     // step3 (total usd pool amount poolUsdtLiquidity + step2)
     var totalUsdtLiquidity = env_1.poolTokenLiquidity + usdtAmountWithoutFee;
     // step4  (usdt Liquidty rate calculation step3 % 2mn)
-    var usdtLiquidtyRate = (0, helper_1.div)(totalUsdtLiquidity, 2000000);
+    var usdtLiquidtyRate = (0, helper_1.div)(totalUsdtLiquidity, env_1.tokenPrecisionCoefficient);
     // step5 (Pool L-BTC liquidity % 16)
-    var x = (0, helper_1.div)(env_1.poolLbtcLiquidity, 16);
+    var x = (0, helper_1.div)(env_1.poolLbtcLiquidity, env_1.quotePrecisionCoefficient);
     // step6 (Pool Token liquidity % 2MN)
-    var y = (0, helper_1.div)(env_1.poolTokenLiquidity, 2000000);
+    var y = (0, helper_1.div)(env_1.poolTokenLiquidity, env_1.tokenPrecisionCoefficient);
     // step 7 (constant x*y = k step5*step6)
     var constant = x * y;
     // step 8 (constant * usdtLiquidtyRate  step7*step4
     var constantRate = (0, helper_1.div)(constant, usdtLiquidtyRate);
     //step 9 (step 8 * 16)
-    var lbtcAmount = constantRate * 16;
+    var lbtcAmount = constantRate * env_1.quotePrecisionCoefficient;
     //step 10 (poolLbtcLiquidity - step9)
     var remainingLbtcAmount = env_1.poolLbtcLiquidity - lbtcAmount;
     var slippageAmount = (0, helper_1.div)(remainingLbtcAmount, slippage);
@@ -87,15 +87,15 @@ var tokenToLbtcSwapAmountCalculate = function (usdtAmount, slippage) {
     return finalAmount;
 };
 exports.tokenToLbtcSwapAmountCalculate = tokenToLbtcSwapAmountCalculate;
-var tokenToLBtcSwap = function (usdtAmount, baseFee, serviceFee, commitmentTxFee, orderingFee) {
+var tokenToLBtcSwap = function (usdtAmount, fundingOutputAdress, quoteAssetId, tokenAssetId, baseFee, serviceFee, commitmentTxFee, orderingFee) {
     var fundingOutput1Value = usdtAmount;
     var fundingOutput2Value = baseFee + serviceFee + commitmentTxFee + orderingFee;
-    var fundingOutput1Address = "tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg";
-    var fundingOutput2Address = "tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg";
+    var fundingOutput1Address = fundingOutputAdress;
+    var fundingOutput2Address = fundingOutputAdress;
     // token asset id
-    var fundingOutput1AssetId = "213cbc4df83abc230852526b1156877f60324da869f0affaee73b6a6a32ad025";
+    var fundingOutput1AssetId = tokenAssetId;
     // lbtc asset id
-    var fundingOutput2AssetId = "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49";
+    var fundingOutput2AssetId = quoteAssetId;
     return {
         fundingOutput1Value: fundingOutput1Value,
         fundingOutput2Value: fundingOutput2Value,
