@@ -3,10 +3,7 @@
   "version": "0.0.0",
   "description": "",
   "scripts": {
-    "wp-common": "npx webpack --mode production --config webpack.config.js",
-    "wp-common-dev": "npx webpack --mode development --config webpack.config.js",
-    "wp": "yarn wp-common",
-    "wpdev": "yarn wp-common-dev",
+    "build": "tsc",
     "test": "jest"
   },
   "devDependencies": {
@@ -18,9 +15,7 @@
     "babel-loader": "^8.0.6",
     "jest": "^26.6.3",
     "ts-loader": "^8.0.18",
-    "typescript": "^4.2.3",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.12"
+    "typescript": "^4.2.3"
   },
   "repository": {
     "type": "git",
