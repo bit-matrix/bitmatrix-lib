@@ -25,7 +25,7 @@ export const lbtcToTokenCreateCommitmentTx = (
 
   const callData = targetAssetId + methodCall + publicKey + calculatedAmountWithSlippage64 + orderingFee.hex;
 
-  const commitmentOutputTapscriptTemplate = "630401000000b200c86920" + targetAssetId + "876700c86920" + targetAssetId + "879169043c000000b221" + publicKey + "ac68";
+  const commitmentOutputTapscriptTemplate = "20" + hexLE(targetAssetId) + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
 
   const constLength = "020000000102";
 
