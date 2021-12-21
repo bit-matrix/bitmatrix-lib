@@ -11,6 +11,7 @@
     "@babel/core": "^7.7.7",
     "@babel/preset-env": "^7.7.7",
     "@babel/preset-typescript": "^7.13.0",
+    "@types/crypto-js": "^4.0.2",
     "@types/jest": "^26.0.23",
     "babel-loader": "^8.0.6",
     "jest": "^26.6.3",
@@ -28,6 +29,8 @@
   },
   "homepage": "https://github.com/bit-matrix/bitmatrix-lib#readme",
   "dependencies": {
-    "@bitmatrix/models": "^0.0.2"
+    "@bitmatrix/models": "^0.0.2",
+    "@script-wiz/lib-core": "^0.0.17",
+    "axios": "^0.24.0"
   }
 }
