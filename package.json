@@ -32,5 +32,7 @@
     "url": "https://github.com/bit-matrix/bitmatrix-lib/issues"
   },
   "homepage": "https://github.com/bit-matrix/bitmatrix-lib#readme",
-  "dependencies": {}
+  "dependencies": {
+    "@bitmatrix/models": "^0.0.2"
+  }
 }
