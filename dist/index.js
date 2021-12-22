@@ -11,9 +11,6 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -22,10 +19,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fundingTx = void 0;
-__exportStar(require("./requests/decodeRawTransaction"), exports);
-__exportStar(require("./requests/getBmConfigs"), exports);
-__exportStar(require("./requests/getPools"), exports);
-__exportStar(require("./requests/sendRawTransaction"), exports);
-exports.fundingTx = __importStar(require("./fundingTx"));
+exports.commitmentTx = exports.fundingTx = exports.api = void 0;
+var fundingTx = __importStar(require("./fundingTx"));
+exports.fundingTx = fundingTx;
+var commitmentTx = __importStar(require("./commitmentTx"));
+exports.commitmentTx = commitmentTx;
+var api = __importStar(require("./api"));
+exports.api = api;
 //# sourceMappingURL=index.js.map
