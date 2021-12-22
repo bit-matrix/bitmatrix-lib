@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const sendRawTransaction = (param: string) => {
+export const sendRawTransaction = async (param: string): Promise<string> => {
   return axios
     .post(
       "http://157.230.101.158:9485/rpc",
