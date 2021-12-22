@@ -2,7 +2,7 @@ import { lpFeeRate, poolLbtcLiquidity, poolTokenLiquidity, quotePrecisionCoeffic
 import { FundingOutput } from "./model/FundingOutput";
 import { div } from "./utils/helper";
 
-export const lbtcToTokenSwap = (
+export const lbtcToToken = (
   lbtcAmount: number,
   fundingOutputAdress: string,
   quoteAssetId: string,
@@ -32,9 +32,9 @@ export const lbtcToTokenSwap = (
 };
 
 // all amounts satoshi
-export const lbtcToTokenSwapAmountCalculate = (lbtcAmount: number, slippage: number, minRemainingSupply: string): number => {
+export const lbtcToTokenAmount = (lbtcAmount: number, slippage: number, minRemainingSupply: string): number => {
   // validation
-  if (lbtcAmount < Number(minRemainingSupply)) {
+  if (lbtcAmount <= Number(minRemainingSupply)) {
     console.log(`Lbtc amount must greater or at least minimum equal ${minRemainingSupply}`);
     return 0;
   }
@@ -80,9 +80,42 @@ export const lbtcToTokenSwapAmountCalculate = (lbtcAmount: number, slippage: num
   return finalAmount;
 };
 
-export const tokenToLbtcSwapAmountCalculate = (usdtAmount: number, slippage: number, minTokenValue: string): number => {
+export const tokenToLBtc = (
+  tokenAmount: number,
+  fundingOutputAdress: string,
+  quoteAssetId: string,
+  tokenAssetId: string,
+  baseFee: number,
+  serviceFee: number,
+  commitmentTxFee: number,
+  orderingFee: number
+): FundingOutput => {
+  const fundingOutput1Value = tokenAmount;
+
+  const fundingOutput2Value = baseFee + serviceFee + commitmentTxFee + orderingFee;
+
+  const fundingOutput1Address = fundingOutputAdress;
+  const fundingOutput2Address = fundingOutputAdress;
+
+  // token asset id
+  const fundingOutput1AssetId = tokenAssetId;
+
+  // lbtc asset id
+  const fundingOutput2AssetId = quoteAssetId;
+
+  return {
+    fundingOutput1Value,
+    fundingOutput2Value,
+    fundingOutput1Address,
+    fundingOutput2Address,
+    fundingOutput1AssetId,
+    fundingOutput2AssetId,
+  };
+};
+
+export const tokenToLbtcAmount = (usdtAmount: number, slippage: number, minTokenValue: string): number => {
   // validation
-  if (usdtAmount < Number(minTokenValue)) {
+  if (usdtAmount <= Number(minTokenValue)) {
     console.log(`Usdt amount must greater or at least minimum equal ${minTokenValue}`);
     return 0;
   }
@@ -122,36 +155,4 @@ export const tokenToLbtcSwapAmountCalculate = (usdtAmount: number, slippage: num
   const finalAmount = remainingLbtcAmount - slippageAmount;
 
   return finalAmount;
-};
-
-export const tokenToLBtcSwap = (
-  usdtAmount: number,
-  fundingOutputAdress: string,
-  quoteAssetId: string,
-  tokenAssetId: string,
-  baseFee: number,
-  serviceFee: number,
-  commitmentTxFee: number,
-  orderingFee: number
-): FundingOutput => {
-  const fundingOutput1Value = usdtAmount;
-
-  const fundingOutput2Value = baseFee + serviceFee + commitmentTxFee + orderingFee;
-
-  const fundingOutput1Address = fundingOutputAdress;
-  const fundingOutput2Address = fundingOutputAdress;
-
-  // token asset id
-  const fundingOutput1AssetId = tokenAssetId;
-  // lbtc asset id
-  const fundingOutput2AssetId = quoteAssetId;
-
-  return {
-    fundingOutput1Value,
-    fundingOutput2Value,
-    fundingOutput1Address,
-    fundingOutput2Address,
-    fundingOutput1AssetId,
-    fundingOutput2AssetId,
-  };
 };
