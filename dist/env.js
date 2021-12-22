@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.targetAssetId = exports.tokenPrecisionCoefficient = exports.quotePrecisionCoefficient = exports.lpFeeRate = exports.poolTokenLiquidity = exports.poolLbtcLiquidity = void 0;
 exports.poolLbtcLiquidity = 1000000;
 exports.poolTokenLiquidity = 50000000000;
-exports.lpFeeRate = 500;
+exports.lpFeeRate = 400;
 exports.quotePrecisionCoefficient = 16;
 exports.tokenPrecisionCoefficient = 2000000;
-exports.targetAssetId = "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49";
+exports.targetAssetId = "e1ed34f4be34f90408f008c32f932e2b7ebfbfab64ed3e925aab8b635cba5c16";
 //# sourceMappingURL=env.js.map
