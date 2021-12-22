@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.tokenToLBtcSwap = exports.tokenToLbtcSwapAmountCalculate = exports.lbtcToTokenSwapAmountCalculate = exports.lbtcToTokenSwap = void 0;
+exports.tokenToLbtcAmount = exports.tokenToLBtc = exports.lbtcToTokenAmount = exports.lbtcToToken = void 0;
 var env_1 = require("./env");
 var helper_1 = require("./utils/helper");
-var lbtcToTokenSwap = function (lbtcAmount, fundingOutputAdress, quoteAssetId, baseFee, serviceFee, commitmentTxFee, orderingFee) {
+var lbtcToToken = function (lbtcAmount, fundingOutputAdress, quoteAssetId, baseFee, serviceFee, commitmentTxFee, orderingFee) {
     // lbtc satoshi amount with slippage
     var fundingOutput1Value = lbtcAmount;
     var fundingOutput2Value = baseFee + serviceFee + commitmentTxFee + orderingFee;
@@ -20,9 +20,9 @@ var lbtcToTokenSwap = function (lbtcAmount, fundingOutputAdress, quoteAssetId, b
         fundingOutput2AssetId: fundingOutput2AssetId,
     };
 };
-exports.lbtcToTokenSwap = lbtcToTokenSwap;
+exports.lbtcToToken = lbtcToToken;
 // all amounts satoshi
-var lbtcToTokenSwapAmountCalculate = function (lbtcAmount, slippage, minRemainingSupply) {
+var lbtcToTokenAmount = function (lbtcAmount, slippage, minRemainingSupply) {
     // validation
     if (lbtcAmount < Number(minRemainingSupply)) {
         console.log("Lbtc amount must greater or at least minimum equal ".concat(minRemainingSupply));
@@ -55,8 +55,27 @@ var lbtcToTokenSwapAmountCalculate = function (lbtcAmount, slippage, minRemainin
     var finalAmount = tokenAmount - slippageAmount;
     return finalAmount;
 };
-exports.lbtcToTokenSwapAmountCalculate = lbtcToTokenSwapAmountCalculate;
-var tokenToLbtcSwapAmountCalculate = function (usdtAmount, slippage, minTokenValue) {
+exports.lbtcToTokenAmount = lbtcToTokenAmount;
+var tokenToLBtc = function (tokenAmount, fundingOutputAdress, quoteAssetId, tokenAssetId, baseFee, serviceFee, commitmentTxFee, orderingFee) {
+    var fundingOutput1Value = tokenAmount;
+    var fundingOutput2Value = baseFee + serviceFee + commitmentTxFee + orderingFee;
+    var fundingOutput1Address = fundingOutputAdress;
+    var fundingOutput2Address = fundingOutputAdress;
+    // token asset id
+    var fundingOutput1AssetId = tokenAssetId;
+    // lbtc asset id
+    var fundingOutput2AssetId = quoteAssetId;
+    return {
+        fundingOutput1Value: fundingOutput1Value,
+        fundingOutput2Value: fundingOutput2Value,
+        fundingOutput1Address: fundingOutput1Address,
+        fundingOutput2Address: fundingOutput2Address,
+        fundingOutput1AssetId: fundingOutput1AssetId,
+        fundingOutput2AssetId: fundingOutput2AssetId,
+    };
+};
+exports.tokenToLBtc = tokenToLBtc;
+var tokenToLbtcAmount = function (usdtAmount, slippage, minTokenValue) {
     // validation
     if (usdtAmount < Number(minTokenValue)) {
         console.log("Usdt amount must greater or at least minimum equal ".concat(minTokenValue));
@@ -86,24 +105,5 @@ var tokenToLbtcSwapAmountCalculate = function (usdtAmount, slippage, minTokenVal
     var finalAmount = remainingLbtcAmount - slippageAmount;
     return finalAmount;
 };
-exports.tokenToLbtcSwapAmountCalculate = tokenToLbtcSwapAmountCalculate;
-var tokenToLBtcSwap = function (usdtAmount, fundingOutputAdress, quoteAssetId, tokenAssetId, baseFee, serviceFee, commitmentTxFee, orderingFee) {
-    var fundingOutput1Value = usdtAmount;
-    var fundingOutput2Value = baseFee + serviceFee + commitmentTxFee + orderingFee;
-    var fundingOutput1Address = fundingOutputAdress;
-    var fundingOutput2Address = fundingOutputAdress;
-    // token asset id
-    var fundingOutput1AssetId = tokenAssetId;
-    // lbtc asset id
-    var fundingOutput2AssetId = quoteAssetId;
-    return {
-        fundingOutput1Value: fundingOutput1Value,
-        fundingOutput2Value: fundingOutput2Value,
-        fundingOutput1Address: fundingOutput1Address,
-        fundingOutput2Address: fundingOutput2Address,
-        fundingOutput1AssetId: fundingOutput1AssetId,
-        fundingOutput2AssetId: fundingOutput2AssetId,
-    };
-};
-exports.tokenToLBtcSwap = tokenToLBtcSwap;
+exports.tokenToLbtcAmount = tokenToLbtcAmount;
 //# sourceMappingURL=fundingTx.js.map
