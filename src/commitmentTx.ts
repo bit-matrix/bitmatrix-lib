@@ -23,7 +23,7 @@ export const lbtcToTokenCreateCommitmentTx = (
 
   const calculatedAmountWithSlippage64 = conversion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
 
-  const callData = targetAssetId + methodCall + publicKey + calculatedAmountWithSlippage64 + orderingFee.hex;
+  const callData = hexLE(targetAssetId) + methodCall + publicKey + calculatedAmountWithSlippage64 + orderingFee.hex;
 
   const commitmentOutputTapscriptTemplate = "20" + hexLE(targetAssetId) + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
 
