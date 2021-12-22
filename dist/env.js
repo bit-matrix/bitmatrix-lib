@@ -6,5 +6,5 @@ exports.poolTokenLiquidity = 50000000000;
 exports.lpFeeRate = 500;
 exports.quotePrecisionCoefficient = 16;
 exports.tokenPrecisionCoefficient = 2000000;
-exports.targetAssetId = "43a2f4ef8ce286e57ab3e39e6da3741382ba542854a1b28231a7a5b8ba337fcd";
+exports.targetAssetId = "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49";
 //# sourceMappingURL=env.js.map
