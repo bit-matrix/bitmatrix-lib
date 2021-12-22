@@ -34,7 +34,7 @@ export const lbtcToToken = (
 // all amounts satoshi
 export const lbtcToTokenAmount = (lbtcAmount: number, slippage: number, minRemainingSupply: string): number => {
   // validation
-  if (lbtcAmount <= Number(minRemainingSupply)) {
+  if (lbtcAmount < Number(minRemainingSupply)) {
     console.log(`Lbtc amount must greater or at least minimum equal ${minRemainingSupply}`);
     return 0;
   }
@@ -115,7 +115,7 @@ export const tokenToLBtc = (
 
 export const tokenToLbtcAmount = (usdtAmount: number, slippage: number, minTokenValue: string): number => {
   // validation
-  if (usdtAmount <= Number(minTokenValue)) {
+  if (usdtAmount < Number(minTokenValue)) {
     console.log(`Usdt amount must greater or at least minimum equal ${minTokenValue}`);
     return 0;
   }
