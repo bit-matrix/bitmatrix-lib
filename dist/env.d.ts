@@ -1,5 +1,5 @@
-export declare const poolLbtcLiquidity = 1000000;
-export declare const poolTokenLiquidity = 50000000000;
+export declare const poolLbtcLiquidity = 1000030000;
+export declare const poolTokenLiquidity = 49998501000000;
 export declare const lpFeeRate = 400;
 export declare const quotePrecisionCoefficient = 16;
 export declare const tokenPrecisionCoefficient = 2000000;

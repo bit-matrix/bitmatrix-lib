@@ -1,1 +1,1 @@
-export declare const getPools: () => Promise<any>;
+export declare const getPools: (poolId: string) => Promise<any>;

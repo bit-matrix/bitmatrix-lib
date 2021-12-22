@@ -19,11 +19,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.commitmentTx = exports.fundingTx = exports.api = void 0;
-var fundingTx = __importStar(require("./fundingTx"));
-exports.fundingTx = fundingTx;
-var commitmentTx = __importStar(require("./commitmentTx"));
-exports.commitmentTx = commitmentTx;
+exports.fundingTx = exports.convertion = exports.commitmentTx = exports.api = void 0;
 var api = __importStar(require("./api"));
 exports.api = api;
+var commitmentTx = __importStar(require("./commitmentTx"));
+exports.commitmentTx = commitmentTx;
+var convertion = __importStar(require("./convertion"));
+exports.convertion = convertion;
+var fundingTx = __importStar(require("./fundingTx"));
+exports.fundingTx = fundingTx;
 //# sourceMappingURL=index.js.map

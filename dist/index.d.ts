@@ -1,4 +1,5 @@
-import * as fundingTx from "./fundingTx";
-import * as commitmentTx from "./commitmentTx";
 import * as api from "./api";
-export { api, fundingTx, commitmentTx };
+import * as commitmentTx from "./commitmentTx";
+import * as convertion from "./convertion";
+import * as fundingTx from "./fundingTx";
+export { api, commitmentTx, convertion, fundingTx };

@@ -41,10 +41,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getBmConfigs = void 0;
 var axios_1 = __importDefault(require("axios"));
-var getBmConfigs = function () { return __awaiter(void 0, void 0, void 0, function () {
+var getBmConfigs = function (poolId) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         return [2 /*return*/, axios_1.default
-                .get("https://db.bitmatrix-aggregate.com/config/43a2f4ef8ce286e57ab3e39e6da3741382ba542854a1b28231a7a5b8ba337fcd")
+                .get("https://db.bitmatrix-aggregate.com/config/".concat(poolId))
                 .then(function (response) {
                 return response.data;
             })
