@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/bit-matrix/bitmatrix-lib#readme",
   "dependencies": {
-    "@bitmatrix/models": "^0.0.2",
+    "@bitmatrix/models": "^0.0.4",
     "@script-wiz/lib-core": "^0.0.17",
     "axios": "^0.24.0"
   }
