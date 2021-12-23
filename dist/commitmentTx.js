@@ -63,8 +63,6 @@ var lbtcToTokenCreateCommitmentTx = function (inputAmount, txId, publicKey, calc
         constLength7 +
         commitmentTxFee64BE +
         constLength8;
-    // send raw transaction
-    console.log(commitmentTransactionRaw);
     return commitmentTransactionRaw;
 };
 exports.lbtcToTokenCreateCommitmentTx = lbtcToTokenCreateCommitmentTx;
