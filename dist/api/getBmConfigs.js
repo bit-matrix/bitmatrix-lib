@@ -41,10 +41,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getBmConfigs = void 0;
 var axios_1 = __importDefault(require("axios"));
+var env_1 = require("../env");
 var getBmConfigs = function (poolId) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         return [2 /*return*/, axios_1.default
-                .get("https://db.bitmatrix-aggregate.com/config/".concat(poolId))
+                .get("".concat(env_1.bmUrl, "/config/").concat(poolId))
                 .then(function (response) {
                 return response.data;
             })
