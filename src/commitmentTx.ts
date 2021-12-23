@@ -22,9 +22,9 @@ export const lbtcToTokenCreateCommitmentTx = (
 ): string => {
   const methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
 
-  const calculatedAmountWithSlippage64 = conversion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
+  const receivedAmount = conversion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
 
-  const callData = hexLE(targetAssetId) + methodCall + publicKey + calculatedAmountWithSlippage64 + orderingFee.hex;
+  const callData = hexLE(targetAssetId) + methodCall + publicKey + receivedAmount + orderingFee.hex;
 
   const commitmentOutputTapscriptTemplate = "20" + hexLE(targetAssetId) + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
 
@@ -91,9 +91,9 @@ export const tokenToLbtcCreateCommitmentTx = (
   // case1
   const methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
 
-  const calculatedAmountWithSlippage64 = conversion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
+  const receivedAmount = conversion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
 
-  const callData = hexLE(targetAssetId) + methodCall + publicKey + calculatedAmountWithSlippage64 + orderingFee.hex;
+  const callData = hexLE(targetAssetId) + methodCall + publicKey + receivedAmount + orderingFee.hex;
 
   const commitmentOutputTapscriptTemplate = "20" + hexLE(targetAssetId) + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
 
