@@ -71,9 +71,6 @@ export const lbtcToTokenCreateCommitmentTx = (
     commitmentTxFee64BE +
     constLength8;
 
-  // send raw transaction
-  console.log(commitmentTransactionRaw);
-
   return commitmentTransactionRaw;
 };
 
