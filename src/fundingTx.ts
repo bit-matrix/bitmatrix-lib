@@ -1,6 +1,4 @@
-import { lpFeeRate, poolLbtcLiquidity, poolTokenLiquidity, quotePrecisionCoefficient, tokenPrecisionCoefficient } from "./env";
 import { FundingOutput } from "./model/FundingOutput";
-import { div } from "./utils/helper";
 
 export const lbtcToToken = (
   lbtcAmount: number,
