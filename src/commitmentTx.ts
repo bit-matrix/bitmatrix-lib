@@ -1,6 +1,6 @@
 import WizData, { hexLE } from "@script-wiz/wiz-data";
 import { conversion, taproot, TAPROOT_VERSION } from "@script-wiz/lib-core";
-import { BmConfig, CALL_METHOD } from "@bitmatrix/models";
+import { BmConfig, CALL_METHOD, Pool } from "@bitmatrix/models";
 
 const calculateAmountTotal = (inputAmount: number, orderingFee: number, baseFee: number) => {
   const totalAmount = inputAmount + orderingFee + baseFee;
@@ -15,17 +15,17 @@ export const quoteToTokenCreateCommitmentTx = (
   publicKey: string,
   calculatedAmountWithSlippage: number,
   config: BmConfig,
-  quoteAssetId: string,
-  poolId: string
+  pool: Pool
 ): string => {
   const methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-  const quoteAssetIdLE = hexLE(quoteAssetId);
+  const quoteAssetIdLE = hexLE(pool.quote.asset);
+  const poolIdLE = hexLE(pool.id);
 
   const receivedAmount = conversion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
 
-  const callData = hexLE(poolId) + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
+  const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
 
-  const commitmentOutputTapscriptTemplate = "20" + hexLE(poolId) + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
+  const commitmentOutputTapscriptTemplate = "20" + poolIdLE + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
 
   const constLength = "020000000102";
 
@@ -77,20 +77,19 @@ export const tokenToQuoteCreateCommitmentTx = (
   inputAmount: number,
   txId: string,
   publicKey: string,
-  tokenAssetId: string,
-  quoteAssetId: string,
   calculatedAmountWithSlippage: number,
   config: BmConfig,
-  poolId: string
+  pool: Pool
 ): string => {
   const methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
-  const quoteAssetIdLE = hexLE(quoteAssetId);
+  const quoteAssetIdLE = hexLE(pool.quote.asset);
+  const poolIdLE = hexLE(pool.id);
 
   const receivedAmount = conversion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
 
-  const callData = hexLE(poolId) + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
+  const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
 
-  const commitmentOutputTapscriptTemplate = "20" + hexLE(poolId) + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
+  const commitmentOutputTapscriptTemplate = "20" + poolIdLE + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
 
   const constLength = "020000000102";
 
@@ -108,7 +107,7 @@ export const tokenToQuoteCreateCommitmentTx = (
 
   const scriptPubKey = taproot.tapRoot(WizData.fromHex(config.innerPublicKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubKey.hex;
 
-  const tokenAssetIdLE = hexLE(tokenAssetId);
+  const tokenAssetIdLE = hexLE(pool.token.asset);
 
   const constLength6 = "01" + tokenAssetIdLE + "01";
 
