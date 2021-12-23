@@ -66,7 +66,7 @@ var lbtcToTokenCreateCommitmentTx = function (inputAmount, txId, publicKey, calc
     return commitmentTransactionRaw;
 };
 exports.lbtcToTokenCreateCommitmentTx = lbtcToTokenCreateCommitmentTx;
-var tokenToLbtcCreateCommitmentTx = function (inputAmount, txId, publicKey, calculatedAmountWithSlippage, orderingFee, baseFee, serviceFee, commitmentTxFee, internalKey) {
+var tokenToLbtcCreateCommitmentTx = function (inputAmount, txId, publicKey, tokenAssetId, calculatedAmountWithSlippage, orderingFee, baseFee, serviceFee, commitmentTxFee, internalKey) {
     // case1
     var methodCall = models_1.CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
     var receivedAmount = lib_core_1.conversion.numToLE64(wiz_data_1.default.fromNumber(calculatedAmountWithSlippage)).hex;
@@ -80,7 +80,8 @@ var tokenToLbtcCreateCommitmentTx = function (inputAmount, txId, publicKey, calc
     var feeAmountsTotal = calculateAmountTotal(serviceFee.number, orderingFee.number, baseFee.number);
     var constLength5 = "0022";
     var scriptPubKey = lib_core_1.taproot.tapRoot(wiz_data_1.default.fromHex(internalKey), [wiz_data_1.default.fromHex(commitmentOutputTapscriptTemplate)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubKey.hex;
-    var constLength6 = "0125d02aa3a6b673eefaaff069a84d32607f8756116b52520823bc3af84dbc3c2101";
+    var tokenAssetIdLE = (0, wiz_data_1.hexLE)(tokenAssetId);
+    var constLength6 = "01" + tokenAssetIdLE + "01";
     var inputAmount64LE = lib_core_1.conversion.numToLE64(wiz_data_1.default.fromNumber(inputAmount)).hex;
     var inputAmount64BE = (0, wiz_data_1.hexLE)(inputAmount64LE);
     var constLength7 = "0022";

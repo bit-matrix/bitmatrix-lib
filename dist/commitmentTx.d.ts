@@ -8,7 +8,7 @@ export declare const lbtcToTokenCreateCommitmentTx: (inputAmount: number, txId: 
     number: number;
     hex: string;
 }, internalKey: string) => string;
-export declare const tokenToLbtcCreateCommitmentTx: (inputAmount: number, txId: string, publicKey: string, calculatedAmountWithSlippage: number, orderingFee: {
+export declare const tokenToLbtcCreateCommitmentTx: (inputAmount: number, txId: string, publicKey: string, tokenAssetId: string, calculatedAmountWithSlippage: number, orderingFee: {
     number: number;
     hex: string;
 }, baseFee: {
