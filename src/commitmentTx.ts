@@ -78,6 +78,7 @@ export const tokenToLbtcCreateCommitmentTx = (
   inputAmount: number,
   txId: string,
   publicKey: string,
+  tokenAssetId: string,
   calculatedAmountWithSlippage: number,
   orderingFee: { number: number; hex: string },
   baseFee: { number: number; hex: string },
@@ -110,7 +111,9 @@ export const tokenToLbtcCreateCommitmentTx = (
 
   const scriptPubKey = taproot.tapRoot(WizData.fromHex(internalKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubKey.hex;
 
-  const constLength6 = "0125d02aa3a6b673eefaaff069a84d32607f8756116b52520823bc3af84dbc3c2101";
+  const tokenAssetIdLE = hexLE(tokenAssetId);
+
+  const constLength6 = "01" + tokenAssetIdLE + "01";
 
   const inputAmount64LE = conversion.numToLE64(WizData.fromNumber(inputAmount)).hex;
 
