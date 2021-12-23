@@ -5,7 +5,7 @@ import { div } from "./utils/helper";
 export const convertForCtx = (value: number, slippage: number, pool: Pool, config: BmConfig, callMethod: CALL_METHOD): number => {
   if (callMethod === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
     if (value < Number(config.minRemainingSupply)) {
-      console.log(`Quate amount must greater or at least minimum equal ${config.minRemainingSupply}`);
+      console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
       return 0;
     }
 

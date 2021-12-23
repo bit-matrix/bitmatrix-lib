@@ -1,23 +1,22 @@
+import { BmConfig, CALL_METHOD, Pool } from "@bitmatrix/models";
 import { FundingOutput } from "./model/FundingOutput";
 
-export const lbtcToToken = (
-  lbtcAmount: number,
-  fundingOutputAdress: string,
-  quoteAssetId: string,
-  baseFee: number,
-  serviceFee: number,
-  commitmentTxFee: number,
-  orderingFee: number
-): FundingOutput => {
-  // lbtc satoshi amount with slippage
-  const fundingOutput1Value = lbtcAmount;
-  const fundingOutput2Value = baseFee + serviceFee + commitmentTxFee + orderingFee;
+const fundingTx = (amount: number, pool: Pool, config: BmConfig, callMethod: CALL_METHOD): FundingOutput => {
+  const fundingOutput1Value = amount;
+  const fundingOutput2Value = config.baseFee.number + config.serviceFee.number + config.commitmentTxFee.number + config.defaultOrderingFee.number;
 
-  const fundingOutput1Address = fundingOutputAdress;
-  const fundingOutput2Address = fundingOutputAdress;
+  const fundingOutput1Address = config.fundingOutputAddress;
+  const fundingOutput2Address = config.fundingOutputAddress;
 
-  const fundingOutput1AssetId = quoteAssetId;
-  const fundingOutput2AssetId = quoteAssetId;
+  let fundingOutput1AssetId = "";
+
+  if (callMethod === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
+    fundingOutput1AssetId = pool.quote.asset;
+  } else if (callMethod === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
+    fundingOutput1AssetId = pool.token.asset;
+  }
+
+  const fundingOutput2AssetId = pool.quote.asset;
 
   return {
     fundingOutput1Value,
@@ -29,35 +28,4 @@ export const lbtcToToken = (
   };
 };
 
-export const tokenToLBtc = (
-  tokenAmount: number,
-  fundingOutputAdress: string,
-  quoteAssetId: string,
-  tokenAssetId: string,
-  baseFee: number,
-  serviceFee: number,
-  commitmentTxFee: number,
-  orderingFee: number
-): FundingOutput => {
-  const fundingOutput1Value = tokenAmount;
-
-  const fundingOutput2Value = baseFee + serviceFee + commitmentTxFee + orderingFee;
-
-  const fundingOutput1Address = fundingOutputAdress;
-  const fundingOutput2Address = fundingOutputAdress;
-
-  // token asset id
-  const fundingOutput1AssetId = tokenAssetId;
-
-  // lbtc asset id
-  const fundingOutput2AssetId = quoteAssetId;
-
-  return {
-    fundingOutput1Value,
-    fundingOutput2Value,
-    fundingOutput1Address,
-    fundingOutput2Address,
-    fundingOutput1AssetId,
-    fundingOutput2AssetId,
-  };
-};
+export default fundingTx;
