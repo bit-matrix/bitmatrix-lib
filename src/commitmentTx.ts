@@ -1,6 +1,6 @@
 import WizData, { hexLE } from "@script-wiz/wiz-data";
 import { conversion, taproot, TAPROOT_VERSION } from "@script-wiz/lib-core";
-import { CALL_METHOD } from "@bitmatrix/models";
+import { BmConfig, CALL_METHOD } from "@bitmatrix/models";
 import { targetAssetId } from "./env";
 
 const calculateAmountTotal = (inputAmount: number, orderingFee: number, baseFee: number) => {
@@ -10,21 +10,12 @@ const calculateAmountTotal = (inputAmount: number, orderingFee: number, baseFee:
   return totalAmount64BE;
 };
 
-export const lbtcToTokenCreateCommitmentTx = (
-  inputAmount: number,
-  txId: string,
-  publicKey: string,
-  calculatedAmountWithSlippage: number,
-  orderingFee: { number: number; hex: string },
-  baseFee: { number: number; hex: string },
-  commitmentTxFee: { number: number; hex: string },
-  internalKey: string
-): string => {
+export const quoteToTokenCreateCommitmentTx = (inputAmount: number, txId: string, publicKey: string, calculatedAmountWithSlippage: number, config: BmConfig): string => {
   const methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
 
   const receivedAmount = conversion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
 
-  const callData = hexLE(targetAssetId) + methodCall + publicKey + receivedAmount + orderingFee.hex;
+  const callData = hexLE(targetAssetId) + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
 
   const commitmentOutputTapscriptTemplate = "20" + hexLE(targetAssetId) + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
 
@@ -38,17 +29,17 @@ export const lbtcToTokenCreateCommitmentTx = (
 
   const constLength4 = "01499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c1401";
 
-  const inputAmountTotal = calculateAmountTotal(inputAmount, orderingFee.number, baseFee.number);
+  const inputAmountTotal = calculateAmountTotal(inputAmount, config.defaultOrderingFee.number, config.baseFee.number);
 
   const constLength5 = "0022";
 
-  const scriptPubKey = taproot.tapRoot(WizData.fromHex(internalKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubKey.hex;
+  const scriptPubKey = taproot.tapRoot(WizData.fromHex(config.innerPublicKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubKey.hex;
 
   const constLength6 = "01499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c1401000000000000028a0022";
 
   const constLength7 = "01499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c1401";
 
-  const commitmentTxFee64LE = conversion.numToLE64(WizData.fromNumber(commitmentTxFee.number)).hex;
+  const commitmentTxFee64LE = conversion.numToLE64(WizData.fromNumber(config.commitmentTxFee.number)).hex;
 
   const commitmentTxFee64BE = hexLE(commitmentTxFee64LE);
 
@@ -74,24 +65,20 @@ export const lbtcToTokenCreateCommitmentTx = (
   return commitmentTransactionRaw;
 };
 
-export const tokenToLbtcCreateCommitmentTx = (
+export const tokenToQuoteCreateCommitmentTx = (
   inputAmount: number,
   txId: string,
   publicKey: string,
   tokenAssetId: string,
   calculatedAmountWithSlippage: number,
-  orderingFee: { number: number; hex: string },
-  baseFee: { number: number; hex: string },
-  serviceFee: { number: number; hex: string },
-  commitmentTxFee: { number: number; hex: string },
-  internalKey: string
+  config: BmConfig
 ): string => {
   // case1
   const methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
 
   const receivedAmount = conversion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
 
-  const callData = hexLE(targetAssetId) + methodCall + publicKey + receivedAmount + orderingFee.hex;
+  const callData = hexLE(targetAssetId) + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
 
   const commitmentOutputTapscriptTemplate = "20" + hexLE(targetAssetId) + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
 
@@ -105,11 +92,11 @@ export const tokenToLbtcCreateCommitmentTx = (
 
   const constLength4 = "01499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c1401";
 
-  const feeAmountsTotal = calculateAmountTotal(serviceFee.number, orderingFee.number, baseFee.number);
+  const feeAmountsTotal = calculateAmountTotal(config.serviceFee.number, config.defaultOrderingFee.number, config.baseFee.number);
 
   const constLength5 = "0022";
 
-  const scriptPubKey = taproot.tapRoot(WizData.fromHex(internalKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubKey.hex;
+  const scriptPubKey = taproot.tapRoot(WizData.fromHex(config.innerPublicKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubKey.hex;
 
   const tokenAssetIdLE = hexLE(tokenAssetId);
 
@@ -123,7 +110,7 @@ export const tokenToLbtcCreateCommitmentTx = (
 
   const constLength8 = "01499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c1401";
 
-  const commitmentTxFee64LE = conversion.numToLE64(WizData.fromNumber(commitmentTxFee.number)).hex;
+  const commitmentTxFee64LE = conversion.numToLE64(WizData.fromNumber(config.commitmentTxFee.number)).hex;
 
   const commitmentTxFee64BE = hexLE(commitmentTxFee64LE);
 
