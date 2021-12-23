@@ -1,7 +1,6 @@
 import WizData, { hexLE } from "@script-wiz/wiz-data";
 import { conversion, taproot, TAPROOT_VERSION } from "@script-wiz/lib-core";
 import { BmConfig, CALL_METHOD } from "@bitmatrix/models";
-import { targetAssetId } from "./env";
 
 const calculateAmountTotal = (inputAmount: number, orderingFee: number, baseFee: number) => {
   const totalAmount = inputAmount + orderingFee + baseFee;
@@ -16,16 +15,17 @@ export const quoteToTokenCreateCommitmentTx = (
   publicKey: string,
   calculatedAmountWithSlippage: number,
   config: BmConfig,
-  quoteAssetId: string
+  quoteAssetId: string,
+  poolId: string
 ): string => {
   const methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
   const quoteAssetIdLE = hexLE(quoteAssetId);
 
   const receivedAmount = conversion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
 
-  const callData = hexLE(targetAssetId) + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
+  const callData = hexLE(poolId) + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
 
-  const commitmentOutputTapscriptTemplate = "20" + hexLE(targetAssetId) + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
+  const commitmentOutputTapscriptTemplate = "20" + hexLE(poolId) + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
 
   const constLength = "020000000102";
 
@@ -80,16 +80,17 @@ export const tokenToQuoteCreateCommitmentTx = (
   tokenAssetId: string,
   quoteAssetId: string,
   calculatedAmountWithSlippage: number,
-  config: BmConfig
+  config: BmConfig,
+  poolId: string
 ): string => {
   const methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
   const quoteAssetIdLE = hexLE(quoteAssetId);
 
   const receivedAmount = conversion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
 
-  const callData = hexLE(targetAssetId) + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
+  const callData = hexLE(poolId) + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
 
-  const commitmentOutputTapscriptTemplate = "20" + hexLE(targetAssetId) + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
+  const commitmentOutputTapscriptTemplate = "20" + hexLE(poolId) + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
 
   const constLength = "020000000102";
 
