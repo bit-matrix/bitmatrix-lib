@@ -1,9 +1,10 @@
 import axios from "axios";
+import { rpcUrl } from "../env";
 
 export const decodeRawTransaction = async (param: string) => {
   return axios
     .post(
-      "http://157.230.101.158:9485/rpc",
+      rpcUrl,
       JSON.stringify({
         jsonrpc: "1.0",
         id: "curltest",
