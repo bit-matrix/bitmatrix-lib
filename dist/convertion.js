@@ -7,7 +7,7 @@ var helper_1 = require("./utils/helper");
 var convertForCtx = function (value, slippage, pool, config, callMethod) {
     if (callMethod === models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
         if (value < Number(config.minRemainingSupply)) {
-            console.log("Quate amount must greater or at least minimum equal ".concat(config.minRemainingSupply));
+            console.log("Quote amount must greater or at least minimum equal ".concat(config.minRemainingSupply));
             return 0;
         }
         // step1  (lp fee calculate)

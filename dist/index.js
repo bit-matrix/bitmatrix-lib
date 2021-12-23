@@ -18,6 +18,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fundingTx = exports.convertion = exports.commitmentTx = exports.api = void 0;
 var api = __importStar(require("./api"));
@@ -26,6 +29,6 @@ var commitmentTx = __importStar(require("./commitmentTx"));
 exports.commitmentTx = commitmentTx;
 var convertion = __importStar(require("./convertion"));
 exports.convertion = convertion;
-var fundingTx = __importStar(require("./fundingTx"));
-exports.fundingTx = fundingTx;
+var fundingTx_1 = __importDefault(require("./fundingTx"));
+exports.fundingTx = fundingTx_1.default;
 //# sourceMappingURL=index.js.map

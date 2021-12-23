@@ -1,14 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.tokenToLBtc = exports.lbtcToToken = void 0;
-var lbtcToToken = function (lbtcAmount, fundingOutputAdress, quoteAssetId, baseFee, serviceFee, commitmentTxFee, orderingFee) {
-    // lbtc satoshi amount with slippage
-    var fundingOutput1Value = lbtcAmount;
-    var fundingOutput2Value = baseFee + serviceFee + commitmentTxFee + orderingFee;
-    var fundingOutput1Address = fundingOutputAdress;
-    var fundingOutput2Address = fundingOutputAdress;
-    var fundingOutput1AssetId = quoteAssetId;
-    var fundingOutput2AssetId = quoteAssetId;
+var models_1 = require("@bitmatrix/models");
+var fundingTx = function (amount, pool, config, callMethod) {
+    var fundingOutput1Value = amount;
+    var fundingOutput2Value = config.baseFee.number + config.serviceFee.number + config.commitmentTxFee.number + config.defaultOrderingFee.number;
+    var fundingOutput1Address = config.fundingOutputAddress;
+    var fundingOutput2Address = config.fundingOutputAddress;
+    var fundingOutput1AssetId = "";
+    if (callMethod === models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
+        fundingOutput1AssetId = pool.quote.asset;
+    }
+    else if (callMethod === models_1.CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
+        fundingOutput1AssetId = pool.token.asset;
+    }
+    var fundingOutput2AssetId = pool.quote.asset;
     return {
         fundingOutput1Value: fundingOutput1Value,
         fundingOutput2Value: fundingOutput2Value,
@@ -18,24 +23,5 @@ var lbtcToToken = function (lbtcAmount, fundingOutputAdress, quoteAssetId, baseF
         fundingOutput2AssetId: fundingOutput2AssetId,
     };
 };
-exports.lbtcToToken = lbtcToToken;
-var tokenToLBtc = function (tokenAmount, fundingOutputAdress, quoteAssetId, tokenAssetId, baseFee, serviceFee, commitmentTxFee, orderingFee) {
-    var fundingOutput1Value = tokenAmount;
-    var fundingOutput2Value = baseFee + serviceFee + commitmentTxFee + orderingFee;
-    var fundingOutput1Address = fundingOutputAdress;
-    var fundingOutput2Address = fundingOutputAdress;
-    // token asset id
-    var fundingOutput1AssetId = tokenAssetId;
-    // lbtc asset id
-    var fundingOutput2AssetId = quoteAssetId;
-    return {
-        fundingOutput1Value: fundingOutput1Value,
-        fundingOutput2Value: fundingOutput2Value,
-        fundingOutput1Address: fundingOutput1Address,
-        fundingOutput2Address: fundingOutput2Address,
-        fundingOutput1AssetId: fundingOutput1AssetId,
-        fundingOutput2AssetId: fundingOutput2AssetId,
-    };
-};
-exports.tokenToLBtc = tokenToLBtc;
+exports.default = fundingTx;
 //# sourceMappingURL=fundingTx.js.map

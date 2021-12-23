@@ -1,3 +1,4 @@
+import { BmConfig, CALL_METHOD, Pool } from "@bitmatrix/models";
 import { FundingOutput } from "./model/FundingOutput";
-export declare const lbtcToToken: (lbtcAmount: number, fundingOutputAdress: string, quoteAssetId: string, baseFee: number, serviceFee: number, commitmentTxFee: number, orderingFee: number) => FundingOutput;
-export declare const tokenToLBtc: (tokenAmount: number, fundingOutputAdress: string, quoteAssetId: string, tokenAssetId: string, baseFee: number, serviceFee: number, commitmentTxFee: number, orderingFee: number) => FundingOutput;
+declare const fundingTx: (amount: number, pool: Pool, config: BmConfig, callMethod: CALL_METHOD) => FundingOutput;
+export default fundingTx;
