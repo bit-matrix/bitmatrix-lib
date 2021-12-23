@@ -32,8 +32,8 @@ var calculateAmountTotal = function (inputAmount, orderingFee, baseFee) {
 };
 var lbtcToTokenCreateCommitmentTx = function (inputAmount, txId, publicKey, calculatedAmountWithSlippage, orderingFee, baseFee, commitmentTxFee, internalKey) {
     var methodCall = models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-    var calculatedAmountWithSlippage64 = lib_core_1.conversion.numToLE64(wiz_data_1.default.fromNumber(calculatedAmountWithSlippage)).hex;
-    var callData = (0, wiz_data_1.hexLE)(env_1.targetAssetId) + methodCall + publicKey + calculatedAmountWithSlippage64 + orderingFee.hex;
+    var receivedAmount = lib_core_1.conversion.numToLE64(wiz_data_1.default.fromNumber(calculatedAmountWithSlippage)).hex;
+    var callData = (0, wiz_data_1.hexLE)(env_1.targetAssetId) + methodCall + publicKey + receivedAmount + orderingFee.hex;
     var commitmentOutputTapscriptTemplate = "20" + (0, wiz_data_1.hexLE)(env_1.targetAssetId) + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
     var constLength = "020000000102";
     var rpcTxId = (0, wiz_data_1.hexLE)(txId);
@@ -71,8 +71,8 @@ exports.lbtcToTokenCreateCommitmentTx = lbtcToTokenCreateCommitmentTx;
 var tokenToLbtcCreateCommitmentTx = function (inputAmount, txId, publicKey, calculatedAmountWithSlippage, orderingFee, baseFee, serviceFee, commitmentTxFee, internalKey) {
     // case1
     var methodCall = models_1.CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
-    var calculatedAmountWithSlippage64 = lib_core_1.conversion.numToLE64(wiz_data_1.default.fromNumber(calculatedAmountWithSlippage)).hex;
-    var callData = (0, wiz_data_1.hexLE)(env_1.targetAssetId) + methodCall + publicKey + calculatedAmountWithSlippage64 + orderingFee.hex;
+    var receivedAmount = lib_core_1.conversion.numToLE64(wiz_data_1.default.fromNumber(calculatedAmountWithSlippage)).hex;
+    var callData = (0, wiz_data_1.hexLE)(env_1.targetAssetId) + methodCall + publicKey + receivedAmount + orderingFee.hex;
     var commitmentOutputTapscriptTemplate = "20" + (0, wiz_data_1.hexLE)(env_1.targetAssetId) + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
     var constLength = "020000000102";
     var rpcTxId = (0, wiz_data_1.hexLE)(txId);
