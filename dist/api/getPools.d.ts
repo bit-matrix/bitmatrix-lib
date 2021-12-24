@@ -1,1 +1,2 @@
-export declare const getPools: (poolId: string) => Promise<any>;
+import { Pool } from "@bitmatrix/models";
+export declare const getPools: () => Promise<Pool[]>;

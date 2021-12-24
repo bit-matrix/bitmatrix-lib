@@ -39,13 +39,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPools = void 0;
+exports.getPoolById = void 0;
 var axios_1 = __importDefault(require("axios"));
 var env_1 = require("../env");
-var getPools = function () { return __awaiter(void 0, void 0, void 0, function () {
+var getPoolById = function (poolId) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         return [2 /*return*/, axios_1.default
-                .get("".concat(env_1.bmUrl, "/pools"))
+                .get("".concat(env_1.bmUrl, "/pools/").concat(poolId))
                 .then(function (response) {
                 return response.data;
             })
@@ -54,5 +54,5 @@ var getPools = function () { return __awaiter(void 0, void 0, void 0, function (
             })];
     });
 }); };
-exports.getPools = getPools;
-//# sourceMappingURL=getPools.js.map
+exports.getPoolById = getPoolById;
+//# sourceMappingURL=getPoolById.js.map
