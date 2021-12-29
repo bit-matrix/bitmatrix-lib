@@ -1,2 +1,2 @@
 import { BmPtx } from "@bitmatrix/models";
-export declare const getPtx: (ptxId: string, poolId: string) => Promise<BmPtx>;
+export declare const getPtx: (ctxId: string, poolId: string) => Promise<BmPtx>;

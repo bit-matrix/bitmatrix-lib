@@ -42,10 +42,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPtx = void 0;
 var axios_1 = __importDefault(require("axios"));
 var env_1 = require("../env");
-var getPtx = function (ptxId, poolId) { return __awaiter(void 0, void 0, void 0, function () {
+var getPtx = function (ctxId, poolId) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         return [2 /*return*/, axios_1.default
-                .get("".concat(env_1.bmUrl, "/ptx/").concat(poolId, "/").concat(ptxId))
+                .get("".concat(env_1.bmUrl, "/ptx/").concat(poolId, "/").concat(ctxId))
                 .then(function (response) {
                 return response.data;
             })
