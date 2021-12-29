@@ -2,9 +2,9 @@ import axios from "axios";
 import { BmPtx } from "@bitmatrix/models";
 import { bmUrl } from "../env";
 
-export const getPtx = async (ptxId: string, poolId: string): Promise<BmPtx> => {
+export const getPtx = async (ctxId: string, poolId: string): Promise<BmPtx> => {
   return axios
-    .get<BmPtx>(`${bmUrl}/ptx/${poolId}/${ptxId}`)
+    .get<BmPtx>(`${bmUrl}/ptx/${poolId}/${ctxId}`)
     .then((response) => {
       return response.data;
     })
