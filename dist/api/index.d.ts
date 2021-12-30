@@ -6,4 +6,5 @@ import { sendRawTransaction } from "./sendRawTransaction";
 import { getCtx } from "./getCtx";
 import { getCtxMempool } from "./getCtxMempool";
 import { getPtx } from "./getPtx";
-export { decodeRawTransaction, getBmConfigs, getPools, getPoolById, sendRawTransaction, getCtx, getCtxMempool, getPtx };
+import { getPoolChartData } from "./getPoolChartData";
+export { decodeRawTransaction, getBmConfigs, getPools, getPoolById, getPoolChartData, sendRawTransaction, getCtx, getCtxMempool, getPtx };
