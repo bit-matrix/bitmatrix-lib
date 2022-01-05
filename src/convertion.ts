@@ -2,11 +2,11 @@ import { BmConfig, CALL_METHOD, Pool } from "@bitmatrix/models";
 import { lpFeeRate, quotePrecisionCoefficient, tokenPrecisionCoefficient } from "./env";
 import { div } from "./utils/helper";
 
-export const convertForCtx = (value: number, slippage: number, pool: Pool, config: BmConfig, callMethod: CALL_METHOD): number => {
+export const convertForCtx = (value: number, slippage: number, pool: Pool, config: BmConfig, callMethod: CALL_METHOD): { amount: number; amountWithSlipapge: number } => {
   if (callMethod === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
     if (value < Number(config.minRemainingSupply)) {
       console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
-      return 0;
+      return { amount: 0, amountWithSlipapge: 0 };
     }
 
     // step1  (lp fee calculate)
@@ -46,12 +46,12 @@ export const convertForCtx = (value: number, slippage: number, pool: Pool, confi
 
     const receivedAmount = tokenAmount - slippageAmount;
 
-    return receivedAmount;
+    return { amount: tokenAmount, amountWithSlipapge: receivedAmount };
   } else if (callMethod === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
     // validation
     if (value < Number(config.minTokenValue)) {
       console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
-      return 0;
+      return { amount: 0, amountWithSlipapge: 0 };
     }
 
     // step1 (fee calculation)
@@ -88,8 +88,8 @@ export const convertForCtx = (value: number, slippage: number, pool: Pool, confi
 
     const receivedAmount = tokenValue - slippageAmount;
 
-    return receivedAmount;
+    return { amount: tokenValue, amountWithSlipapge: receivedAmount };
   }
 
-  return 0;
+  return { amount: 0, amountWithSlipapge: 0 };
 };
