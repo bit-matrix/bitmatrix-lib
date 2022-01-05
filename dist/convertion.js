@@ -4,7 +4,7 @@ exports.convertForCtx = void 0;
 var models_1 = require("@bitmatrix/models");
 var env_1 = require("./env");
 var helper_1 = require("./utils/helper");
-var convertForCtx = function (value, slippage, pool, config, callMethod, constant) {
+var convertForCtx = function (value, slippage, pool, config, callMethod) {
     if (callMethod === models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
         if (value < Number(config.minRemainingSupply)) {
             console.log("Quote amount must greater or at least minimum equal ".concat(config.minRemainingSupply));
@@ -31,7 +31,7 @@ var convertForCtx = function (value, slippage, pool, config, callMethod, constan
         // step 10  (Pool Token liquidity - 9.step)
         var finalTokenPoolLiquidity = Number(pool.token.value) - poolRateMulWithLbtcPoolRateMul;
         //step11 ( step 10 - 1milion)
-        var tokenAmount = finalTokenPoolLiquidity - constant;
+        var tokenAmount = finalTokenPoolLiquidity - config.recipientValueMinus;
         var slippageAmount = (0, helper_1.div)(tokenAmount, slippage);
         var receivedAmount = tokenAmount - slippageAmount;
         return { amount: tokenAmount, amountWithSlipapge: receivedAmount };
@@ -55,9 +55,9 @@ var convertForCtx = function (value, slippage, pool, config, callMethod, constan
         // step6 (Pool Token liquidity % 2MN)
         var y = (0, helper_1.div)(Number(pool.token.value), env_1.tokenPrecisionCoefficient);
         // step 7 (constant x*y = k step5*step6)
-        var constant_1 = x * y;
+        var constant = x * y;
         // step 8 (constant * usdtLiquidtyRate  step7*step4
-        var constantRate = (0, helper_1.div)(constant_1, usdtLiquidtyRate);
+        var constantRate = (0, helper_1.div)(constant, usdtLiquidtyRate);
         //step 9 (step 8 * 16)
         var lbtcAmount = constantRate * env_1.quotePrecisionCoefficient;
         //step 10 (poolLbtcLiquidity - step9)
