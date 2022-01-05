@@ -8,7 +8,7 @@ var convertForCtx = function (value, slippage, pool, config, callMethod) {
     if (callMethod === models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
         if (value < Number(config.minRemainingSupply)) {
             console.log("Quote amount must greater or at least minimum equal ".concat(config.minRemainingSupply));
-            return 0;
+            return { amount: 0, amountWithSlipapge: 0 };
         }
         // step1  (lp fee calculate)
         var lpFee = (0, helper_1.div)(value, env_1.lpFeeRate);
@@ -34,13 +34,13 @@ var convertForCtx = function (value, slippage, pool, config, callMethod) {
         var tokenAmount = finalTokenPoolLiquidity - 1000000;
         var slippageAmount = (0, helper_1.div)(tokenAmount, slippage);
         var receivedAmount = tokenAmount - slippageAmount;
-        return receivedAmount;
+        return { amount: tokenAmount, amountWithSlipapge: receivedAmount };
     }
     else if (callMethod === models_1.CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
         // validation
         if (value < Number(config.minTokenValue)) {
             console.log("Token amount must greater or at least minimum equal ".concat(config.minTokenValue));
-            return 0;
+            return { amount: 0, amountWithSlipapge: 0 };
         }
         // step1 (fee calculation)
         var lpFee = (0, helper_1.div)(value, env_1.lpFeeRate);
@@ -64,9 +64,9 @@ var convertForCtx = function (value, slippage, pool, config, callMethod) {
         var tokenValue = Number(pool.quote.value) - lbtcAmount;
         var slippageAmount = (0, helper_1.div)(tokenValue, slippage);
         var receivedAmount = tokenValue - slippageAmount;
-        return receivedAmount;
+        return { amount: tokenValue, amountWithSlipapge: receivedAmount };
     }
-    return 0;
+    return { amount: 0, amountWithSlipapge: 0 };
 };
 exports.convertForCtx = convertForCtx;
 //# sourceMappingURL=convertion.js.map
