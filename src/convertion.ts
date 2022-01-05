@@ -2,14 +2,7 @@ import { BmConfig, CALL_METHOD, Pool } from "@bitmatrix/models";
 import { lpFeeRate, quotePrecisionCoefficient, tokenPrecisionCoefficient } from "./env";
 import { div } from "./utils/helper";
 
-export const convertForCtx = (
-  value: number,
-  slippage: number,
-  pool: Pool,
-  config: BmConfig,
-  callMethod: CALL_METHOD,
-  constant: number
-): { amount: number; amountWithSlipapge: number } => {
+export const convertForCtx = (value: number, slippage: number, pool: Pool, config: BmConfig, callMethod: CALL_METHOD): { amount: number; amountWithSlipapge: number } => {
   if (callMethod === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
     if (value < Number(config.minRemainingSupply)) {
       console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
@@ -47,7 +40,7 @@ export const convertForCtx = (
     const finalTokenPoolLiquidity = Number(pool.token.value) - poolRateMulWithLbtcPoolRateMul;
 
     //step11 ( step 10 - 1milion)
-    const tokenAmount = finalTokenPoolLiquidity - constant;
+    const tokenAmount = finalTokenPoolLiquidity - config.recipientValueMinus;
 
     const slippageAmount = div(tokenAmount, slippage);
 
