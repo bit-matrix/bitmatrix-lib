@@ -66,6 +66,17 @@ var convertForCtx = function (value, slippage, pool, config, callMethod) {
         var receivedAmount = tokenValue - slippageAmount;
         return { amount: tokenValue, amountWithSlipapge: receivedAmount };
     }
+    else if (callMethod === models_1.CALL_METHOD.ADD_LIQUIDITY) {
+        if (value < Number(config.minRemainingSupply)) {
+            console.log("Quote amount must greater or at least minimum equal ".concat(config.minRemainingSupply));
+            return { amount: 0, amountWithSlipapge: 0 };
+        }
+        var quoteInput = value;
+        var quotePoolAmount = Number(pool.quote.value);
+        var tokenPoolAmount = Number(pool.token.value);
+        var tokenOutput = (0, helper_1.div)(quoteInput * tokenPoolAmount, quotePoolAmount);
+        return { amount: tokenOutput, amountWithSlipapge: 0 };
+    }
     return { amount: 0, amountWithSlipapge: 0 };
 };
 exports.convertForCtx = convertForCtx;
