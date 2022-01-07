@@ -2,8 +2,8 @@ import WizData, { hexLE } from "@script-wiz/wiz-data";
 import { conversion, taproot, TAPROOT_VERSION } from "@script-wiz/lib-core";
 import { BmConfig, CALL_METHOD, Pool } from "@bitmatrix/models";
 
-const calculateAmountTotal = (inputAmount: number, orderingFee: number, baseFee: number, lFee: number = 0) => {
-  const totalAmount = inputAmount + orderingFee + baseFee - lFee;
+const calculateAmountTotal = (inputAmount: number, orderingFee: number, baseFee: number, serviceFee: number = 0, lFee: number = 0) => {
+  const totalAmount = inputAmount + orderingFee + baseFee + serviceFee;
   const totalAmount64 = conversion.numToLE64(WizData.fromNumber(totalAmount)).hex;
   const totalAmount64BE = hexLE(totalAmount64);
   return totalAmount64BE;
@@ -101,7 +101,7 @@ export const tokenToQuoteCreateCommitmentTx = (
 
   const constLength4 = "01" + quoteAssetIdLE + "01";
 
-  const feeAmountsTotal = calculateAmountTotal(config.serviceFee.number, config.defaultOrderingFee.number, config.baseFee.number);
+  const feeAmountsTotal = calculateAmountTotal(0, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number);
 
   const constLength5 = "0022";
 
@@ -150,9 +150,10 @@ export const tokenToQuoteCreateCommitmentTx = (
 export const liquidityAddCreateCommitmentTx = (quoteAmount: number, tokenAmount: number, txId: string, publicKey: string, config: BmConfig, pool: Pool): string => {
   const methodCall = CALL_METHOD.ADD_LIQUIDITY;
   const quoteAssetIdLE = hexLE(pool.quote.asset);
+  const tokenAssetIdLE = hexLE(pool.token.asset);
   const poolIdLE = hexLE(pool.id);
 
-  const receivedAmount = conversion.numToLE64(WizData.fromNumber(tokenAmount)).hex;
+  const receivedAmount = hexLE(calculateAmountTotal(quoteAmount, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number, 100));
 
   const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
 
@@ -168,29 +169,21 @@ export const liquidityAddCreateCommitmentTx = (quoteAmount: number, tokenAmount:
 
   const constLength4 = "01" + quoteAssetIdLE + "01";
 
-  const feeAmountsTotal = calculateAmountTotal(config.serviceFee.number, config.defaultOrderingFee.number, config.baseFee.number, 100);
+  const inputAmountTotal = calculateAmountTotal(quoteAmount, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number, 100);
 
   const constLength5 = "0022";
 
   const scriptPubKey = taproot.tapRoot(WizData.fromHex(config.innerPublicKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubKey.hex;
 
-  const tokenAssetIdLE = hexLE(pool.token.asset);
+  const constLength6 = "01" + tokenAssetIdLE + "01" + hexLE(conversion.numToLE64(WizData.fromNumber(tokenAmount)).hex) + "0022";
 
-  const constLength6 = "01" + tokenAssetIdLE + "01";
-
-  const inputAmount64LE = conversion.numToLE64(WizData.fromNumber(quoteAmount)).hex;
-
-  const inputAmount64BE = hexLE(inputAmount64LE);
-
-  const constLength7 = "0022";
-
-  const constLength8 = "01" + quoteAssetIdLE + "01";
+  const constLength7 = "01" + quoteAssetIdLE + "01";
 
   const commitmentTxFee64LE = conversion.numToLE64(WizData.fromNumber(config.commitmentTxFee.number)).hex;
 
   const commitmentTxFee64BE = hexLE(commitmentTxFee64LE);
 
-  const constLength9 = "00007ba513000000010151000000010151000000000000000000";
+  const constLength8 = "00007ba513000000010151000000010151000000000000000000";
 
   const commitmentTransactionRaw =
     constLength +
@@ -200,16 +193,14 @@ export const liquidityAddCreateCommitmentTx = (quoteAmount: number, tokenAmount:
     constLength3 +
     callData +
     constLength4 +
-    feeAmountsTotal +
+    inputAmountTotal +
     constLength5 +
     scriptPubKey +
     constLength6 +
-    inputAmount64BE +
-    constLength7 +
     scriptPubKey +
-    constLength8 +
+    constLength7 +
     commitmentTxFee64BE +
-    constLength9;
+    constLength8;
 
   return commitmentTransactionRaw;
 };
