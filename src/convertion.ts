@@ -89,7 +89,46 @@ export const convertForCtx = (value: number, slippage: number, pool: Pool, confi
     const receivedAmount = tokenValue - slippageAmount;
 
     return { amount: tokenValue, amountWithSlipapge: receivedAmount };
+  } else if (callMethod === CALL_METHOD.ADD_LIQUIDITY) {
+    if (value < Number(config.minRemainingSupply)) {
+      console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
+      return { amount: 0, amountWithSlipapge: 0 };
+    }
+    const quoteInput = value;
+    const quotePoolAmount = Number(pool.quote.value);
+    const tokenPoolAmount = Number(pool.token.value);
+    const tokenOutput = div(quoteInput * tokenPoolAmount, quotePoolAmount);
+    return { amount: tokenOutput, amountWithSlipapge: 0 };
   }
 
   return { amount: 0, amountWithSlipapge: 0 };
+};
+
+export const calcRecipientValue = (pool: Pool, quoteAmount: number, tokenAmount: number) => {
+  const user_provided_remaining_lbtc_supply = quoteAmount;
+
+  const user_provided_remaining_lbtc_supply_16 = Math.floor(user_provided_remaining_lbtc_supply / 16);
+
+  const pool_lp_supply = Number(pool.lp.value);
+  const pool_lp_circulation = 2000000000 - pool_lp_supply;
+  const mul_circ = user_provided_remaining_lbtc_supply_16 * pool_lp_circulation;
+  const pool_lbtc_supply = Number(pool.quote.value);
+  const pool_lbtc_supply_down = Math.floor(pool_lbtc_supply / 16);
+
+  const user_lp_receiving_1 = Math.floor(mul_circ / pool_lbtc_supply_down);
+
+  const user_provided_token_supply = tokenAmount;
+
+  const user_provided_token_supply_down = Math.floor(user_provided_token_supply / 2000000);
+  const mul_circ2 = user_provided_token_supply_down * pool_lp_circulation;
+  const pool_token_supply = Number(pool.token.value);
+  const pool_token_supply_down = Math.floor(pool_token_supply / 2000000);
+
+  const user_lp_receiving_2 = Math.floor(mul_circ2 / pool_token_supply_down);
+
+  const user_lp_received = Math.min(user_lp_receiving_1, user_lp_receiving_2);
+
+  const poolRate = (user_lp_received / pool_lp_circulation).toFixed(2);
+
+  return { lpReceived: user_lp_received.toString(), poolRate };
 };

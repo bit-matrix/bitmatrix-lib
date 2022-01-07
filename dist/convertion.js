@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.convertForCtx = void 0;
+exports.calcRecipientValue = exports.convertForCtx = void 0;
 var models_1 = require("@bitmatrix/models");
 var env_1 = require("./env");
 var helper_1 = require("./utils/helper");
@@ -66,7 +66,38 @@ var convertForCtx = function (value, slippage, pool, config, callMethod) {
         var receivedAmount = tokenValue - slippageAmount;
         return { amount: tokenValue, amountWithSlipapge: receivedAmount };
     }
+    else if (callMethod === models_1.CALL_METHOD.ADD_LIQUIDITY) {
+        if (value < Number(config.minRemainingSupply)) {
+            console.log("Quote amount must greater or at least minimum equal ".concat(config.minRemainingSupply));
+            return { amount: 0, amountWithSlipapge: 0 };
+        }
+        var quoteInput = value;
+        var quotePoolAmount = Number(pool.quote.value);
+        var tokenPoolAmount = Number(pool.token.value);
+        var tokenOutput = (0, helper_1.div)(quoteInput * tokenPoolAmount, quotePoolAmount);
+        return { amount: tokenOutput, amountWithSlipapge: 0 };
+    }
     return { amount: 0, amountWithSlipapge: 0 };
 };
 exports.convertForCtx = convertForCtx;
+var calcRecipientValue = function (pool, quoteAmount, tokenAmount) {
+    var user_provided_remaining_lbtc_supply = quoteAmount;
+    var user_provided_remaining_lbtc_supply_16 = Math.floor(user_provided_remaining_lbtc_supply / 16);
+    var pool_lp_supply = Number(pool.lp.value);
+    var pool_lp_circulation = 2000000000 - pool_lp_supply;
+    var mul_circ = user_provided_remaining_lbtc_supply_16 * pool_lp_circulation;
+    var pool_lbtc_supply = Number(pool.quote.value);
+    var pool_lbtc_supply_down = Math.floor(pool_lbtc_supply / 16);
+    var user_lp_receiving_1 = Math.floor(mul_circ / pool_lbtc_supply_down);
+    var user_provided_token_supply = tokenAmount;
+    var user_provided_token_supply_down = Math.floor(user_provided_token_supply / 2000000);
+    var mul_circ2 = user_provided_token_supply_down * pool_lp_circulation;
+    var pool_token_supply = Number(pool.token.value);
+    var pool_token_supply_down = Math.floor(pool_token_supply / 2000000);
+    var user_lp_receiving_2 = Math.floor(mul_circ2 / pool_token_supply_down);
+    var user_lp_received = Math.min(user_lp_receiving_1, user_lp_receiving_2);
+    var poolRate = (user_lp_received / pool_lp_circulation).toFixed(2);
+    return { lpReceived: user_lp_received.toString(), poolRate: poolRate };
+};
+exports.calcRecipientValue = calcRecipientValue;
 //# sourceMappingURL=convertion.js.map
