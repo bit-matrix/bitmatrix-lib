@@ -27,7 +27,6 @@ var calculateAmountTotal = function (inputAmount, orderingFee, baseFee, serviceF
     if (serviceFee === void 0) { serviceFee = 0; }
     if (lFee === void 0) { lFee = 0; }
     var totalAmount = inputAmount + orderingFee + baseFee + serviceFee;
-    console.log("tot:", totalAmount);
     var totalAmount64 = lib_core_1.conversion.numToLE64(wiz_data_1.default.fromNumber(totalAmount)).hex;
     var totalAmount64BE = (0, wiz_data_1.hexLE)(totalAmount64);
     return totalAmount64BE;
