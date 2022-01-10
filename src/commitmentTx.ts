@@ -2,7 +2,7 @@ import WizData, { hexLE } from "@script-wiz/wiz-data";
 import { conversion, taproot, TAPROOT_VERSION } from "@script-wiz/lib-core";
 import { BmConfig, CALL_METHOD, Pool } from "@bitmatrix/models";
 
-const calculateAmountTotal = (inputAmount: number, orderingFee: number, baseFee: number, serviceFee: number = 0, lFee: number = 0) => {
+const calculateAmountTotal = (inputAmount: number, orderingFee: number, baseFee: number, serviceFee: number = 0) => {
   const totalAmount = inputAmount + orderingFee + baseFee + serviceFee;
   const totalAmount64 = conversion.numToLE64(WizData.fromNumber(totalAmount)).hex;
   const totalAmount64BE = hexLE(totalAmount64);
@@ -153,7 +153,7 @@ export const liquidityAddCreateCommitmentTx = (quoteAmount: number, tokenAmount:
   const tokenAssetIdLE = hexLE(pool.token.asset);
   const poolIdLE = hexLE(pool.id);
 
-  const receivedAmount = hexLE(calculateAmountTotal(quoteAmount, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number, 100));
+  const receivedAmount = hexLE(calculateAmountTotal(quoteAmount, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number));
 
   const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
 
@@ -169,13 +169,71 @@ export const liquidityAddCreateCommitmentTx = (quoteAmount: number, tokenAmount:
 
   const constLength4 = "01" + quoteAssetIdLE + "01";
 
-  const inputAmountTotal = calculateAmountTotal(quoteAmount, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number, 100);
+  const inputAmountTotal = calculateAmountTotal(quoteAmount, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number);
 
   const constLength5 = "0022";
 
   const scriptPubKey = taproot.tapRoot(WizData.fromHex(config.innerPublicKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubKey.hex;
 
   const constLength6 = "01" + tokenAssetIdLE + "01" + hexLE(conversion.numToLE64(WizData.fromNumber(tokenAmount)).hex) + "0022";
+
+  const constLength7 = "01" + quoteAssetIdLE + "01";
+
+  const commitmentTxFee64LE = conversion.numToLE64(WizData.fromNumber(config.commitmentTxFee.number)).hex;
+
+  const commitmentTxFee64BE = hexLE(commitmentTxFee64LE);
+
+  const constLength8 = "00007ba513000000010151000000010151000000000000000000";
+
+  const commitmentTransactionRaw =
+    constLength +
+    rpcTxId +
+    constLength2 +
+    rpcTxId +
+    constLength3 +
+    callData +
+    constLength4 +
+    inputAmountTotal +
+    constLength5 +
+    scriptPubKey +
+    constLength6 +
+    scriptPubKey +
+    constLength7 +
+    commitmentTxFee64BE +
+    constLength8;
+
+  return commitmentTransactionRaw;
+};
+
+export const liquidityRemoveCreateCommitmentTx = (lpAmount: number, txId: string, publicKey: string, config: BmConfig, pool: Pool): string => {
+  const methodCall = CALL_METHOD.REMOVE_LIQUIDITY;
+  const quoteAssetIdLE = hexLE(pool.quote.asset);
+  const lpAssetIdLE = hexLE(pool.lp.asset);
+  const poolIdLE = hexLE(pool.id);
+
+  const receivedAmount = hexLE(calculateAmountTotal(0, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number));
+
+  const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
+
+  const commitmentOutputTapscriptTemplate = "20" + poolIdLE + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
+
+  const constLength = "020000000102";
+
+  const rpcTxId = hexLE(txId);
+
+  const constLength2 = "0000000000ffffffff";
+
+  const constLength3 = "0100000000ffffffff0401" + quoteAssetIdLE + "01000000000000000000516a4c4e";
+
+  const constLength4 = "01" + quoteAssetIdLE + "01";
+
+  const inputAmountTotal = calculateAmountTotal(0, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number);
+
+  const constLength5 = "0022";
+
+  const scriptPubKey = taproot.tapRoot(WizData.fromHex(config.innerPublicKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubKey.hex;
+
+  const constLength6 = "01" + lpAssetIdLE + "01" + hexLE(conversion.numToLE64(WizData.fromNumber(lpAmount)).hex) + "0022";
 
   const constLength7 = "01" + quoteAssetIdLE + "01";
 
