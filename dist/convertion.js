@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.calcRecipientValue = exports.convertForCtx = void 0;
+exports.calcRemoveLiquidityRecipientValue = exports.calcAddLiquidityRecipientValue = exports.convertForCtx = void 0;
 var models_1 = require("@bitmatrix/models");
 var env_1 = require("./env");
 var helper_1 = require("./utils/helper");
@@ -80,7 +80,7 @@ var convertForCtx = function (value, slippage, pool, config, callMethod) {
     return { amount: 0, amountWithSlipapge: 0 };
 };
 exports.convertForCtx = convertForCtx;
-var calcRecipientValue = function (pool, quoteAmount, tokenAmount) {
+var calcAddLiquidityRecipientValue = function (pool, quoteAmount, tokenAmount) {
     var user_provided_remaining_lbtc_supply = quoteAmount;
     var user_provided_remaining_lbtc_supply_16 = Math.floor(user_provided_remaining_lbtc_supply / 16);
     var pool_lp_supply = Number(pool.lp.value);
@@ -99,5 +99,25 @@ var calcRecipientValue = function (pool, quoteAmount, tokenAmount) {
     var poolRate = user_lp_received / pool_lp_circulation;
     return { lpReceived: user_lp_received, poolRate: poolRate };
 };
-exports.calcRecipientValue = calcRecipientValue;
+exports.calcAddLiquidityRecipientValue = calcAddLiquidityRecipientValue;
+var calcRemoveLiquidityRecipientValue = function (pool, valLp) {
+    var user_lp_input = valLp;
+    var pool_lbtc_supply = Number(pool.quote.value);
+    var pool_token_supply = Number(pool.token.value);
+    var pool_lp_supply = Number(pool.lp.value);
+    var pool_lbtc_supply_down = Math.floor(pool_lbtc_supply / 16);
+    var mul_1 = user_lp_input * pool_lbtc_supply_down;
+    var lp_circ = 2000000000 - pool_lp_supply;
+    var div_1 = Math.floor(mul_1 / lp_circ);
+    var user_lbtc_received = div_1 * 16;
+    var pool_token_supply_down = Math.floor(pool_token_supply / 2000000);
+    var mul_2 = user_lp_input * pool_token_supply_down;
+    var div_2 = Math.floor(mul_2 / lp_circ);
+    var user_token_received = div_2 * 2000000;
+    return {
+        user_lbtc_received: user_lbtc_received,
+        user_token_received: user_token_received,
+    };
+};
+exports.calcRemoveLiquidityRecipientValue = calcRemoveLiquidityRecipientValue;
 //# sourceMappingURL=convertion.js.map

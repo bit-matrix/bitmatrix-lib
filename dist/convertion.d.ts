@@ -3,7 +3,11 @@ export declare const convertForCtx: (value: number, slippage: number, pool: Pool
     amount: number;
     amountWithSlipapge: number;
 };
-export declare const calcRecipientValue: (pool: Pool, quoteAmount: number, tokenAmount: number) => {
+export declare const calcAddLiquidityRecipientValue: (pool: Pool, quoteAmount: number, tokenAmount: number) => {
     lpReceived: number;
     poolRate: number;
+};
+export declare const calcRemoveLiquidityRecipientValue: (pool: Pool, valLp: number) => {
+    user_lbtc_received: number;
+    user_token_received: number;
 };
