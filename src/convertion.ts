@@ -104,7 +104,7 @@ export const convertForCtx = (value: number, slippage: number, pool: Pool, confi
   return { amount: 0, amountWithSlipapge: 0 };
 };
 
-export const calcRecipientValue = (pool: Pool, quoteAmount: number, tokenAmount: number) => {
+export const calcAddLiquidityRecipientValue = (pool: Pool, quoteAmount: number, tokenAmount: number) => {
   const user_provided_remaining_lbtc_supply = quoteAmount;
 
   const user_provided_remaining_lbtc_supply_16 = Math.floor(user_provided_remaining_lbtc_supply / 16);
@@ -131,4 +131,29 @@ export const calcRecipientValue = (pool: Pool, quoteAmount: number, tokenAmount:
   const poolRate = user_lp_received / pool_lp_circulation;
 
   return { lpReceived: user_lp_received, poolRate };
+};
+
+export const calcRemoveLiquidityRecipientValue = (pool: Pool, valLp: number) => {
+  const user_lp_input = valLp;
+  const pool_lbtc_supply = Number(pool.quote.value);
+  const pool_token_supply = Number(pool.token.value);
+  const pool_lp_supply = Number(pool.lp.value);
+
+  const pool_lbtc_supply_down = Math.floor(pool_lbtc_supply / 16);
+  const mul_1 = user_lp_input * pool_lbtc_supply_down;
+  const lp_circ = 2000000000 - pool_lp_supply;
+  const div_1 = Math.floor(mul_1 / lp_circ);
+
+  const user_lbtc_received = div_1 * 16;
+
+  const pool_token_supply_down = Math.floor(pool_token_supply / 2000000);
+
+  const mul_2 = user_lp_input * pool_token_supply_down;
+  const div_2 = Math.floor(mul_2 / lp_circ);
+  const user_token_received = div_2 * 2000000;
+
+  return {
+    user_lbtc_received,
+    user_token_received,
+  };
 };
