@@ -4,6 +4,6 @@ export declare const convertForCtx: (value: number, slippage: number, pool: Pool
     amountWithSlipapge: number;
 };
 export declare const calcRecipientValue: (pool: Pool, quoteAmount: number, tokenAmount: number) => {
-    lpReceived: string;
-    poolRate: string;
+    lpReceived: number;
+    poolRate: number;
 };

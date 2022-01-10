@@ -96,8 +96,8 @@ var calcRecipientValue = function (pool, quoteAmount, tokenAmount) {
     var pool_token_supply_down = Math.floor(pool_token_supply / 2000000);
     var user_lp_receiving_2 = Math.floor(mul_circ2 / pool_token_supply_down);
     var user_lp_received = Math.min(user_lp_receiving_1, user_lp_receiving_2);
-    var poolRate = (user_lp_received / pool_lp_circulation).toFixed(2);
-    return { lpReceived: user_lp_received.toString(), poolRate: poolRate };
+    var poolRate = user_lp_received / pool_lp_circulation;
+    return { lpReceived: user_lp_received, poolRate: poolRate };
 };
 exports.calcRecipientValue = calcRecipientValue;
 //# sourceMappingURL=convertion.js.map
