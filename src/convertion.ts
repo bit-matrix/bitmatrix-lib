@@ -128,7 +128,7 @@ export const calcRecipientValue = (pool: Pool, quoteAmount: number, tokenAmount:
 
   const user_lp_received = Math.min(user_lp_receiving_1, user_lp_receiving_2);
 
-  const poolRate = (user_lp_received / pool_lp_circulation).toFixed(2);
+  const poolRate = user_lp_received / pool_lp_circulation;
 
-  return { lpReceived: user_lp_received.toString(), poolRate };
+  return { lpReceived: user_lp_received, poolRate };
 };
