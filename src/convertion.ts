@@ -89,16 +89,6 @@ export const convertForCtx = (value: number, slippage: number, pool: Pool, confi
     const receivedAmount = tokenValue - slippageAmount;
 
     return { amount: tokenValue, amountWithSlipapge: receivedAmount };
-  } else if (callMethod === CALL_METHOD.ADD_LIQUIDITY) {
-    if (value < Number(config.minRemainingSupply)) {
-      console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
-      return { amount: 0, amountWithSlipapge: 0 };
-    }
-    const quoteInput = value;
-    const quotePoolAmount = Number(pool.quote.value);
-    const tokenPoolAmount = Number(pool.token.value);
-    const tokenOutput = div(quoteInput * tokenPoolAmount, quotePoolAmount);
-    return { amount: tokenOutput, amountWithSlipapge: 0 };
   }
 
   return { amount: 0, amountWithSlipapge: 0 };
@@ -156,4 +146,32 @@ export const calcRemoveLiquidityRecipientValue = (pool: Pool, valLp: number) => 
     user_lbtc_received,
     user_token_received,
   };
+};
+
+export const convertForLiquidityCtx = (value: number, pool: Pool, config: BmConfig, isToken = false): number => {
+  if (isToken) {
+    if (value < Number(config.minTokenValue)) {
+      console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
+      return 0;
+    }
+
+    const tokenInput = value;
+
+    const quotePoolAmount = Number(pool.quote.value);
+    const tokenPoolAmount = Number(pool.token.value);
+
+    const quoteOutput = div(tokenInput * quotePoolAmount, tokenPoolAmount);
+
+    return quoteOutput;
+  } else {
+    if (value < Number(config.minRemainingSupply)) {
+      console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
+      return 0;
+    }
+    const quoteInput = value;
+    const quotePoolAmount = Number(pool.quote.value);
+    const tokenPoolAmount = Number(pool.token.value);
+    const tokenOutput = div(quoteInput * tokenPoolAmount, quotePoolAmount);
+    return tokenOutput;
+  }
 };
