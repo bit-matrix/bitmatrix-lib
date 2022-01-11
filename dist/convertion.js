@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.calcRemoveLiquidityRecipientValue = exports.calcAddLiquidityRecipientValue = exports.convertForCtx = void 0;
+exports.convertForLiquidityCtx = exports.calcRemoveLiquidityRecipientValue = exports.calcAddLiquidityRecipientValue = exports.convertForCtx = void 0;
 var models_1 = require("@bitmatrix/models");
 var env_1 = require("./env");
 var helper_1 = require("./utils/helper");
@@ -66,17 +66,6 @@ var convertForCtx = function (value, slippage, pool, config, callMethod) {
         var receivedAmount = tokenValue - slippageAmount;
         return { amount: tokenValue, amountWithSlipapge: receivedAmount };
     }
-    else if (callMethod === models_1.CALL_METHOD.ADD_LIQUIDITY) {
-        if (value < Number(config.minRemainingSupply)) {
-            console.log("Quote amount must greater or at least minimum equal ".concat(config.minRemainingSupply));
-            return { amount: 0, amountWithSlipapge: 0 };
-        }
-        var quoteInput = value;
-        var quotePoolAmount = Number(pool.quote.value);
-        var tokenPoolAmount = Number(pool.token.value);
-        var tokenOutput = (0, helper_1.div)(quoteInput * tokenPoolAmount, quotePoolAmount);
-        return { amount: tokenOutput, amountWithSlipapge: 0 };
-    }
     return { amount: 0, amountWithSlipapge: 0 };
 };
 exports.convertForCtx = convertForCtx;
@@ -120,4 +109,30 @@ var calcRemoveLiquidityRecipientValue = function (pool, valLp) {
     };
 };
 exports.calcRemoveLiquidityRecipientValue = calcRemoveLiquidityRecipientValue;
+var convertForLiquidityCtx = function (value, pool, config, isToken) {
+    if (isToken === void 0) { isToken = false; }
+    if (isToken) {
+        if (value < Number(config.minTokenValue)) {
+            console.log("Token amount must greater or at least minimum equal ".concat(config.minTokenValue));
+            return 0;
+        }
+        var tokenInput = value;
+        var quotePoolAmount = Number(pool.quote.value);
+        var tokenPoolAmount = Number(pool.token.value);
+        var quoteOutput = (0, helper_1.div)(tokenInput * quotePoolAmount, tokenPoolAmount);
+        return quoteOutput;
+    }
+    else {
+        if (value < Number(config.minRemainingSupply)) {
+            console.log("Quote amount must greater or at least minimum equal ".concat(config.minRemainingSupply));
+            return 0;
+        }
+        var quoteInput = value;
+        var quotePoolAmount = Number(pool.quote.value);
+        var tokenPoolAmount = Number(pool.token.value);
+        var tokenOutput = (0, helper_1.div)(quoteInput * tokenPoolAmount, quotePoolAmount);
+        return tokenOutput;
+    }
+};
+exports.convertForLiquidityCtx = convertForLiquidityCtx;
 //# sourceMappingURL=convertion.js.map
