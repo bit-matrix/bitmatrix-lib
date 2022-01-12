@@ -43,7 +43,7 @@ export const quoteToTokenCreateCommitmentTx = (
 
   const scriptPubKey = taproot.tapRoot(WizData.fromHex(config.innerPublicKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubKey.hex;
 
-  const constLength6 = "01" + quoteAssetIdLE + "01000000000000028a0022";
+  const constLength6 = "01" + quoteAssetIdLE + "01" + hexLE(conversion.numToLE64(WizData.fromNumber(config.serviceFee.number)).hex) + "0022";
 
   const constLength7 = "01" + quoteAssetIdLE + "01";
 
