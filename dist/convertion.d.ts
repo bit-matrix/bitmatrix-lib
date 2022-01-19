@@ -3,6 +3,10 @@ export declare const convertForCtx: (value: number, slippage: number, pool: Pool
     amount: number;
     amountWithSlipapge: number;
 };
+export declare const convertForCtx2: (value: number, slippage: number, pool: Pool, config: BmConfig, callMethod: CALL_METHOD) => {
+    amount: number;
+    amountWithSlipapge: number;
+};
 export declare const calcAddLiquidityRecipientValue: (pool: Pool, quoteAmount: number, tokenAmount: number) => {
     lpReceived: number;
     poolRate: number;
