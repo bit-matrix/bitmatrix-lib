@@ -37,13 +37,13 @@ export const quoteToTokenCreateCommitmentTx = (
 
   const constLength4 = "01" + quoteAssetIdLE + "01";
 
-  const inputAmountTotal = calculateAmountTotal(inputAmount, config.defaultOrderingFee.number, config.baseFee.number);
+  const ctxOutput1 = calculateAmountTotal(inputAmount / 2, config.defaultOrderingFee.number, config.baseFee.number + config.serviceFee.number);
 
   const constLength5 = "0022";
 
   const scriptPubKey = taproot.tapRoot(WizData.fromHex(config.innerPublicKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubKey.hex;
 
-  const constLength6 = "01" + quoteAssetIdLE + "01" + hexLE(conversion.numToLE64(WizData.fromNumber(config.serviceFee.number)).hex) + "0022";
+  const ctxOutput2 = "01" + quoteAssetIdLE + "01" + hexLE(conversion.numToLE64(WizData.fromNumber(inputAmount / 2)).hex) + "0022";
 
   const constLength7 = "01" + quoteAssetIdLE + "01";
 
@@ -61,10 +61,10 @@ export const quoteToTokenCreateCommitmentTx = (
     constLength3 +
     callData +
     constLength4 +
-    inputAmountTotal +
+    ctxOutput1 +
     constLength5 +
     scriptPubKey +
-    constLength6 +
+    ctxOutput2 +
     scriptPubKey +
     constLength7 +
     commitmentTxFee64BE +
