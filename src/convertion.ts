@@ -5,7 +5,7 @@ import { div } from "./utils/helper";
 export const convertForCtx = (value: number, slippage: number, pool: Pool, config: BmConfig, callMethod: CALL_METHOD): { amount: number; amountWithSlipapge: number } => {
   if (callMethod === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
     if (value < Number(config.minRemainingSupply)) {
-      console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
+      // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
       return { amount: 0, amountWithSlipapge: 0 };
     }
 
@@ -50,7 +50,7 @@ export const convertForCtx = (value: number, slippage: number, pool: Pool, confi
   } else if (callMethod === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
     // validation
     if (value < Number(config.minTokenValue)) {
-      console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
+      // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
       return { amount: 0, amountWithSlipapge: 0 };
     }
 
@@ -151,7 +151,7 @@ export const calcRemoveLiquidityRecipientValue = (pool: Pool, valLp: number) => 
 export const convertForLiquidityCtx = (value: number, pool: Pool, config: BmConfig, isToken = false): number => {
   if (isToken) {
     if (value < Number(config.minTokenValue)) {
-      console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
+      // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
       return 0;
     }
 
@@ -165,7 +165,7 @@ export const convertForLiquidityCtx = (value: number, pool: Pool, config: BmConf
     return quoteOutput;
   } else {
     if (value < Number(config.minRemainingSupply)) {
-      console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
+      // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
       return 0;
     }
     const quoteInput = value;
