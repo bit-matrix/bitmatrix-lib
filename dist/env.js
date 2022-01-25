@@ -7,5 +7,5 @@ exports.tokenPrecisionCoefficient = 2000000;
 exports.rpcUrl = "https://rpc.bitmatrix-aggregate.com/rpc";
 // export const bmUrl = "https://db.bitmatrix-aggregate.com";
 exports.bmUrl = "https://rocksdb.bitmatrix-aggregate.com";
-exports.bmApiUrl = "https://api.bitmatrix-aggregate.com";
+exports.bmApiUrl = "https://rocksapi.bitmatrix-aggregate.com";
 //# sourceMappingURL=env.js.map
