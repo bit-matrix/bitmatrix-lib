@@ -7,7 +7,7 @@ var helper_1 = require("./utils/helper");
 var convertForCtx = function (value, slippage, pool, config, callMethod) {
     if (callMethod === models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
         if (value < Number(config.minRemainingSupply)) {
-            console.log("Quote amount must greater or at least minimum equal ".concat(config.minRemainingSupply));
+            // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
             return { amount: 0, amountWithSlipapge: 0 };
         }
         // step1  (lp fee calculate)
@@ -39,7 +39,7 @@ var convertForCtx = function (value, slippage, pool, config, callMethod) {
     else if (callMethod === models_1.CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
         // validation
         if (value < Number(config.minTokenValue)) {
-            console.log("Token amount must greater or at least minimum equal ".concat(config.minTokenValue));
+            // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
             return { amount: 0, amountWithSlipapge: 0 };
         }
         // step1 (fee calculation)
@@ -113,7 +113,7 @@ var convertForLiquidityCtx = function (value, pool, config, isToken) {
     if (isToken === void 0) { isToken = false; }
     if (isToken) {
         if (value < Number(config.minTokenValue)) {
-            console.log("Token amount must greater or at least minimum equal ".concat(config.minTokenValue));
+            // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
             return 0;
         }
         var tokenInput = value;
@@ -124,7 +124,7 @@ var convertForLiquidityCtx = function (value, pool, config, isToken) {
     }
     else {
         if (value < Number(config.minRemainingSupply)) {
-            console.log("Quote amount must greater or at least minimum equal ".concat(config.minRemainingSupply));
+            // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
             return 0;
         }
         var quoteInput = value;
