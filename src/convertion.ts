@@ -136,6 +136,44 @@ export const convertForCtx2 = (value: number, slippage: number, pool: Pool, conf
     }
 
     return { amount: inp, amountWithSlipapge: receivedAmount };
+  } else if (callMethod === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
+    // validation
+    // if (value < Number(config.minTokenValue)) {
+    //   // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
+    //   return { amount: 0, amountWithSlipapge: 0 };
+    // }
+    const lbtcAmount = Number(pool.quote.value) - value;
+
+    const constantRate = div(lbtcAmount, quotePrecisionCoefficient);
+
+    const x = div(Number(pool.quote.value), quotePrecisionCoefficient);
+
+    const y = div(Number(pool.token.value), tokenPrecisionCoefficient);
+
+    const constant = x * y;
+
+    const usdtLiquidtyRate = div(constant, constantRate);
+
+    const totalUsdtLiquidity = usdtLiquidtyRate * tokenPrecisionCoefficient;
+
+    const usdtAmountWithoutFee = totalUsdtLiquidity - Number(pool.token.value);
+
+    const lpFee = value - usdtAmountWithoutFee;
+
+    const lpFeeRate = div(value, lpFee);
+
+    const inp = div(lpFeeRate * usdtAmountWithoutFee, lpFeeRate - 1);
+
+    const slippageAmount = div(inp, slippage);
+
+    const receivedAmount = inp - slippageAmount;
+
+    // if (inp < Number(config.minTokenValue)) {
+    //   console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
+    //   return { amount: 0, amountWithSlipapge: 0 };
+    // }
+
+    return { amount: usdtAmountWithoutFee, amountWithSlipapge: receivedAmount };
   }
 
   return { amount: 0, amountWithSlipapge: 0 };
