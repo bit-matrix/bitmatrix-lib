@@ -100,6 +100,31 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
         }
         return { amount: inp, amountWithSlipapge: receivedAmount };
     }
+    else if (callMethod === models_1.CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
+        // validation
+        // if (value < Number(config.minTokenValue)) {
+        //   // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
+        //   return { amount: 0, amountWithSlipapge: 0 };
+        // }
+        var lbtcAmount = Number(pool.quote.value) - value;
+        var constantRate = (0, helper_1.div)(lbtcAmount, env_1.quotePrecisionCoefficient);
+        var x = (0, helper_1.div)(Number(pool.quote.value), env_1.quotePrecisionCoefficient);
+        var y = (0, helper_1.div)(Number(pool.token.value), env_1.tokenPrecisionCoefficient);
+        var constant = x * y;
+        var usdtLiquidtyRate = (0, helper_1.div)(constant, constantRate);
+        var totalUsdtLiquidity = usdtLiquidtyRate * env_1.tokenPrecisionCoefficient;
+        var usdtAmountWithoutFee = totalUsdtLiquidity - Number(pool.token.value);
+        var lpFee = value - usdtAmountWithoutFee;
+        var lpFeeRate_1 = (0, helper_1.div)(value, lpFee);
+        var inp = (0, helper_1.div)(lpFeeRate_1 * usdtAmountWithoutFee, lpFeeRate_1 - 1);
+        var slippageAmount = (0, helper_1.div)(inp, slippage);
+        var receivedAmount = inp - slippageAmount;
+        // if (inp < Number(config.minTokenValue)) {
+        //   console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
+        //   return { amount: 0, amountWithSlipapge: 0 };
+        // }
+        return { amount: usdtAmountWithoutFee, amountWithSlipapge: receivedAmount };
+    }
     return { amount: 0, amountWithSlipapge: 0 };
 };
 exports.convertForCtx2 = convertForCtx2;
