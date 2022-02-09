@@ -42,10 +42,10 @@ var quoteToTokenCreateCommitmentTx = function (inputAmount, txId, publicKey, cal
     var constLength2 = "0000000000ffffffff";
     var constLength3 = "0100000000ffffffff0401" + quoteAssetIdLE + "01000000000000000000516a4c4e";
     var constLength4 = "01" + quoteAssetIdLE + "01";
-    var inputAmountTotal = calculateAmountTotal(inputAmount, config.defaultOrderingFee.number, config.baseFee.number);
+    var ctxOutput1 = calculateAmountTotal(inputAmount / 2, config.defaultOrderingFee.number, config.baseFee.number + config.serviceFee.number);
     var constLength5 = "0022";
     var scriptPubKey = lib_core_1.taproot.tapRoot(wiz_data_1.default.fromHex(config.innerPublicKey), [wiz_data_1.default.fromHex(commitmentOutputTapscriptTemplate)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubKey.hex;
-    var constLength6 = "01" + quoteAssetIdLE + "01" + (0, wiz_data_1.hexLE)(lib_core_1.conversion.numToLE64(wiz_data_1.default.fromNumber(config.serviceFee.number)).hex) + "0022";
+    var ctxOutput2 = "01" + quoteAssetIdLE + "01" + (0, wiz_data_1.hexLE)(lib_core_1.conversion.numToLE64(wiz_data_1.default.fromNumber(inputAmount / 2)).hex) + "0022";
     var constLength7 = "01" + quoteAssetIdLE + "01";
     var commitmentTxFee64LE = lib_core_1.conversion.numToLE64(wiz_data_1.default.fromNumber(config.commitmentTxFee.number)).hex;
     var commitmentTxFee64BE = (0, wiz_data_1.hexLE)(commitmentTxFee64LE);
@@ -57,10 +57,10 @@ var quoteToTokenCreateCommitmentTx = function (inputAmount, txId, publicKey, cal
         constLength3 +
         callData +
         constLength4 +
-        inputAmountTotal +
+        ctxOutput1 +
         constLength5 +
         scriptPubKey +
-        constLength6 +
+        ctxOutput2 +
         scriptPubKey +
         constLength7 +
         commitmentTxFee64BE +
