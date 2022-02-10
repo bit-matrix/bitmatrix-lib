@@ -71,8 +71,8 @@ var convertForCtx = function (value, slippage, pool, config, callMethod) {
 exports.convertForCtx = convertForCtx;
 var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
     if (callMethod === models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
-        if (value < Number(config.minRemainingSupply)) {
-            console.log("Quote amount must greater or at least minimum equal ".concat(config.minRemainingSupply));
+        if (value < Number(config.minTokenValue)) {
+            // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
             return { amount: 0, amountWithSlipapge: 0 };
         }
         // extra
@@ -95,17 +95,17 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
         var slippageAmount = (0, helper_1.div)(inp, slippage);
         var receivedAmount = inp - slippageAmount;
         if (inp < Number(config.minRemainingSupply)) {
-            console.log("Quote amount must greater or at least minimum equal ".concat(config.minRemainingSupply));
+            // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
             return { amount: 0, amountWithSlipapge: 0 };
         }
         return { amount: inp, amountWithSlipapge: receivedAmount };
     }
     else if (callMethod === models_1.CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
         // validation
-        // if (value < Number(config.minTokenValue)) {
-        //   // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
-        //   return { amount: 0, amountWithSlipapge: 0 };
-        // }
+        if (value < Number(config.minRemainingSupply)) {
+            // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
+            return { amount: 0, amountWithSlipapge: 0 };
+        }
         var lbtcAmount = Number(pool.quote.value) - value;
         var constantRate = (0, helper_1.div)(lbtcAmount, env_1.quotePrecisionCoefficient);
         var x = (0, helper_1.div)(Number(pool.quote.value), env_1.quotePrecisionCoefficient);
@@ -114,16 +114,14 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
         var usdtLiquidtyRate = (0, helper_1.div)(constant, constantRate);
         var totalUsdtLiquidity = usdtLiquidtyRate * env_1.tokenPrecisionCoefficient;
         var usdtAmountWithoutFee = totalUsdtLiquidity - Number(pool.token.value);
-        var lpFee = value - usdtAmountWithoutFee;
-        var lpFeeRate_1 = (0, helper_1.div)(value, lpFee);
-        var inp = (0, helper_1.div)(lpFeeRate_1 * usdtAmountWithoutFee, lpFeeRate_1 - 1);
+        var inp = (0, helper_1.div)(env_1.lpFeeRate * usdtAmountWithoutFee, env_1.lpFeeRate - 1);
         var slippageAmount = (0, helper_1.div)(inp, slippage);
         var receivedAmount = inp - slippageAmount;
-        // if (inp < Number(config.minTokenValue)) {
-        //   console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
-        //   return { amount: 0, amountWithSlipapge: 0 };
-        // }
-        return { amount: usdtAmountWithoutFee, amountWithSlipapge: receivedAmount };
+        if (inp < Number(config.minTokenValue)) {
+            // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
+            return { amount: 0, amountWithSlipapge: 0 };
+        }
+        return { amount: inp, amountWithSlipapge: receivedAmount };
     }
     return { amount: 0, amountWithSlipapge: 0 };
 };
