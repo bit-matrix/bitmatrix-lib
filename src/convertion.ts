@@ -94,6 +94,87 @@ export const convertForCtx = (value: number, slippage: number, pool: Pool, confi
   return { amount: 0, amountWithSlipapge: 0 };
 };
 
+export const convertForCtx2 = (value: number, slippage: number, pool: Pool, config: BmConfig, callMethod: CALL_METHOD): { amount: number; amountWithSlipapge: number } => {
+  if (callMethod === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
+    if (value < Number(config.minTokenValue)) {
+      // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
+      return { amount: 0, amountWithSlipapge: 0 };
+    }
+
+    // extra
+    const quotePoolAmountWithRate = div(Number(pool.quote.value), quotePrecisionCoefficient);
+    const usdtPoolAmountWithRate = div(Number(pool.token.value), tokenPrecisionCoefficient);
+    const poolRateMul = quotePoolAmountWithRate * usdtPoolAmountWithRate;
+
+    // step 1
+    const finalTokenPoolLiquidity = value + config.recipientValueMinus;
+
+    // step 2
+    const poolRateMulWithLbtcPoolRateMul = Number(pool.token.value) - finalTokenPoolLiquidity;
+
+    // step 3
+    const poolRateMulWithQuotePoolRate = div(poolRateMulWithLbtcPoolRateMul, tokenPrecisionCoefficient);
+
+    // step 4
+    const quotePoolTotalAmountWithRate = div(poolRateMul, poolRateMulWithQuotePoolRate);
+
+    // step 5
+    const quotePoolTotalAmount = quotePoolTotalAmountWithRate * quotePrecisionCoefficient;
+
+    // step 6
+    const quoteAmountSubFee = quotePoolTotalAmount - Number(pool.quote.value);
+
+    const inp = div(lpFeeRate * quoteAmountSubFee, lpFeeRate - 1);
+
+    const slippageAmount = div(inp, slippage);
+
+    const receivedAmount = inp - slippageAmount;
+
+    if (inp < Number(config.minRemainingSupply)) {
+      // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
+      return { amount: 0, amountWithSlipapge: 0 };
+    }
+
+    return { amount: inp, amountWithSlipapge: receivedAmount };
+  } else if (callMethod === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
+    // validation
+    if (value < Number(config.minRemainingSupply)) {
+      // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
+      return { amount: 0, amountWithSlipapge: 0 };
+    }
+    const lbtcAmount = Number(pool.quote.value) - value;
+
+    const constantRate = div(lbtcAmount, quotePrecisionCoefficient);
+
+    const x = div(Number(pool.quote.value), quotePrecisionCoefficient);
+
+    const y = div(Number(pool.token.value), tokenPrecisionCoefficient);
+
+    const constant = x * y;
+
+    const usdtLiquidtyRate = div(constant, constantRate);
+
+    const totalUsdtLiquidity = usdtLiquidtyRate * tokenPrecisionCoefficient;
+
+    const usdtAmountWithoutFee = totalUsdtLiquidity - Number(pool.token.value);
+
+    const inp = div(lpFeeRate * usdtAmountWithoutFee, lpFeeRate - 1);
+
+    const slippageAmount = div(inp, slippage);
+
+    const receivedAmount = inp - slippageAmount;
+
+    if (inp < Number(config.minTokenValue)) {
+      // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
+      return { amount: 0, amountWithSlipapge: 0 };
+    }
+
+    return { amount: inp, amountWithSlipapge: receivedAmount };
+  }
+
+  return { amount: 0, amountWithSlipapge: 0 };
+};
+
 export const calcAddLiquidityRecipientValue = (pool: Pool, quoteAmount: number, tokenAmount: number) => {
   const user_provided_remaining_lbtc_supply = quoteAmount;
 
