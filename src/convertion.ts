@@ -96,8 +96,8 @@ export const convertForCtx = (value: number, slippage: number, pool: Pool, confi
 
 export const convertForCtx2 = (value: number, slippage: number, pool: Pool, config: BmConfig, callMethod: CALL_METHOD): { amount: number; amountWithSlipapge: number } => {
   if (callMethod === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
-    if (value < Number(config.minRemainingSupply)) {
-      console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
+    if (value < Number(config.minTokenValue)) {
+      // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
       return { amount: 0, amountWithSlipapge: 0 };
     }
 
@@ -131,17 +131,17 @@ export const convertForCtx2 = (value: number, slippage: number, pool: Pool, conf
     const receivedAmount = inp - slippageAmount;
 
     if (inp < Number(config.minRemainingSupply)) {
-      console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
+      // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
       return { amount: 0, amountWithSlipapge: 0 };
     }
 
     return { amount: inp, amountWithSlipapge: receivedAmount };
   } else if (callMethod === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
     // validation
-    // if (value < Number(config.minTokenValue)) {
-    //   // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
-    //   return { amount: 0, amountWithSlipapge: 0 };
-    // }
+    if (value < Number(config.minRemainingSupply)) {
+      // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
+      return { amount: 0, amountWithSlipapge: 0 };
+    }
     const lbtcAmount = Number(pool.quote.value) - value;
 
     const constantRate = div(lbtcAmount, quotePrecisionCoefficient);
@@ -158,22 +158,18 @@ export const convertForCtx2 = (value: number, slippage: number, pool: Pool, conf
 
     const usdtAmountWithoutFee = totalUsdtLiquidity - Number(pool.token.value);
 
-    const lpFee = value - usdtAmountWithoutFee;
-
-    const lpFeeRate = div(value, lpFee);
-
     const inp = div(lpFeeRate * usdtAmountWithoutFee, lpFeeRate - 1);
 
     const slippageAmount = div(inp, slippage);
 
     const receivedAmount = inp - slippageAmount;
 
-    // if (inp < Number(config.minTokenValue)) {
-    //   console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
-    //   return { amount: 0, amountWithSlipapge: 0 };
-    // }
+    if (inp < Number(config.minTokenValue)) {
+      // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
+      return { amount: 0, amountWithSlipapge: 0 };
+    }
 
-    return { amount: usdtAmountWithoutFee, amountWithSlipapge: receivedAmount };
+    return { amount: inp, amountWithSlipapge: receivedAmount };
   }
 
   return { amount: 0, amountWithSlipapge: 0 };
