@@ -126,9 +126,9 @@ export const convertForCtx2 = (value: number, slippage: number, pool: Pool, conf
 
     const inp = div(lpFeeRate * quoteAmountSubFee, lpFeeRate - 1);
 
-    const slippageAmount = div(inp, slippage);
+    const slippageAmount = div(value, slippage);
 
-    const receivedAmount = inp - slippageAmount;
+    const receivedAmount = value - slippageAmount;
 
     if (inp < Number(config.minRemainingSupply)) {
       // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
@@ -160,9 +160,9 @@ export const convertForCtx2 = (value: number, slippage: number, pool: Pool, conf
 
     const inp = div(lpFeeRate * usdtAmountWithoutFee, lpFeeRate - 1);
 
-    const slippageAmount = div(inp, slippage);
+    const slippageAmount = div(value, slippage);
 
-    const receivedAmount = inp - slippageAmount;
+    const receivedAmount = value - slippageAmount;
 
     if (inp < Number(config.minTokenValue)) {
       // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
