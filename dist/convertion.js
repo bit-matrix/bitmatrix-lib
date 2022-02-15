@@ -92,8 +92,8 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
         // step 6
         var quoteAmountSubFee = quotePoolTotalAmount - Number(pool.quote.value);
         var inp = (0, helper_1.div)(env_1.lpFeeRate * quoteAmountSubFee, env_1.lpFeeRate - 1);
-        var slippageAmount = (0, helper_1.div)(inp, slippage);
-        var receivedAmount = inp - slippageAmount;
+        var slippageAmount = (0, helper_1.div)(value, slippage);
+        var receivedAmount = value - slippageAmount;
         if (inp < Number(config.minRemainingSupply)) {
             // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
             return { amount: 0, amountWithSlipapge: 0 };
@@ -115,8 +115,8 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
         var totalUsdtLiquidity = usdtLiquidtyRate * env_1.tokenPrecisionCoefficient;
         var usdtAmountWithoutFee = totalUsdtLiquidity - Number(pool.token.value);
         var inp = (0, helper_1.div)(env_1.lpFeeRate * usdtAmountWithoutFee, env_1.lpFeeRate - 1);
-        var slippageAmount = (0, helper_1.div)(inp, slippage);
-        var receivedAmount = inp - slippageAmount;
+        var slippageAmount = (0, helper_1.div)(value, slippage);
+        var receivedAmount = value - slippageAmount;
         if (inp < Number(config.minTokenValue)) {
             // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
             return { amount: 0, amountWithSlipapge: 0 };
