@@ -37,7 +37,9 @@ export const quoteToTokenCreateCommitmentTx = (
 
   const constLength4 = "01" + quoteAssetIdLE + "01";
 
-  const ctxOutput1 = calculateAmountTotal(inputAmount / 2, config.defaultOrderingFee.number, config.baseFee.number + config.serviceFee.number);
+  const inputMod2 = inputAmount % 2;
+
+  const ctxOutput1 = calculateAmountTotal(inputAmount / 2 + inputMod2, config.defaultOrderingFee.number, config.baseFee.number + config.serviceFee.number);
 
   const constLength5 = "0022";
 
