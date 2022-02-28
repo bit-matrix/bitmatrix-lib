@@ -43,7 +43,6 @@ var quoteToTokenCreateCommitmentTx = function (inputAmount, txId, publicKey, cal
     var constLength3 = "0100000000ffffffff0401" + quoteAssetIdLE + "01000000000000000000516a4c4e";
     var constLength4 = "01" + quoteAssetIdLE + "01";
     var inputMod2 = inputAmount % 2;
-    console.log("inputmod2", inputMod2);
     var ctxOutput1 = calculateAmountTotal(inputAmount / 2 + inputMod2, config.defaultOrderingFee.number, config.baseFee.number + config.serviceFee.number);
     var constLength5 = "0022";
     var scriptPubKey = lib_core_1.taproot.tapRoot(wiz_data_1.default.fromHex(config.innerPublicKey), [wiz_data_1.default.fromHex(commitmentOutputTapscriptTemplate)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubKey.hex;
