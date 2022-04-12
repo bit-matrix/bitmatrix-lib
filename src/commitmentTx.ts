@@ -1,10 +1,10 @@
 import WizData, { hexLE } from "@script-wiz/wiz-data";
-import { conversion, taproot, TAPROOT_VERSION } from "@script-wiz/lib-core";
+import { convertion, taproot, TAPROOT_VERSION } from "@script-wiz/lib-core";
 import { BmConfig, CALL_METHOD, Pool } from "@bitmatrix/models";
 
 const calculateAmountTotal = (inputAmount: number, orderingFee: number, baseFee: number, serviceFee: number = 0) => {
   const totalAmount = inputAmount + orderingFee + baseFee + serviceFee;
-  const totalAmount64 = conversion.numToLE64(WizData.fromNumber(totalAmount)).hex;
+  const totalAmount64 = convertion.numToLE64(WizData.fromNumber(totalAmount)).hex;
   const totalAmount64BE = hexLE(totalAmount64);
   return totalAmount64BE;
 };
@@ -21,7 +21,7 @@ export const quoteToTokenCreateCommitmentTx = (
   const quoteAssetIdLE = hexLE(pool.quote.asset);
   const poolIdLE = hexLE(pool.id);
 
-  const receivedAmount = conversion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
+  const receivedAmount = convertion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
 
   const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
 
@@ -43,13 +43,13 @@ export const quoteToTokenCreateCommitmentTx = (
 
   const constLength5 = "0022";
 
-  const scriptPubKey = taproot.tapRoot(WizData.fromHex(config.innerPublicKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubKey.hex;
+  const scriptPubKey = taproot.tapRoot(WizData.fromHex(config.innerPublicKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
 
-  const ctxOutput2 = "01" + quoteAssetIdLE + "01" + hexLE(conversion.numToLE64(WizData.fromNumber(inputAmount / 2)).hex) + "0022";
+  const ctxOutput2 = "01" + quoteAssetIdLE + "01" + hexLE(convertion.numToLE64(WizData.fromNumber(inputAmount / 2)).hex) + "0022";
 
   const constLength7 = "01" + quoteAssetIdLE + "01";
 
-  const commitmentTxFee64LE = conversion.numToLE64(WizData.fromNumber(config.commitmentTxFee.number)).hex;
+  const commitmentTxFee64LE = convertion.numToLE64(WizData.fromNumber(config.commitmentTxFee.number)).hex;
 
   const commitmentTxFee64BE = hexLE(commitmentTxFee64LE);
 
@@ -87,7 +87,7 @@ export const tokenToQuoteCreateCommitmentTx = (
   const quoteAssetIdLE = hexLE(pool.quote.asset);
   const poolIdLE = hexLE(pool.id);
 
-  const receivedAmount = conversion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
+  const receivedAmount = convertion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
 
   const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
 
@@ -107,13 +107,13 @@ export const tokenToQuoteCreateCommitmentTx = (
 
   const constLength5 = "0022";
 
-  const scriptPubKey = taproot.tapRoot(WizData.fromHex(config.innerPublicKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubKey.hex;
+  const scriptPubKey = taproot.tapRoot(WizData.fromHex(config.innerPublicKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
 
   const tokenAssetIdLE = hexLE(pool.token.asset);
 
   const constLength6 = "01" + tokenAssetIdLE + "01";
 
-  const inputAmount64LE = conversion.numToLE64(WizData.fromNumber(inputAmount)).hex;
+  const inputAmount64LE = convertion.numToLE64(WizData.fromNumber(inputAmount)).hex;
 
   const inputAmount64BE = hexLE(inputAmount64LE);
 
@@ -121,7 +121,7 @@ export const tokenToQuoteCreateCommitmentTx = (
 
   const constLength8 = "01" + quoteAssetIdLE + "01";
 
-  const commitmentTxFee64LE = conversion.numToLE64(WizData.fromNumber(config.commitmentTxFee.number)).hex;
+  const commitmentTxFee64LE = convertion.numToLE64(WizData.fromNumber(config.commitmentTxFee.number)).hex;
 
   const commitmentTxFee64BE = hexLE(commitmentTxFee64LE);
 
@@ -175,13 +175,13 @@ export const liquidityAddCreateCommitmentTx = (quoteAmount: number, tokenAmount:
 
   const constLength5 = "0022";
 
-  const scriptPubKey = taproot.tapRoot(WizData.fromHex(config.innerPublicKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubKey.hex;
+  const scriptPubKey = taproot.tapRoot(WizData.fromHex(config.innerPublicKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
 
-  const constLength6 = "01" + tokenAssetIdLE + "01" + hexLE(conversion.numToLE64(WizData.fromNumber(tokenAmount)).hex) + "0022";
+  const constLength6 = "01" + tokenAssetIdLE + "01" + hexLE(convertion.numToLE64(WizData.fromNumber(tokenAmount)).hex) + "0022";
 
   const constLength7 = "01" + quoteAssetIdLE + "01";
 
-  const commitmentTxFee64LE = conversion.numToLE64(WizData.fromNumber(config.commitmentTxFee.number)).hex;
+  const commitmentTxFee64LE = convertion.numToLE64(WizData.fromNumber(config.commitmentTxFee.number)).hex;
 
   const commitmentTxFee64BE = hexLE(commitmentTxFee64LE);
 
@@ -233,13 +233,13 @@ export const liquidityRemoveCreateCommitmentTx = (lpAmount: number, txId: string
 
   const constLength5 = "0022";
 
-  const scriptPubKey = taproot.tapRoot(WizData.fromHex(config.innerPublicKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubKey.hex;
+  const scriptPubKey = taproot.tapRoot(WizData.fromHex(config.innerPublicKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
 
-  const constLength6 = "01" + lpAssetIdLE + "01" + hexLE(conversion.numToLE64(WizData.fromNumber(lpAmount)).hex) + "0022";
+  const constLength6 = "01" + lpAssetIdLE + "01" + hexLE(convertion.numToLE64(WizData.fromNumber(lpAmount)).hex) + "0022";
 
   const constLength7 = "01" + quoteAssetIdLE + "01";
 
-  const commitmentTxFee64LE = conversion.numToLE64(WizData.fromNumber(config.commitmentTxFee.number)).hex;
+  const commitmentTxFee64LE = convertion.numToLE64(WizData.fromNumber(config.commitmentTxFee.number)).hex;
 
   const commitmentTxFee64BE = hexLE(commitmentTxFee64LE);
 
