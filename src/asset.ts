@@ -1,5 +1,6 @@
 import WizData, { hexLE } from "@script-wiz/wiz-data";
 import { compileData } from "@script-wiz/lib";
+import { taproot } from "@script-wiz/lib-core";
 
 const bandwithArray = [
   145, // n = 0
@@ -153,4 +154,17 @@ export const bodyCalculaterN = (n: number, flagAssetId = "2f77bb1b61a8e2f6b95875
     "e0d769d58c767676cf69547a88d14f8800a888ce6953ce69888c76d1008814972ca4efa6bac21a771259e77dafabeeb0acbfe088ce6953ce69886c52cf69886c51cf69886c53cf698800ca6900d1698851ca6951d1698852ca6952d1698853ca6953d1698800c86900ce698851c86951ce698852c86952ce698853c86953ce6988040100000076767600cb8851cb8852cb8853cb88d2040200000088d3040000000087";
 
   return finalHeader + body + footer;
+};
+
+export const createCovenants = (leafCount: number, lookupLeafIndex: number, flagAssetId = "2f77bb1b61a8e2f6b958759334ed052e540d18ae2d26dcfd52df9b059caea1b6") => {
+  const mainCovenantScript: string[] = [];
+
+  for (let i = 0; i <= leafCount; i++) {
+    mainCovenantScript.push(bodyCalculaterN(i, flagAssetId));
+  }
+
+  const scriptsWizData = mainCovenantScript.map((mcs) => WizData.fromHex(mcs));
+  const controlBlock = taproot.controlBlockCalculation(scriptsWizData, "c4", "1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624", lookupLeafIndex);
+
+  return { mainCovenantScript, controlBlock };
 };

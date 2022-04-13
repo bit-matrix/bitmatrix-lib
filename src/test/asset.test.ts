@@ -1,6 +1,7 @@
-import { bodyCalculaterN } from "../asset";
+import { createCovenants } from "../asset";
 
 test("asset test", () => {
-  const x = bodyCalculaterN(0);
-  console.log(x);
+  const rest = createCovenants(15, 0);
+
+  console.log(rest);
 });
