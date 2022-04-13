@@ -21,7 +21,7 @@ const bandwithArray = [
   10120, // n = 15
 ];
 
-export const bodyCalculaterN = (n: number, flagAssetId = "2f77bb1b61a8e2f6b958759334ed052e540d18ae2d26dcfd52df9b059caea1b6") => {
+export const bodyCalculaterN = (n: number, flagAssetId: string) => {
   let body = "";
   let header = "";
   const reversedFlagAssetId = hexLE(flagAssetId);
@@ -156,7 +156,7 @@ export const bodyCalculaterN = (n: number, flagAssetId = "2f77bb1b61a8e2f6b95875
   return finalHeader + body + footer;
 };
 
-export const createCovenants = (leafCount: number, lookupLeafIndex: number, flagAssetId = "2f77bb1b61a8e2f6b958759334ed052e540d18ae2d26dcfd52df9b059caea1b6") => {
+export const createCovenants = (leafCount: number, lookupLeafIndex: number, flagAssetId: string) => {
   const mainCovenantScript: string[] = [];
 
   for (let i = 0; i <= leafCount; i++) {
