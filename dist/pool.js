@@ -169,9 +169,11 @@ var createCovenants = function (leafCount, lookupLeafIndex, flagAssetId) {
     for (var i = 0; i <= leafCount; i++) {
         mainCovenantScript.push((0, exports.bodyCalculaterN)(i, flagAssetId));
     }
+    var pubKey = wiz_data_1.default.fromHex("1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624");
     var scriptsWizData = mainCovenantScript.map(function (mcs) { return wiz_data_1.default.fromHex(mcs); });
-    var controlBlock = lib_core_1.taproot.controlBlockCalculation(scriptsWizData, "c4", "1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624", lookupLeafIndex);
-    return { mainCovenantScript: mainCovenantScript, controlBlock: controlBlock };
+    var controlBlock = lib_core_1.taproot.controlBlockCalculation(scriptsWizData, "c4", pubKey.hex, lookupLeafIndex);
+    var taprootResult = lib_core_1.taproot.tapRoot(pubKey, scriptsWizData, "LIQUID");
+    return { mainCovenantScript: mainCovenantScript, controlBlock: controlBlock, taprootResult: taprootResult };
 };
 exports.createCovenants = createCovenants;
 //# sourceMappingURL=pool.js.map
