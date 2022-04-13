@@ -42,7 +42,6 @@ var bandwithArray = [
     10120, // n = 15
 ];
 var bodyCalculaterN = function (n, flagAssetId) {
-    if (flagAssetId === void 0) { flagAssetId = "2f77bb1b61a8e2f6b958759334ed052e540d18ae2d26dcfd52df9b059caea1b6"; }
     var body = "";
     var header = "";
     var reversedFlagAssetId = (0, wiz_data_1.hexLE)(flagAssetId);
@@ -166,7 +165,6 @@ var bodyCalculaterN = function (n, flagAssetId) {
 };
 exports.bodyCalculaterN = bodyCalculaterN;
 var createCovenants = function (leafCount, lookupLeafIndex, flagAssetId) {
-    if (flagAssetId === void 0) { flagAssetId = "2f77bb1b61a8e2f6b958759334ed052e540d18ae2d26dcfd52df9b059caea1b6"; }
     var mainCovenantScript = [];
     for (var i = 0; i <= leafCount; i++) {
         mainCovenantScript.push((0, exports.bodyCalculaterN)(i, flagAssetId));
