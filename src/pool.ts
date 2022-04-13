@@ -163,8 +163,11 @@ export const createCovenants = (leafCount: number, lookupLeafIndex: number, flag
     mainCovenantScript.push(bodyCalculaterN(i, flagAssetId));
   }
 
-  const scriptsWizData = mainCovenantScript.map((mcs) => WizData.fromHex(mcs));
-  const controlBlock = taproot.controlBlockCalculation(scriptsWizData, "c4", "1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624", lookupLeafIndex);
+  const pubKey = WizData.fromHex("1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624");
 
-  return { mainCovenantScript, controlBlock };
+  const scriptsWizData = mainCovenantScript.map((mcs) => WizData.fromHex(mcs));
+  const controlBlock = taproot.controlBlockCalculation(scriptsWizData, "c4", pubKey.hex, lookupLeafIndex);
+
+  const taprootResult = taproot.tapRoot(pubKey, scriptsWizData, "LIQUID" as any);
+  return { mainCovenantScript, controlBlock, taprootResult };
 };
