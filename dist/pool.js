@@ -176,4 +176,4 @@ var createCovenants = function (leafCount, lookupLeafIndex, flagAssetId) {
     return { mainCovenantScript: mainCovenantScript, controlBlock: controlBlock };
 };
 exports.createCovenants = createCovenants;
-//# sourceMappingURL=asset.js.map
+//# sourceMappingURL=pool.js.map

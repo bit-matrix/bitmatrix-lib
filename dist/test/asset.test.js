@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var asset_1 = require("../asset");
+var pool_1 = require("../pool");
 test("asset test", function () {
-    var x = (0, asset_1.bodyCalculaterN)(0);
-    console.log(x);
+    var rest = (0, pool_1.createCovenants)(15, 0);
+    console.log(rest);
 });
 //# sourceMappingURL=asset.test.js.map
