@@ -1,6 +1,6 @@
 import WizData, { hexLE } from "@script-wiz/wiz-data";
 import { compileData } from "@script-wiz/lib";
-import { taproot } from "@script-wiz/lib-core";
+import { taproot, TAPROOT_VERSION } from "@script-wiz/lib-core";
 
 const bandwithArray = [
   145, // n = 0
@@ -168,6 +168,6 @@ export const createCovenants = (leafCount: number, lookupLeafIndex: number, flag
   const scriptsWizData = mainCovenantScript.map((mcs) => WizData.fromHex(mcs));
   const controlBlock = taproot.controlBlockCalculation(scriptsWizData, "c4", pubKey.hex, lookupLeafIndex);
 
-  const taprootResult = taproot.tapRoot(pubKey, scriptsWizData, "LIQUID" as any);
+  const taprootResult = taproot.tapRoot(pubKey, scriptsWizData, TAPROOT_VERSION.LIQUID);
   return { mainCovenantScript, controlBlock, taprootResult };
 };
