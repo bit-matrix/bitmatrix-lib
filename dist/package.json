@@ -17,7 +17,7 @@
   "homepage": "https://github.com/bit-matrix/bit-matrix-lib#readme",
   "dependencies": {
     "@bitmatrix/models": "^0.1.4",
-    "@script-wiz/lib": "^0.1.74",
+    "@script-wiz/lib": "^0.1.75",
     "axios": "^0.24.0"
   }
 }
