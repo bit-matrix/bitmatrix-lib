@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fundingTxForLiquidity = exports.fundingTx = exports.pool = exports.convertion = exports.commitmentTx = exports.asset = exports.api = void 0;
+exports.fundingTxForLiquidity = exports.fundingTx = exports.poolDeployment = exports.pool = exports.convertion = exports.commitmentTx = exports.asset = exports.api = void 0;
 var api = __importStar(require("./api"));
 exports.api = api;
 var asset = __importStar(require("./asset"));
@@ -33,6 +33,8 @@ var convertion = __importStar(require("./convertion"));
 exports.convertion = convertion;
 var pool = __importStar(require("./pool"));
 exports.pool = pool;
+var poolDeployment = __importStar(require("./poolDeployment"));
+exports.poolDeployment = poolDeployment;
 var fundingTx_1 = __importDefault(require("./fundingTx"));
 exports.fundingTx = fundingTx_1.default;
 var fundingTxForLiquidity_1 = __importDefault(require("./fundingTxForLiquidity"));
