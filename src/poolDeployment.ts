@@ -15,7 +15,8 @@ export const poolDeploy = (txId: string, tokenAssetId: string, quoteAmount: numb
   const newFlagAssetId = calculateAssetId(txId, flagContractHash, 0);
   const newLpAssetId = calculateAssetId(txId, lpContractHash, 1);
 
-  const mainCovenantScriptPubkey = createCovenants(1, 0, newFlagAssetId).taprootResult.scriptPubkey.hex;
+  const mainCovenantScriptPubkey = createCovenants(0, 0, newFlagAssetId).taprootResult.scriptPubkey.hex;
+
   const flagScriptPubkey = "512070d3017ab2a8ae4cccdb0537a45fb4a3192bff79c49cf54bd9edd508dcc93f55";
   const lpHolderCovenantScript = "20" + hexLE(newFlagAssetId) + "00c86987";
 
