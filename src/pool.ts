@@ -62,7 +62,7 @@ export const bodyCalculaterN = (n: number, flagAssetId: string) => {
       compileData(WizData.fromNumber(i + 4).hex) +
       "c969" +
       compileData(WizData.fromNumber(i + 5).hex) +
-      "c969d769557902bc0293e0d8697602f401e0df69766b7602f401e0da6977d8695179d76960e0da6977517960e0da6977537951c96953c969da69777651e0df6960e0d969da6977d9697cda697751c96953c969da69777651e0df6960e0d969d96952797cd86951c96953c969da69777651e0df690132e0d969d869567a5179dd637651c86976" +
+      "c969d769557902bc0293e0d8697602e803e0df69766b7602f401e0da6977d8695179d76960e0da6977517960e0da6977537951c96953c969da697760e0d96951e0d769da6977d9697cda697751c96953c969da697760e0d96951e0d769d96952797cd86951c96953c969da69770120e0d96951e0d769d869567a5179dd637651c86976" +
       compileData(WizData.fromNumber(i + 4).hex) +
       "ce6988" +
       compileData(WizData.fromNumber(i + 5).hex) +
@@ -84,7 +84,7 @@ export const bodyCalculaterN = (n: number, flagAssetId: string) => {
       compileData(WizData.fromNumber(i + 5).hex) +
       "c86951c86988" +
       compileData(WizData.fromNumber(i + 5).hex) +
-      "c9697651c96953c969da69777651e0df6902f401e0d969df69766b7602f401e0da6977d8695279d76951c96953c969da69777651e0df6960e0d969da6977517960e0da6977537951c96953c969da69777651e0df6960e0d969da6977d9697cda697760e0d96951797cd869567a5179dd637652e0da6953c86976" +
+      "c969760132e0df69766b7602f401e0da6977d8695279d76951c96953c969da697760e0d96951e0d769da6977517960e0da6977537951c96953c969da697760e0d96951e0d769da6977d9697cda697760e0d96951797cd8690120e0d869567a5179dd517902e803e0dc63750068637652e0da6953c86976" +
       compileData(WizData.fromNumber(i + 4).hex) +
       "ce6988" +
       compileData(WizData.fromNumber(i + 5).hex) +
@@ -106,7 +106,7 @@ export const bodyCalculaterN = (n: number, flagAssetId: string) => {
       compileData(WizData.fromNumber(i + 5).hex) +
       "c86951c86988" +
       compileData(WizData.fromNumber(i + 5).hex) +
-      "c969760480f0fa02e0df697651c96953c969da69777651e0df6960e0d969da69776cd969557951c96953c969da69777651e0df6960e0d969da6977da6977527a6edf637767756852c86976" +
+      "c969760480f0fa02e0df697651c96953c969da697760e0d96951e0d769da69776cd969557951c96953c969da697760e0d96951e0d769da6977da6977527a6edf637767756852c86976" +
       compileData(WizData.fromNumber(i + 4).hex) +
       "ce6988" +
       compileData(WizData.fromNumber(i + 5).hex) +
