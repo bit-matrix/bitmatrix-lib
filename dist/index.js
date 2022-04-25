@@ -22,11 +22,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fundingTxForLiquidity = exports.fundingTx = exports.poolDeployment = exports.pool = exports.convertion = exports.commitmentTx = exports.asset = exports.api = void 0;
+exports.fundingTxForLiquidity = exports.fundingTx = exports.poolDeployment = exports.pool = exports.convertion = exports.commitmentTx = exports.commitmentOutput = exports.asset = exports.api = void 0;
 var api = __importStar(require("./api"));
 exports.api = api;
 var asset = __importStar(require("./asset"));
 exports.asset = asset;
+var commitmentOutput = __importStar(require("./commitmentOutput"));
+exports.commitmentOutput = commitmentOutput;
 var commitmentTx = __importStar(require("./commitmentTx"));
 exports.commitmentTx = commitmentTx;
 var convertion = __importStar(require("./convertion"));
