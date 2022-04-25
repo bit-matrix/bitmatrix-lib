@@ -207,8 +207,6 @@ export const createCovenantsV2 = (leafCount: number, lookupLeafIndex: number, fl
 
   const pubKey = WizData.fromHex("1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624");
 
-  console.log(mainCovenantScript[0]);
-
   const scriptsWizData = mainCovenantScript.map((mcs) => WizData.fromHex(mcs));
 
   const controlBlock = taproot.controlBlockCalculation(scriptsWizData, "c4", pubKey.hex, lookupLeafIndex);
