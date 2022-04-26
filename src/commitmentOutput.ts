@@ -21,5 +21,7 @@ export const commitmentOutputTapscript = (flagAssetId: string, pubkey: string, i
   const innerKey = WizData.fromHex("1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624");
   const taprootResult = taproot.tapRoot(innerKey, [WizData.fromHex(commitmentOutput)], TAPROOT_VERSION.LIQUID);
 
-  return { taprootResult, commitmentOutput };
+  const controlBlock = taproot.controlBlockCalculation([WizData.fromHex(commitmentOutput)], "c4", innerKey.hex, 0);
+
+  return { taprootResult, commitmentOutput, controlBlock };
 };
