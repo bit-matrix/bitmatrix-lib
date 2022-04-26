@@ -39,7 +39,8 @@ var commitmentOutputTapscript = function (flagAssetId, pubkey, isAddLiquidity) {
     var commitmentOutput = (0, exports.createCommitmentOutput)(flagAssetId, pubkey, isAddLiquidity);
     var innerKey = wiz_data_1.default.fromHex("1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624");
     var taprootResult = lib_core_1.taproot.tapRoot(innerKey, [wiz_data_1.default.fromHex(commitmentOutput)], lib_core_1.TAPROOT_VERSION.LIQUID);
-    return { taprootResult: taprootResult, commitmentOutput: commitmentOutput };
+    var controlBlock = lib_core_1.taproot.controlBlockCalculation([wiz_data_1.default.fromHex(commitmentOutput)], "c4", innerKey.hex, 0);
+    return { taprootResult: taprootResult, commitmentOutput: commitmentOutput, controlBlock: controlBlock };
 };
 exports.commitmentOutputTapscript = commitmentOutputTapscript;
 //# sourceMappingURL=commitmentOutput.js.map
