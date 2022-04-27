@@ -6,11 +6,21 @@ import { div } from "./utils/helper";
 
 const maxLpSupply = 2000000000;
 
-export const poolDeploy = (txId: string, tokenAssetId: string, quoteAmount: number, tokenAmount: number, userPubkey: string, poolVersion: number, pair1Coefficient: number) => {
+export const poolDeploy = (
+  txId: string,
+  quoteAssetId: string,
+  tokenAssetId: string,
+  quoteAmount: number,
+  tokenAmount: number,
+  userPubkey: string,
+  poolVersion: number,
+  pair1Coefficient: number
+) => {
   const flagContractHash = "2c4b31700fd1a93f25db0a70037c38c812b61441d0aeb757824cbb1d366d3c23";
   const lpContractHash = "26842dfd877abe7ae07a7f925fe0223996a4d6f4233d3eca06dd72c8bb26eb75";
   const innerkey = WizData.fromHex("1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624");
   const prevTxId = hexLE(txId);
+  const quoteAssetIdLE = hexLE(quoteAssetId);
 
   const newFlagAssetId = calculateAssetId(txId, flagContractHash, 0);
   const newLpAssetId = calculateAssetId(txId, lpContractHash, 1);
@@ -103,7 +113,7 @@ export const poolDeploy = (txId: string, tokenAssetId: string, quoteAmount: numb
     "22" +
     lpHolderCovenantScriptPubkey +
     "01" +
-    "499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c14" + // it will be generic
+    quoteAssetIdLE + // it will be generic
     "01" +
     poolSatsInitialSupply +
     "00" +
