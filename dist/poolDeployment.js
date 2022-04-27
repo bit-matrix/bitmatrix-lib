@@ -26,14 +26,24 @@ var pool_1 = require("./pool");
 var wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
 var helper_1 = require("./utils/helper");
 var maxLpSupply = 2000000000;
-var poolDeploy = function (txId, tokenAssetId, quoteAmount, tokenAmount, userPubkey) {
+var poolDeploy = function (txId, tokenAssetId, quoteAmount, tokenAmount, userPubkey, poolVersion, pair1Coefficient) {
     var flagContractHash = "2c4b31700fd1a93f25db0a70037c38c812b61441d0aeb757824cbb1d366d3c23";
     var lpContractHash = "26842dfd877abe7ae07a7f925fe0223996a4d6f4233d3eca06dd72c8bb26eb75";
     var innerkey = wiz_data_1.default.fromHex("1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624");
     var prevTxId = (0, wiz_data_1.hexLE)(txId);
     var newFlagAssetId = (0, asset_1.calculateAssetId)(txId, flagContractHash, 0);
     var newLpAssetId = (0, asset_1.calculateAssetId)(txId, lpContractHash, 1);
-    var mainCovenantScriptPubkey = (0, pool_1.createCovenants)(0, 0, newFlagAssetId).taprootResult.scriptPubkey.hex;
+    var leafCount = 0;
+    if (poolVersion === 2) {
+        leafCount = 15;
+    }
+    if (poolVersion === 3) {
+        leafCount = 31;
+    }
+    if (poolVersion === 4) {
+        leafCount = 63;
+    }
+    var mainCovenantScriptPubkey = (0, pool_1.createCovenants)(leafCount, 0, newFlagAssetId).taprootResult.scriptPubkey.hex;
     var flagScriptPubkey = "512070d3017ab2a8ae4cccdb0537a45fb4a3192bff79c49cf54bd9edd508dcc93f55";
     var lpHolderCovenantScript = "20" + (0, wiz_data_1.hexLE)(newFlagAssetId) + "00c86987";
     var lpHolderCovenantScriptPubkey = lib_core_1.taproot.tapRoot(innerkey, [wiz_data_1.default.fromHex(lpHolderCovenantScript)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
@@ -44,7 +54,7 @@ var poolDeploy = function (txId, tokenAssetId, quoteAmount, tokenAmount, userPub
     var poolSatsInitialSupply = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(quoteAmount - (quoteAmount % 100))).hex);
     var poolTokensInitialSupply = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(tokenAmount)).hex);
     var deploymentTxFees = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(1000 + (quoteAmount % 100))).hex);
-    var lookupKeyword = "6a204172a97b9f6409ecf6b3039fb51eda9e837e8610f836abe1032fe6fd59529776"; // muz hash
+    var lookupKeyword = "6a0e6269746d6174726978"; // muz hash
     var finalResult = "02000000" +
         "01" +
         "04" +
@@ -115,8 +125,10 @@ var poolDeploy = function (txId, tokenAssetId, quoteAmount, tokenAmount, userPub
         "01" +
         "0000000000000000" +
         "00" +
-        "22" +
+        "10" +
         lookupKeyword +
+        wiz_data_1.default.fromNumber(poolVersion).hex +
+        lib_core_1.convertion.convert32(wiz_data_1.default.fromNumber(pair1Coefficient)).hex +
         "01" +
         "499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c14" +
         "01" +
