@@ -6,7 +6,7 @@ import { div } from "./utils/helper";
 
 const maxLpSupply = 2000000000;
 
-export const poolDeploy = (txId: string, tokenAssetId: string, quoteAmount: number, tokenAmount: number, userPubkey: string) => {
+export const poolDeploy = (txId: string, tokenAssetId: string, quoteAmount: number, tokenAmount: number, userPubkey: string, poolVersion: number, pair1Coefficient: number) => {
   const flagContractHash = "2c4b31700fd1a93f25db0a70037c38c812b61441d0aeb757824cbb1d366d3c23";
   const lpContractHash = "26842dfd877abe7ae07a7f925fe0223996a4d6f4233d3eca06dd72c8bb26eb75";
   const innerkey = WizData.fromHex("1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624");
@@ -15,7 +15,21 @@ export const poolDeploy = (txId: string, tokenAssetId: string, quoteAmount: numb
   const newFlagAssetId = calculateAssetId(txId, flagContractHash, 0);
   const newLpAssetId = calculateAssetId(txId, lpContractHash, 1);
 
-  const mainCovenantScriptPubkey = createCovenants(0, 0, newFlagAssetId).taprootResult.scriptPubkey.hex;
+  let leafCount = 0;
+
+  if (poolVersion === 2) {
+    leafCount = 15;
+  }
+
+  if (poolVersion === 3) {
+    leafCount = 31;
+  }
+
+  if (poolVersion === 4) {
+    leafCount = 63;
+  }
+
+  const mainCovenantScriptPubkey = createCovenants(leafCount, 0, newFlagAssetId).taprootResult.scriptPubkey.hex;
 
   const flagScriptPubkey = "512070d3017ab2a8ae4cccdb0537a45fb4a3192bff79c49cf54bd9edd508dcc93f55";
   const lpHolderCovenantScript = "20" + hexLE(newFlagAssetId) + "00c86987";
@@ -34,7 +48,7 @@ export const poolDeploy = (txId: string, tokenAssetId: string, quoteAmount: numb
 
   const deploymentTxFees = hexLE(convertion.convert64(WizData.fromNumber(1000 + (quoteAmount % 100))).hex);
 
-  const lookupKeyword = "6a204172a97b9f6409ecf6b3039fb51eda9e837e8610f836abe1032fe6fd59529776"; // muz hash
+  const lookupKeyword = "6a0e6269746d6174726978"; // muz hash
 
   const finalResult =
     "02000000" +
@@ -107,8 +121,10 @@ export const poolDeploy = (txId: string, tokenAssetId: string, quoteAmount: numb
     "01" +
     "0000000000000000" +
     "00" +
-    "22" +
+    "10" +
     lookupKeyword +
+    WizData.fromNumber(poolVersion).hex +
+    convertion.convert32(WizData.fromNumber(pair1Coefficient)).hex +
     "01" +
     "499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c14" +
     "01" +
