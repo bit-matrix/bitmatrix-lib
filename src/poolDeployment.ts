@@ -158,3 +158,12 @@ export const poolDeploy = (
 
   return finalResult;
 };
+
+export const calculateInitialLpCirculation = (pair1Coefficient: number, pair1Amount: number) => {
+  const lpPrecision = 5 * pair1Coefficient;
+
+  //Initial LP supply
+  const deployerLpAmount = hexLE(convertion.convert64(WizData.fromNumber(div(pair1Amount, lpPrecision))).hex);
+
+  return WizData.fromHex(deployerLpAmount).number;
+};
