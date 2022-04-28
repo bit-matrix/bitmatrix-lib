@@ -44,17 +44,19 @@ var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenA
     if (poolVersion === 4) {
         leafCount = 63;
     }
-    var mainCovenantScriptPubkey = (0, pool_1.createCovenants)(leafCount, 0, newFlagAssetId).taprootResult.scriptPubkey.hex;
+    var mainCovenantScriptPubkey = (0, pool_1.createCovenants)(leafCount, 0, newFlagAssetId, pair1Coefficient).taprootResult.scriptPubkey.hex;
     var flagScriptPubkey = "512070d3017ab2a8ae4cccdb0537a45fb4a3192bff79c49cf54bd9edd508dcc93f55";
     var lpHolderCovenantScript = "20" + (0, wiz_data_1.hexLE)(newFlagAssetId) + "00c86987";
     var lpHolderCovenantScriptPubkey = lib_core_1.taproot.tapRoot(innerkey, [wiz_data_1.default.fromHex(lpHolderCovenantScript)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
     var tokenHolderCovenantScriptPubkey = lpHolderCovenantScriptPubkey;
-    var deployerLpAmount = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber((0, helper_1.div)(quoteAmount, 100))).hex);
-    var lpPoolInitialSupply = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(maxLpSupply - (0, helper_1.div)(quoteAmount, 100))).hex);
+    var lpPrecision = 5 * pair1Coefficient;
+    //Initial LP supply
+    var deployerLpAmount = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber((0, helper_1.div)(quoteAmount, lpPrecision))).hex);
+    var lpPoolInitialSupply = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(maxLpSupply - (0, helper_1.div)(quoteAmount, lpPrecision))).hex);
     var deployerScriptPubkey = "0014" + lib_core_1.crypto.hash160v2(wiz_data_1.default.fromHex(userPubkey));
-    var poolSatsInitialSupply = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(quoteAmount - (quoteAmount % 100))).hex);
+    var poolSatsInitialSupply = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(quoteAmount)).hex);
     var poolTokensInitialSupply = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(tokenAmount)).hex);
-    var deploymentTxFees = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(1000 + (quoteAmount % 100))).hex);
+    var deploymentTxFees = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(1000)).hex);
     var lookupKeyword = "6a0e6269746d6174726978"; // muz hash
     var finalResult = "02000000" +
         "01" +
