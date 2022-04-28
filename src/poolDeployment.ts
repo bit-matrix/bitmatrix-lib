@@ -47,16 +47,20 @@ export const poolDeploy = (
   const lpHolderCovenantScriptPubkey = taproot.tapRoot(innerkey, [WizData.fromHex(lpHolderCovenantScript)], TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
   const tokenHolderCovenantScriptPubkey = lpHolderCovenantScriptPubkey;
 
-  const deployerLpAmount = hexLE(convertion.convert64(WizData.fromNumber(div(quoteAmount, 100))).hex);
-  const lpPoolInitialSupply = hexLE(convertion.convert64(WizData.fromNumber(maxLpSupply - div(quoteAmount, 100))).hex);
+  const lpPrecision = 5 * pair1Coefficient;
+
+  //Initial LP supply
+  const deployerLpAmount = hexLE(convertion.convert64(WizData.fromNumber(div(quoteAmount, lpPrecision))).hex);
+
+  const lpPoolInitialSupply = hexLE(convertion.convert64(WizData.fromNumber(maxLpSupply - div(quoteAmount, lpPrecision))).hex);
 
   const deployerScriptPubkey = "0014" + crypto.hash160v2(WizData.fromHex(userPubkey));
 
-  const poolSatsInitialSupply = hexLE(convertion.convert64(WizData.fromNumber(quoteAmount - (quoteAmount % 100))).hex);
+  const poolSatsInitialSupply = hexLE(convertion.convert64(WizData.fromNumber(quoteAmount)).hex);
 
   const poolTokensInitialSupply = hexLE(convertion.convert64(WizData.fromNumber(tokenAmount)).hex);
 
-  const deploymentTxFees = hexLE(convertion.convert64(WizData.fromNumber(1000 + (quoteAmount % 100))).hex);
+  const deploymentTxFees = hexLE(convertion.convert64(WizData.fromNumber(1000)).hex);
 
   const lookupKeyword = "6a0e6269746d6174726978"; // muz hash
 
