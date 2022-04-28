@@ -39,7 +39,7 @@ export const poolDeploy = (
     leafCount = 63;
   }
 
-  const mainCovenantScriptPubkey = createCovenants(leafCount, 0, newFlagAssetId).taprootResult.scriptPubkey.hex;
+  const mainCovenantScriptPubkey = createCovenants(leafCount, 0, newFlagAssetId, pair1Coefficient).taprootResult.scriptPubkey.hex;
 
   const flagScriptPubkey = "512070d3017ab2a8ae4cccdb0537a45fb4a3192bff79c49cf54bd9edd508dcc93f55";
   const lpHolderCovenantScript = "20" + hexLE(newFlagAssetId) + "00c86987";
