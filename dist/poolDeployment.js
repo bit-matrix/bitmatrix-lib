@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.poolDeploy = void 0;
+exports.calculateInitialLpCirculation = exports.poolDeploy = void 0;
 var asset_1 = require("./asset");
 var lib_core_1 = require("@script-wiz/lib-core");
 var pool_1 = require("./pool");
@@ -151,4 +151,11 @@ var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenA
     return finalResult;
 };
 exports.poolDeploy = poolDeploy;
+var calculateInitialLpCirculation = function (pair1Coefficient, pair1Amount) {
+    var lpPrecision = 5 * pair1Coefficient;
+    //Initial LP supply
+    var deployerLpAmount = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber((0, helper_1.div)(pair1Amount, lpPrecision))).hex);
+    return wiz_data_1.default.fromHex(deployerLpAmount).number;
+};
+exports.calculateInitialLpCirculation = calculateInitialLpCirculation;
 //# sourceMappingURL=poolDeployment.js.map
