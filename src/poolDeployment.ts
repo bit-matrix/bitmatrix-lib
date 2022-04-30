@@ -163,7 +163,7 @@ export const calculateInitialLpCirculation = (pair1Coefficient: number, pair1Amo
   const lpPrecision = 5 * pair1Coefficient;
 
   //Initial LP supply
-  const deployerLpAmount = hexLE(convertion.convert64(WizData.fromNumber(div(pair1Amount, lpPrecision))).hex);
+  const deployerLpAmount = div(pair1Amount, lpPrecision) / 100000000;
 
-  return WizData.fromHex(deployerLpAmount).number;
+  return deployerLpAmount;
 };
