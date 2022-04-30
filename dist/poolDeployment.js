@@ -154,8 +154,8 @@ exports.poolDeploy = poolDeploy;
 var calculateInitialLpCirculation = function (pair1Coefficient, pair1Amount) {
     var lpPrecision = 5 * pair1Coefficient;
     //Initial LP supply
-    var deployerLpAmount = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber((0, helper_1.div)(pair1Amount, lpPrecision))).hex);
-    return wiz_data_1.default.fromHex(deployerLpAmount).number;
+    var deployerLpAmount = (0, helper_1.div)(pair1Amount, lpPrecision) / 100000000;
+    return deployerLpAmount;
 };
 exports.calculateInitialLpCirculation = calculateInitialLpCirculation;
 //# sourceMappingURL=poolDeployment.js.map
