@@ -1,16 +1,7 @@
-import {
-  AddressInterface,
-  Balance,
-  EventListenerID,
-  MarinaEventType,
-  NetworkString,
-  Recipient,
-  SentTransaction,
-  Utxo,
-} from 'marina-provider';
-import { IWallet } from './IWallet';
-import Marina from './marina/marina';
-import { WALLET_NAME } from './WALLET_NAME';
+import { AddressInterface, Balance, EventListenerID, MarinaEventType, NetworkString, Recipient, SentTransaction, Utxo } from "marina-provider";
+import { IWallet } from "./IWallet";
+import Marina from "./marina/marina";
+import { WALLET_NAME } from "./WALLET_NAME";
 
 export class Wallet implements IWallet {
   private wallet: IWallet;
@@ -20,6 +11,9 @@ export class Wallet implements IWallet {
     // TODO default wallet
     else this.wallet = new Marina();
   }
+  public signTransaction = (pset: string): Promise<string> => this.wallet.signTransaction(pset);
+
+  public broadcastTransaction = (signedTxHex: string): Promise<SentTransaction> => this.wallet.broadcastTransaction(signedTxHex);
 
   public off = (listenerId: EventListenerID): void => this.wallet.off(listenerId);
 
@@ -37,8 +31,7 @@ export class Wallet implements IWallet {
 
   public getAddresses = (): Promise<AddressInterface[]> => this.wallet.getAddresses();
 
-  public sendTransaction = (recipients: Recipient[]): Promise<SentTransaction> =>
-    this.wallet.sendTransaction(recipients);
+  public sendTransaction = (recipients: Recipient[]): Promise<SentTransaction> => this.wallet.sendTransaction(recipients);
 
   public getBalances = (): Promise<Balance[]> => this.wallet.getBalances();
 

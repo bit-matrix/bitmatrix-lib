@@ -27,23 +27,17 @@ export default class Marina implements MarinaProvider {
   constructor() {
     this.marina = window.marina;
   }
-  isReady(): Promise<boolean> {
-    throw new Error("Method not implemented.");
+
+  signTransaction(pset: string): Promise<string> {
+    if (this.exist() && marina) return marina.signTransaction(pset);
+
+    throw new Error("Marina wallet disabled.");
   }
-  getSelectedAccount(): Promise<string> {
-    throw new Error("Method not implemented.");
-  }
-  createAccount(accountName: string): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-  useAccount(account: string): Promise<boolean> {
-    throw new Error("Method not implemented.");
-  }
-  importTemplate(template: DescriptorTemplate, changeTemplate?: DescriptorTemplate): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
+
   broadcastTransaction(signedTxHex: string): Promise<SentTransaction> {
-    throw new Error("Method not implemented.");
+    if (this.exist() && marina) return marina.broadcastTransaction(signedTxHex);
+
+    throw new Error("Marina wallet disabled.");
   }
 
   on = (type: MarinaEventType, callback: (payload: any) => void): string => {
@@ -129,9 +123,7 @@ export default class Marina implements MarinaProvider {
   blindTransaction(/*pset: string*/): Promise<string> {
     throw new Error("Method not implemented.");
   }
-  signTransaction(/*pset: string*/): Promise<string> {
-    throw new Error("Method not implemented.");
-  }
+
   signMessage(/*message: string*/): Promise<SignedMessage> {
     throw new Error("Method not implemented.");
   }
@@ -139,7 +131,28 @@ export default class Marina implements MarinaProvider {
   getTransactions(): Promise<Transaction[]> {
     throw new Error("Method not implemented.");
   }
+
   getFeeAssets(): Promise<string[]> {
+    throw new Error("Method not implemented.");
+  }
+
+  isReady(): Promise<boolean> {
+    throw new Error("Method not implemented.");
+  }
+
+  getSelectedAccount(): Promise<string> {
+    throw new Error("Method not implemented.");
+  }
+
+  createAccount(accountName: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+
+  useAccount(account: string): Promise<boolean> {
+    throw new Error("Method not implemented.");
+  }
+
+  importTemplate(template: DescriptorTemplate, changeTemplate?: DescriptorTemplate): Promise<void> {
     throw new Error("Method not implemented.");
   }
 }
