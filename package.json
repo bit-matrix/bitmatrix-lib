@@ -29,6 +29,8 @@
   "dependencies": {
     "@bitmatrix/models": "^0.1.4",
     "@script-wiz/lib": "^0.1.75",
-    "axios": "^0.24.0"
+    "axios": "^0.24.0",
+    "ldk": "^0.4.11",
+    "marina-provider": "^1.5.0"
   }
 }
