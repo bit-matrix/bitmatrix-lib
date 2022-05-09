@@ -35,23 +35,15 @@ var Marina = /** @class */ (function () {
         };
         this.marina = window.marina;
     }
-    Marina.prototype.isReady = function () {
-        throw new Error("Method not implemented.");
-    };
-    Marina.prototype.getSelectedAccount = function () {
-        throw new Error("Method not implemented.");
-    };
-    Marina.prototype.createAccount = function (accountName) {
-        throw new Error("Method not implemented.");
-    };
-    Marina.prototype.useAccount = function (account) {
-        throw new Error("Method not implemented.");
-    };
-    Marina.prototype.importTemplate = function (template, changeTemplate) {
-        throw new Error("Method not implemented.");
+    Marina.prototype.signTransaction = function (pset) {
+        if (this.exist() && exports.marina)
+            return exports.marina.signTransaction(pset);
+        throw new Error("Marina wallet disabled.");
     };
     Marina.prototype.broadcastTransaction = function (signedTxHex) {
-        throw new Error("Method not implemented.");
+        if (this.exist() && exports.marina)
+            return exports.marina.broadcastTransaction(signedTxHex);
+        throw new Error("Marina wallet disabled.");
     };
     Marina.prototype.getNextAddress = function () {
         if (this.exist() && this.marina)
@@ -103,9 +95,6 @@ var Marina = /** @class */ (function () {
     Marina.prototype.blindTransaction = function ( /*pset: string*/) {
         throw new Error("Method not implemented.");
     };
-    Marina.prototype.signTransaction = function ( /*pset: string*/) {
-        throw new Error("Method not implemented.");
-    };
     Marina.prototype.signMessage = function ( /*message: string*/) {
         throw new Error("Method not implemented.");
     };
@@ -113,6 +102,21 @@ var Marina = /** @class */ (function () {
         throw new Error("Method not implemented.");
     };
     Marina.prototype.getFeeAssets = function () {
+        throw new Error("Method not implemented.");
+    };
+    Marina.prototype.isReady = function () {
+        throw new Error("Method not implemented.");
+    };
+    Marina.prototype.getSelectedAccount = function () {
+        throw new Error("Method not implemented.");
+    };
+    Marina.prototype.createAccount = function (accountName) {
+        throw new Error("Method not implemented.");
+    };
+    Marina.prototype.useAccount = function (account) {
+        throw new Error("Method not implemented.");
+    };
+    Marina.prototype.importTemplate = function (template, changeTemplate) {
         throw new Error("Method not implemented.");
     };
     return Marina;

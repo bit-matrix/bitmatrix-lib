@@ -8,11 +8,7 @@ export declare const marina: MarinaProvider | undefined;
 export default class Marina implements MarinaProvider {
     private marina;
     constructor();
-    isReady(): Promise<boolean>;
-    getSelectedAccount(): Promise<string>;
-    createAccount(accountName: string): Promise<void>;
-    useAccount(account: string): Promise<boolean>;
-    importTemplate(template: DescriptorTemplate, changeTemplate?: DescriptorTemplate): Promise<void>;
+    signTransaction(pset: string): Promise<string>;
     broadcastTransaction(signedTxHex: string): Promise<SentTransaction>;
     on: (type: MarinaEventType, callback: (payload: any) => void) => string;
     off: (listenerId: EventListenerID) => void;
@@ -30,8 +26,12 @@ export default class Marina implements MarinaProvider {
     getNetwork(): Promise<NetworkString>;
     setAccount(): Promise<void>;
     blindTransaction(): Promise<string>;
-    signTransaction(): Promise<string>;
     signMessage(): Promise<SignedMessage>;
     getTransactions(): Promise<Transaction[]>;
     getFeeAssets(): Promise<string[]>;
+    isReady(): Promise<boolean>;
+    getSelectedAccount(): Promise<string>;
+    createAccount(accountName: string): Promise<void>;
+    useAccount(account: string): Promise<boolean>;
+    importTemplate(template: DescriptorTemplate, changeTemplate?: DescriptorTemplate): Promise<void>;
 }

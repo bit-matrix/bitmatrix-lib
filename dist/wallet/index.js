@@ -10,6 +10,8 @@ var Wallet = /** @class */ (function () {
     function Wallet(walletName) {
         var _this = this;
         if (walletName === void 0) { walletName = WALLET_NAME_1.WALLET_NAME.MARINA; }
+        this.signTransaction = function (pset) { return _this.wallet.signTransaction(pset); };
+        this.broadcastTransaction = function (signedTxHex) { return _this.wallet.broadcastTransaction(signedTxHex); };
         this.off = function (listenerId) { return _this.wallet.off(listenerId); };
         this.on = function (type, callback) { return _this.wallet.on(type, callback); };
         this.exist = function () { return _this.wallet.exist(); };
@@ -18,9 +20,7 @@ var Wallet = /** @class */ (function () {
         this.disable = function () { return _this.wallet.disable(); };
         this.getNextAddress = function () { return _this.wallet.getNextAddress(); };
         this.getAddresses = function () { return _this.wallet.getAddresses(); };
-        this.sendTransaction = function (recipients) {
-            return _this.wallet.sendTransaction(recipients);
-        };
+        this.sendTransaction = function (recipients) { return _this.wallet.sendTransaction(recipients); };
         this.getBalances = function () { return _this.wallet.getBalances(); };
         this.getNextChangeAddress = function () { return _this.wallet.getNextChangeAddress(); };
         this.reloadCoins = function () { return _this.wallet.reloadCoins(); };
