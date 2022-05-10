@@ -1,9 +1,9 @@
-import { AddressInterface, craftMultipleRecipientsPset, greedyCoinSelector, UnblindedOutput } from "ldk";
+import { AddressInterface, craftMultipleRecipientsPset, greedyCoinSelector, RecipientInterface, UnblindedOutput } from "ldk";
 import { AssetHash, confidential, networks, Psbt, script, address as liquidAddress } from "liquidjs-lib";
 import { Wallet } from "./wallet";
 import * as ecc from "tiny-secp256k1";
 
-export const signTx = async (marina: Wallet, data: string, address: string): Promise<string> => {
+export const signTx = async (marina: Wallet, callData: string, recipients: RecipientInterface[]): Promise<string> => {
   const coins = await marina.getCoins();
 
   const changeAddress = await marina.getNextChangeAddress();
@@ -13,21 +13,21 @@ export const signTx = async (marina: Wallet, data: string, address: string): Pro
 
   // 2. add a custom OP_RETURN output to psbt
   pset.addOutput({
-    script: script.compile([script.OPS.OP_RETURN, Buffer.from(data, "hex")]),
+    script: script.compile([script.OPS.OP_RETURN, Buffer.from(callData, "hex")]),
     value: confidential.satoshiToConfidentialValue(0),
     asset: AssetHash.fromHex(networks.testnet.assetHash, false).bytes,
     nonce: Buffer.alloc(0),
   });
 
   // 3. add P2TR address(es) as recipient(s) to psbt
-  const recipients = [
-    {
-      asset: networks.testnet.assetHash,
-      value: 5000,
-      //P2TR address
-      address,
-    },
-  ];
+  // const recipients = [
+  //   {
+  //     asset: networks.testnet.assetHash,
+  //     value: 5000,
+  //     //P2TR address
+  //     address,
+  //   },
+  // ];
 
   // 4. Serialize as base64 the psbt to be passed to LDK
   const tx = pset.toBase64();
