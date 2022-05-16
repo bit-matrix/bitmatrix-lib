@@ -4,8 +4,8 @@ exports.bmApiUrl = exports.bmUrl = exports.rpcUrl = exports.tokenPrecisionCoeffi
 exports.lpFeeRate = 500;
 exports.quotePrecisionCoefficient = 16;
 exports.tokenPrecisionCoefficient = 2000000;
-exports.rpcUrl = "https://rpc.bitmatrix-aggregate.com/rpc";
-// export const bmUrl = "https://db.bitmatrix-aggregate.com";
-exports.bmUrl = "https://rocksdb.bitmatrix-aggregate.com";
-exports.bmApiUrl = "https://rocksapi.bitmatrix-aggregate.com";
+exports.rpcUrl = "https://rpc.basebitmatrix.com/rpc";
+// export const bmUrl = "https://db.basebitmatrix.com.com";
+exports.bmUrl = "https://rocksdb.basebitmatrix.com";
+exports.bmApiUrl = "https://rocksapi.basebitmatrix.com";
 //# sourceMappingURL=env.js.map
