@@ -11,6 +11,7 @@ export const case1 = (wallet: Wallet, inputAmount: number, calculatedAmountWithS
   const methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
   const poolIdLE = hexLE(pool.id);
   const receivedAmount = convertion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
+  console.log("receivedAmount", receivedAmount);
 
   // Call data OP_RETURN
   const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
@@ -29,6 +30,34 @@ export const case1 = (wallet: Wallet, inputAmount: number, calculatedAmountWithS
       value: inputAmount,
       address,
       asset: pool.quote.asset,
+    },
+  ];
+
+  return signTx(wallet, callData, receipents);
+};
+
+export const case2 = (wallet: Wallet, inputAmount: number, calculatedAmountWithSlippage: number, pool: Pool, config: BmConfig, publicKey: string): Promise<string> => {
+  const methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+  const poolIdLE = hexLE(pool.id);
+  const receivedAmount = convertion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
+  console.log("receivedAmount", receivedAmount);
+
+  // Call data OP_RETURN
+  const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
+  const address = commitmentOutputTapscript(pool.token.asset, config.innerPublicKey).taprootResult.address.testnet;
+
+  const totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
+
+  const receipents: RecipientInterface[] = [
+    {
+      value: totalFee,
+      address,
+      asset: pool.quote.asset,
+    },
+    {
+      value: inputAmount,
+      address,
+      asset: pool.token.asset,
     },
   ];
 
