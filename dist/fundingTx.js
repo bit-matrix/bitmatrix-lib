@@ -8,12 +8,12 @@ var fundingTx = function (amount, pool, config, callMethod) {
     var fundingOutput2Address = config.fundingOutputAddress;
     var fundingOutput1AssetId = "";
     if (callMethod === models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
-        fundingOutput1AssetId = pool.quote.asset;
+        fundingOutput1AssetId = pool.quote.assetHash;
     }
     else if (callMethod === models_1.CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
-        fundingOutput1AssetId = pool.token.asset;
+        fundingOutput1AssetId = pool.token.assetHash;
     }
-    var fundingOutput2AssetId = pool.quote.asset;
+    var fundingOutput2AssetId = pool.quote.assetHash;
     return {
         fundingOutput1Value: fundingOutput1Value,
         fundingOutput2Value: fundingOutput2Value,

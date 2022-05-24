@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -32,7 +36,7 @@ var calculateAmountTotal = function (inputAmount, orderingFee, baseFee, serviceF
 };
 var quoteToTokenCreateCommitmentTx = function (inputAmount, txId, publicKey, calculatedAmountWithSlippage, config, pool) {
     var methodCall = models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-    var quoteAssetIdLE = (0, wiz_data_1.hexLE)(pool.quote.asset);
+    var quoteAssetIdLE = (0, wiz_data_1.hexLE)(pool.quote.assetHash);
     var poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
     var receivedAmount = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(calculatedAmountWithSlippage)).hex;
     var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
@@ -71,7 +75,7 @@ var quoteToTokenCreateCommitmentTx = function (inputAmount, txId, publicKey, cal
 exports.quoteToTokenCreateCommitmentTx = quoteToTokenCreateCommitmentTx;
 var tokenToQuoteCreateCommitmentTx = function (inputAmount, txId, publicKey, calculatedAmountWithSlippage, config, pool) {
     var methodCall = models_1.CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
-    var quoteAssetIdLE = (0, wiz_data_1.hexLE)(pool.quote.asset);
+    var quoteAssetIdLE = (0, wiz_data_1.hexLE)(pool.quote.assetHash);
     var poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
     var receivedAmount = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(calculatedAmountWithSlippage)).hex;
     var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
@@ -84,7 +88,7 @@ var tokenToQuoteCreateCommitmentTx = function (inputAmount, txId, publicKey, cal
     var feeAmountsTotal = calculateAmountTotal(0, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number);
     var constLength5 = "0022";
     var scriptPubKey = lib_core_1.taproot.tapRoot(wiz_data_1.default.fromHex(config.innerPublicKey), [wiz_data_1.default.fromHex(commitmentOutputTapscriptTemplate)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
-    var tokenAssetIdLE = (0, wiz_data_1.hexLE)(pool.token.asset);
+    var tokenAssetIdLE = (0, wiz_data_1.hexLE)(pool.token.assetHash);
     var constLength6 = "01" + tokenAssetIdLE + "01";
     var inputAmount64LE = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(inputAmount)).hex;
     var inputAmount64BE = (0, wiz_data_1.hexLE)(inputAmount64LE);
@@ -115,8 +119,8 @@ var tokenToQuoteCreateCommitmentTx = function (inputAmount, txId, publicKey, cal
 exports.tokenToQuoteCreateCommitmentTx = tokenToQuoteCreateCommitmentTx;
 var liquidityAddCreateCommitmentTx = function (quoteAmount, tokenAmount, txId, publicKey, config, pool) {
     var methodCall = models_1.CALL_METHOD.ADD_LIQUIDITY;
-    var quoteAssetIdLE = (0, wiz_data_1.hexLE)(pool.quote.asset);
-    var tokenAssetIdLE = (0, wiz_data_1.hexLE)(pool.token.asset);
+    var quoteAssetIdLE = (0, wiz_data_1.hexLE)(pool.quote.assetHash);
+    var tokenAssetIdLE = (0, wiz_data_1.hexLE)(pool.token.assetHash);
     var poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
     var receivedAmount = (0, wiz_data_1.hexLE)(calculateAmountTotal(quoteAmount, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number));
     var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
@@ -154,8 +158,8 @@ var liquidityAddCreateCommitmentTx = function (quoteAmount, tokenAmount, txId, p
 exports.liquidityAddCreateCommitmentTx = liquidityAddCreateCommitmentTx;
 var liquidityRemoveCreateCommitmentTx = function (lpAmount, txId, publicKey, config, pool) {
     var methodCall = models_1.CALL_METHOD.REMOVE_LIQUIDITY;
-    var quoteAssetIdLE = (0, wiz_data_1.hexLE)(pool.quote.asset);
-    var lpAssetIdLE = (0, wiz_data_1.hexLE)(pool.lp.asset);
+    var quoteAssetIdLE = (0, wiz_data_1.hexLE)(pool.quote.assetHash);
+    var lpAssetIdLE = (0, wiz_data_1.hexLE)(pool.lp.assetHash);
     var poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
     var receivedAmount = (0, wiz_data_1.hexLE)(calculateAmountTotal(0, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number));
     var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;

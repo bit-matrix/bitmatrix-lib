@@ -8,8 +8,8 @@ var marina_1 = __importDefault(require("./marina/marina"));
 var WALLET_NAME_1 = require("./WALLET_NAME");
 var Wallet = /** @class */ (function () {
     function Wallet(walletName) {
-        var _this = this;
         if (walletName === void 0) { walletName = WALLET_NAME_1.WALLET_NAME.MARINA; }
+        var _this = this;
         this.signTransaction = function (pset) { return _this.wallet.signTransaction(pset); };
         this.broadcastTransaction = function (signedTxHex) { return _this.wallet.broadcastTransaction(signedTxHex); };
         this.off = function (listenerId) { return _this.wallet.off(listenerId); };

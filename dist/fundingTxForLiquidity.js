@@ -7,13 +7,13 @@ var fundingTxForLiquidity = function (quoteAmount, tokenAmount, pool, config, ca
     var fundingOutput2Value = tokenAmount;
     var fundingOutput1Address = config.fundingOutputAddress;
     var fundingOutput2Address = config.fundingOutputAddress;
-    var fundingOutput1AssetId = pool.quote.asset;
+    var fundingOutput1AssetId = pool.quote.assetHash;
     var fundingOutput2AssetId = "";
     if (callMethod === models_1.CALL_METHOD.ADD_LIQUIDITY) {
-        fundingOutput2AssetId = pool.token.asset;
+        fundingOutput2AssetId = pool.token.assetHash;
     }
     else if (callMethod === models_1.CALL_METHOD.REMOVE_LIQUIDITY) {
-        fundingOutput2AssetId = pool.lp.asset;
+        fundingOutput2AssetId = pool.lp.assetHash;
     }
     return {
         fundingOutput1Value: fundingOutput1Value,
