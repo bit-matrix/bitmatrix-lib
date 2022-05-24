@@ -10,14 +10,14 @@ const fundingTxForLiquidity = (quoteAmount: number, tokenAmount: number, pool: P
   const fundingOutput1Address = config.fundingOutputAddress;
   const fundingOutput2Address = config.fundingOutputAddress;
 
-  const fundingOutput1AssetId = pool.quote.asset;
+  const fundingOutput1AssetId = pool.quote.assetHash;
 
   let fundingOutput2AssetId = "";
 
   if (callMethod === CALL_METHOD.ADD_LIQUIDITY) {
-    fundingOutput2AssetId = pool.token.asset;
+    fundingOutput2AssetId = pool.token.assetHash;
   } else if (callMethod === CALL_METHOD.REMOVE_LIQUIDITY) {
-    fundingOutput2AssetId = pool.lp.asset;
+    fundingOutput2AssetId = pool.lp.assetHash;
   }
 
   return {

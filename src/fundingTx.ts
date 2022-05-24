@@ -11,12 +11,12 @@ const fundingTx = (amount: number, pool: Pool, config: BmConfig, callMethod: CAL
   let fundingOutput1AssetId = "";
 
   if (callMethod === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
-    fundingOutput1AssetId = pool.quote.asset;
+    fundingOutput1AssetId = pool.quote.assetHash;
   } else if (callMethod === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
-    fundingOutput1AssetId = pool.token.asset;
+    fundingOutput1AssetId = pool.token.assetHash;
   }
 
-  const fundingOutput2AssetId = pool.quote.asset;
+  const fundingOutput2AssetId = pool.quote.assetHash;
 
   return {
     fundingOutput1Value,
