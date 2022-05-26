@@ -1,38 +1,30 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Wallet = void 0;
-var marina_1 = __importDefault(require("./marina/marina"));
-var WALLET_NAME_1 = require("./WALLET_NAME");
-var Wallet = /** @class */ (function () {
-    function Wallet(walletName) {
-        var _this = this;
-        if (walletName === void 0) { walletName = WALLET_NAME_1.WALLET_NAME.MARINA; }
-        this.signTransaction = function (pset) { return _this.wallet.signTransaction(pset); };
-        this.broadcastTransaction = function (signedTxHex) { return _this.wallet.broadcastTransaction(signedTxHex); };
-        this.off = function (listenerId) { return _this.wallet.off(listenerId); };
-        this.on = function (type, callback) { return _this.wallet.on(type, callback); };
-        this.exist = function () { return _this.wallet.exist(); };
-        this.isEnabled = function () { return _this.wallet.isEnabled(); };
-        this.enable = function () { return _this.wallet.enable(); };
-        this.disable = function () { return _this.wallet.disable(); };
-        this.getNextAddress = function () { return _this.wallet.getNextAddress(); };
-        this.getAddresses = function () { return _this.wallet.getAddresses(); };
-        this.sendTransaction = function (recipients) { return _this.wallet.sendTransaction(recipients); };
-        this.getBalances = function () { return _this.wallet.getBalances(); };
-        this.getNextChangeAddress = function () { return _this.wallet.getNextChangeAddress(); };
-        this.reloadCoins = function () { return _this.wallet.reloadCoins(); };
-        this.getCoins = function () { return _this.wallet.getCoins(); };
-        this.getNetwork = function () { return _this.wallet.getNetwork(); };
-        if (walletName === WALLET_NAME_1.WALLET_NAME.MARINA)
-            this.wallet = new marina_1.default();
-        // TODO default wallet
-        else
-            this.wallet = new marina_1.default();
-    }
-    return Wallet;
-}());
-exports.Wallet = Wallet;
+// import { AddressInterface, Balance, EventListenerID, MarinaEventType, NetworkString, Recipient, SentTransaction, Utxo } from "marina-provider";
+// import { IWallet } from "./IWallet";
+// import Marina from "./marina/marina";
+// import { WALLET_NAME } from "./WALLET_NAME";
+// export class Wallet implements IWallet {
+//   private wallet: IWallet;
+//   constructor(walletName: WALLET_NAME = WALLET_NAME.MARINA) {
+//     if (walletName === WALLET_NAME.MARINA) this.wallet = new Marina();
+//     // TODO default wallet
+//     else this.wallet = new Marina();
+//   }
+//   public signTransaction = (pset: string): Promise<string> => this.wallet.signTransaction(pset);
+//   public broadcastTransaction = (signedTxHex: string): Promise<SentTransaction> => this.wallet.broadcastTransaction(signedTxHex);
+//   public off = (listenerId: EventListenerID): void => this.wallet.off(listenerId);
+//   public on = (type: MarinaEventType, callback: (payload: any) => void): string => this.wallet.on(type, callback);
+//   public exist = (): boolean => this.wallet.exist();
+//   public isEnabled = (): Promise<boolean> => this.wallet.isEnabled();
+//   public enable = (): Promise<void> => this.wallet.enable();
+//   public disable = (): Promise<void> => this.wallet.disable();
+//   public getNextAddress = (): Promise<AddressInterface> => this.wallet.getNextAddress();
+//   public getAddresses = (): Promise<AddressInterface[]> => this.wallet.getAddresses();
+//   public sendTransaction = (recipients: Recipient[]): Promise<SentTransaction> => this.wallet.sendTransaction(recipients);
+//   public getBalances = (): Promise<Balance[]> => this.wallet.getBalances();
+//   public getNextChangeAddress = (): Promise<AddressInterface> => this.wallet.getNextChangeAddress();
+//   public reloadCoins = (): Promise<void> => this.wallet.reloadCoins();
+//   public getCoins = (): Promise<Utxo[]> => this.wallet.getCoins();
+//   public getNetwork = (): Promise<NetworkString> => this.wallet.getNetwork();
+// }
 //# sourceMappingURL=index.js.map

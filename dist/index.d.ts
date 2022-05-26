@@ -7,5 +7,4 @@ import * as pool from "./pool";
 import * as poolDeployment from "./poolDeployment";
 import fundingTx from "./fundingTx";
 import fundingTxForLiquidity from "./fundingTxForLiquidity";
-import { Wallet } from "./wallet";
-export { api, asset, commitmentOutput, commitmentTx, convertion, pool, poolDeployment, Wallet, fundingTx, fundingTxForLiquidity };
+export { api, asset, commitmentOutput, commitmentTx, convertion, pool, poolDeployment, fundingTx, fundingTxForLiquidity };
