@@ -1,23 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.marina = void 0;
-exports.marina = window.marina;
 var Marina = /** @class */ (function () {
-    function Marina() {
+    function Marina(marina) {
         var _this = this;
         this.on = function (type, callback) {
-            if (_this.exist() && exports.marina)
-                return exports.marina.on(type, callback);
+            if (_this.exist() && _this.marina)
+                return _this.marina.on(type, callback);
             return "Marina wallet disabled.";
         };
         this.off = function (listenerId) {
-            if (_this.exist() && exports.marina)
-                exports.marina.off(listenerId);
+            if (_this.exist() && _this.marina)
+                _this.marina.off(listenerId);
         };
-        this.exist = function () { return typeof window.marina !== "undefined"; };
+        this.exist = function () { return typeof _this.marina !== "undefined"; };
         this.isEnabled = function () {
-            if (_this.exist() && exports.marina)
-                return exports.marina.isEnabled();
+            if (_this.exist() && _this.marina)
+                return _this.marina.isEnabled();
             // throw "Install Marina first";
             return Promise.resolve(false);
         };
@@ -33,16 +31,16 @@ var Marina = /** @class */ (function () {
             // else throw "Install Marina first";
             return Promise.resolve();
         };
-        this.marina = window.marina;
+        this.marina = marina;
     }
     Marina.prototype.signTransaction = function (pset) {
-        if (this.exist() && exports.marina)
-            return exports.marina.signTransaction(pset);
+        if (this.exist() && this.marina)
+            return this.marina.signTransaction(pset);
         throw new Error("Marina wallet disabled.");
     };
     Marina.prototype.broadcastTransaction = function (signedTxHex) {
-        if (this.exist() && exports.marina)
-            return exports.marina.broadcastTransaction(signedTxHex);
+        if (this.exist() && this.marina)
+            return this.marina.broadcastTransaction(signedTxHex);
         throw new Error("Marina wallet disabled.");
     };
     Marina.prototype.getNextAddress = function () {
@@ -75,18 +73,18 @@ var Marina = /** @class */ (function () {
         throw new Error("Marina wallet disabled.");
     };
     Marina.prototype.reloadCoins = function () {
-        if (this.exist() && exports.marina)
-            return exports.marina.reloadCoins();
+        if (this.exist() && this.marina)
+            return this.marina.reloadCoins();
         return Promise.reject("Marina wallet disabled.");
     };
     Marina.prototype.getCoins = function () {
-        if (this.exist() && exports.marina)
-            return exports.marina.getCoins();
+        if (this.exist() && this.marina)
+            return this.marina.getCoins();
         return Promise.reject("Marina wallet disabled.");
     };
     Marina.prototype.getNetwork = function () {
-        if (this.exist() && exports.marina)
-            return exports.marina.getNetwork();
+        if (this.exist() && this.marina)
+            return this.marina.getNetwork();
         return Promise.reject("Marina wallet disabled.");
     };
     Marina.prototype.setAccount = function ( /*account: number*/) {

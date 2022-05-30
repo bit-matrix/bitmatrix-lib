@@ -1,13 +1,7 @@
 import { AddressInterface, Balance, DescriptorTemplate, EventListenerID, MarinaEventType, MarinaProvider, NetworkString, Recipient, SentTransaction, SignedMessage, Transaction, Utxo } from "marina-provider";
-declare global {
-    interface Window {
-        marina?: MarinaProvider;
-    }
-}
-export declare const marina: MarinaProvider | undefined;
 export default class Marina implements MarinaProvider {
     private marina;
-    constructor();
+    constructor(marina: MarinaProvider);
     signTransaction(pset: string): Promise<string>;
     broadcastTransaction(signedTxHex: string): Promise<SentTransaction>;
     on: (type: MarinaEventType, callback: (payload: any) => void) => string;

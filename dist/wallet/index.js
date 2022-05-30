@@ -7,7 +7,7 @@ exports.Wallet = void 0;
 var marina_1 = __importDefault(require("./marina/marina"));
 var WALLET_NAME_1 = require("./WALLET_NAME");
 var Wallet = /** @class */ (function () {
-    function Wallet(walletName) {
+    function Wallet(marina, walletName) {
         var _this = this;
         if (walletName === void 0) { walletName = WALLET_NAME_1.WALLET_NAME.MARINA; }
         this.signTransaction = function (pset) { return _this.wallet.signTransaction(pset); };
@@ -27,10 +27,10 @@ var Wallet = /** @class */ (function () {
         this.getCoins = function () { return _this.wallet.getCoins(); };
         this.getNetwork = function () { return _this.wallet.getNetwork(); };
         if (walletName === WALLET_NAME_1.WALLET_NAME.MARINA)
-            this.wallet = new marina_1.default();
+            this.wallet = new marina_1.default(marina);
         // TODO default wallet
         else
-            this.wallet = new marina_1.default();
+            this.wallet = new marina_1.default(marina);
     }
     return Wallet;
 }());

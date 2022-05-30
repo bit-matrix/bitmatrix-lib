@@ -13,47 +13,39 @@ import {
   Utxo,
 } from "marina-provider";
 
-declare global {
-  interface Window {
-    marina?: MarinaProvider;
-  }
-}
-
-export const marina = window.marina;
-
 export default class Marina implements MarinaProvider {
   private marina: MarinaProvider | undefined;
 
-  constructor() {
-    this.marina = window.marina;
+  constructor(marina: MarinaProvider) {
+    this.marina = marina;
   }
 
   signTransaction(pset: string): Promise<string> {
-    if (this.exist() && marina) return marina.signTransaction(pset);
+    if (this.exist() && this.marina) return this.marina.signTransaction(pset);
 
     throw new Error("Marina wallet disabled.");
   }
 
   broadcastTransaction(signedTxHex: string): Promise<SentTransaction> {
-    if (this.exist() && marina) return marina.broadcastTransaction(signedTxHex);
+    if (this.exist() && this.marina) return this.marina.broadcastTransaction(signedTxHex);
 
     throw new Error("Marina wallet disabled.");
   }
 
   on = (type: MarinaEventType, callback: (payload: any) => void): string => {
-    if (this.exist() && marina) return marina.on(type, callback);
+    if (this.exist() && this.marina) return this.marina.on(type, callback);
 
     return "Marina wallet disabled.";
   };
 
   off = (listenerId: EventListenerID): void => {
-    if (this.exist() && marina) marina.off(listenerId);
+    if (this.exist() && this.marina) this.marina.off(listenerId);
   };
 
-  exist = (): boolean => typeof window.marina !== "undefined";
+  exist = (): boolean => typeof this.marina !== "undefined";
 
   isEnabled = (): Promise<boolean> => {
-    if (this.exist() && marina) return marina.isEnabled();
+    if (this.exist() && this.marina) return this.marina.isEnabled();
     // throw "Install Marina first";
     return Promise.resolve(false);
   };
@@ -101,18 +93,18 @@ export default class Marina implements MarinaProvider {
   }
 
   reloadCoins(): Promise<void> {
-    if (this.exist() && marina) return marina.reloadCoins();
+    if (this.exist() && this.marina) return this.marina.reloadCoins();
 
     return Promise.reject("Marina wallet disabled.");
   }
 
   getCoins(): Promise<Utxo[]> {
-    if (this.exist() && marina) return marina.getCoins();
+    if (this.exist() && this.marina) return this.marina.getCoins();
     return Promise.reject("Marina wallet disabled.");
   }
 
   getNetwork(): Promise<NetworkString> {
-    if (this.exist() && marina) return marina.getNetwork();
+    if (this.exist() && this.marina) return this.marina.getNetwork();
     return Promise.reject("Marina wallet disabled.");
   }
 
