@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -22,13 +26,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fundingTxForLiquidity = exports.fundingTx = exports.Wallet = exports.poolDeployment = exports.pool = exports.ldk = exports.convertion = exports.commitmentTx = exports.commitmentOutput = exports.asset = exports.api = void 0;
+exports.fundingTxForLiquidity = exports.fundingTx = exports.Wallet = exports.poolDeployment = exports.pool = exports.ldk = exports.convertion = exports.commitmentTx = exports.commitmentSign = exports.commitmentOutput = exports.asset = exports.api = void 0;
 var api = __importStar(require("./api"));
 exports.api = api;
 var asset = __importStar(require("./asset"));
 exports.asset = asset;
 var commitmentOutput = __importStar(require("./commitmentOutput"));
 exports.commitmentOutput = commitmentOutput;
+var commitmentSign = __importStar(require("./commitmentSign"));
+exports.commitmentSign = commitmentSign;
 var commitmentTx = __importStar(require("./commitmentTx"));
 exports.commitmentTx = commitmentTx;
 var convertion = __importStar(require("./convertion"));

@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -59,90 +63,72 @@ exports.signTx = void 0;
 var ldk_1 = require("ldk");
 var liquidjs_lib_1 = require("liquidjs-lib");
 var ecc = __importStar(require("tiny-secp256k1"));
-var signTx = function (marina, data, address) { return __awaiter(void 0, void 0, void 0, function () {
-    var coins, changeAddress, pset, recipients, tx, unsignedTx, ptx, marinaInputIndex, marinaChangeOutputIndex, blindPrivKey, inputBlindingMap, outputBlindingMap, signedTx, finalTx, txFinal;
+var utils_1 = require("./utils/utils");
+var helper_1 = require("./utils/helper");
+var signTx = function (marina, callData, recipients) { return __awaiter(void 0, void 0, void 0, function () {
+    var coins, pset, tx, makeGetter, assets, uniquAssets, changeAddressGetter, unsignedTx, ptx, inputBlindingMap, outputBlindingMap, signedTx, finalTx, txFinal;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, marina.getCoins()];
             case 1:
                 coins = _a.sent();
-                return [4 /*yield*/, marina.getNextChangeAddress()];
-            case 2:
-                changeAddress = _a.sent();
                 pset = new liquidjs_lib_1.Psbt({ network: liquidjs_lib_1.networks.testnet });
                 // 2. add a custom OP_RETURN output to psbt
                 pset.addOutput({
-                    script: liquidjs_lib_1.script.compile([liquidjs_lib_1.script.OPS.OP_RETURN, Buffer.from(data, "hex")]),
+                    script: liquidjs_lib_1.script.compile([liquidjs_lib_1.script.OPS.OP_RETURN, Buffer.from(callData, "hex")]),
                     value: liquidjs_lib_1.confidential.satoshiToConfidentialValue(0),
                     asset: liquidjs_lib_1.AssetHash.fromHex(liquidjs_lib_1.networks.testnet.assetHash, false).bytes,
                     nonce: Buffer.alloc(0),
                 });
-                recipients = [
-                    {
-                        asset: liquidjs_lib_1.networks.testnet.assetHash,
-                        value: 5000,
-                        //P2TR address
-                        address: address,
-                    },
-                ];
                 tx = pset.toBase64();
+                makeGetter = makeAssetChangeGetter(marina);
+                assets = recipients.map(function (r) { return r.asset; });
+                uniquAssets = (0, helper_1.uniqueArray)(assets);
+                return [4 /*yield*/, makeGetter(uniquAssets)];
+            case 2:
+                changeAddressGetter = _a.sent();
                 unsignedTx = (0, ldk_1.craftMultipleRecipientsPset)({
                     psetBase64: tx,
                     unspents: coins,
                     recipients: recipients,
                     coinSelector: (0, ldk_1.greedyCoinSelector)(),
-                    changeAddressByAsset: function (_) { return changeAddress.confidentialAddress; },
+                    changeAddressByAsset: changeAddressGetter,
                     addFee: true,
                 });
                 ptx = liquidjs_lib_1.Psbt.fromBase64(unsignedTx);
-                marinaInputIndex = ptx.data.inputs.length - 1;
-                marinaChangeOutputIndex = ptx.data.outputs.length - 2;
-                return [4 /*yield*/, getBlindingKeyByScript(marina, ptx.data.inputs[marinaInputIndex].witnessUtxo.script.toString("hex"))];
-            case 3:
-                blindPrivKey = _a.sent();
-                inputBlindingMap = new Map().set(marinaInputIndex, Buffer.from(blindPrivKey, "hex"));
-                outputBlindingMap = new Map().set(marinaChangeOutputIndex, 
-                // this is the blinding publick key of the change output for marina
-                liquidjs_lib_1.address.fromConfidential(changeAddress.confidentialAddress).blindingKey);
+                inputBlindingMap = (0, utils_1.inputBlindingDataMap)(unsignedTx, coins);
+                outputBlindingMap = (0, utils_1.outPubKeysMap)(unsignedTx, [changeAddressGetter(liquidjs_lib_1.networks.testnet.assetHash), recipients[0].address]);
                 return [4 /*yield*/, ptx.blindOutputsByIndex(liquidjs_lib_1.Psbt.ECCKeysGenerator(ecc), inputBlindingMap, outputBlindingMap)];
-            case 4:
+            case 3:
                 _a.sent();
                 return [4 /*yield*/, marina.signTransaction(ptx.toBase64())];
-            case 5:
+            case 4:
                 signedTx = _a.sent();
                 finalTx = liquidjs_lib_1.Psbt.fromBase64(signedTx);
                 finalTx.finalizeAllInputs();
                 return [4 /*yield*/, marina.broadcastTransaction(finalTx.extractTransaction().toHex())];
-            case 6:
+            case 5:
                 txFinal = _a.sent();
                 return [2 /*return*/, txFinal.txid];
         }
     });
 }); };
 exports.signTx = signTx;
-var getBlindingKeyByScript = function (marina, script) { return __awaiter(void 0, void 0, void 0, function () {
-    var addresses, found_1, e_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, marina.getAddresses()];
-            case 1:
-                addresses = _a.sent();
-                addresses.forEach(function (addr) {
-                    var currentScript = liquidjs_lib_1.address.toOutputScript(addr.confidentialAddress).toString("hex");
-                    if (currentScript === script) {
-                        found_1 = addr;
-                    }
-                });
-                if (!found_1)
-                    throw new Error("no blinding key for script " + script);
-                return [2 /*return*/, found_1.blindingPrivateKey];
-            case 2:
-                e_1 = _a.sent();
-                throw e_1;
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
+var makeAssetChangeGetter = function (marina) {
+    return function (assets) { return __awaiter(void 0, void 0, void 0, function () {
+        var addresses;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, Promise.all(assets.map(function (_) { return marina.getNextChangeAddress(); }))];
+                case 1:
+                    addresses = _a.sent();
+                    return [2 /*return*/, function (asset) {
+                            console.log(asset);
+                            var index = assets.findIndex(function (a) { return a === asset; });
+                            return addresses[index].confidentialAddress;
+                        }];
+            }
+        });
+    }); };
+};
 //# sourceMappingURL=ldk.js.map
