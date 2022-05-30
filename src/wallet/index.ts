@@ -1,45 +1,46 @@
-// import { AddressInterface, Balance, EventListenerID, MarinaEventType, NetworkString, Recipient, SentTransaction, Utxo } from "marina-provider";
-// import { IWallet } from "./IWallet";
-// import Marina from "./marina/marina";
-// import { WALLET_NAME } from "./WALLET_NAME";
+import { AddressInterface, Balance, EventListenerID, MarinaEventType, MarinaProvider, NetworkString, Recipient, SentTransaction, Utxo } from "marina-provider";
+import { IWallet } from "./IWallet";
+import Marina from "./marina/marina";
+import { WALLET_NAME } from "./WALLET_NAME";
 
-// export class Wallet implements IWallet {
-//   private wallet: IWallet;
+export class Wallet implements IWallet {
+  private wallet: IWallet;
 
-//   constructor(walletName: WALLET_NAME = WALLET_NAME.MARINA) {
-//     if (walletName === WALLET_NAME.MARINA) this.wallet = new Marina();
-//     // TODO default wallet
-//     else this.wallet = new Marina();
-//   }
-//   public signTransaction = (pset: string): Promise<string> => this.wallet.signTransaction(pset);
+  constructor(marina: MarinaProvider, walletName: WALLET_NAME = WALLET_NAME.MARINA) {
+    if (walletName === WALLET_NAME.MARINA) this.wallet = new Marina(marina);
+    // TODO default wallet
+    else this.wallet = new Marina(marina);
+  }
 
-//   public broadcastTransaction = (signedTxHex: string): Promise<SentTransaction> => this.wallet.broadcastTransaction(signedTxHex);
+  public signTransaction = (pset: string): Promise<string> => this.wallet.signTransaction(pset);
 
-//   public off = (listenerId: EventListenerID): void => this.wallet.off(listenerId);
+  public broadcastTransaction = (signedTxHex: string): Promise<SentTransaction> => this.wallet.broadcastTransaction(signedTxHex);
 
-//   public on = (type: MarinaEventType, callback: (payload: any) => void): string => this.wallet.on(type, callback);
+  public off = (listenerId: EventListenerID): void => this.wallet.off(listenerId);
 
-//   public exist = (): boolean => this.wallet.exist();
+  public on = (type: MarinaEventType, callback: (payload: any) => void): string => this.wallet.on(type, callback);
 
-//   public isEnabled = (): Promise<boolean> => this.wallet.isEnabled();
+  public exist = (): boolean => this.wallet.exist();
 
-//   public enable = (): Promise<void> => this.wallet.enable();
+  public isEnabled = (): Promise<boolean> => this.wallet.isEnabled();
 
-//   public disable = (): Promise<void> => this.wallet.disable();
+  public enable = (): Promise<void> => this.wallet.enable();
 
-//   public getNextAddress = (): Promise<AddressInterface> => this.wallet.getNextAddress();
+  public disable = (): Promise<void> => this.wallet.disable();
 
-//   public getAddresses = (): Promise<AddressInterface[]> => this.wallet.getAddresses();
+  public getNextAddress = (): Promise<AddressInterface> => this.wallet.getNextAddress();
 
-//   public sendTransaction = (recipients: Recipient[]): Promise<SentTransaction> => this.wallet.sendTransaction(recipients);
+  public getAddresses = (): Promise<AddressInterface[]> => this.wallet.getAddresses();
 
-//   public getBalances = (): Promise<Balance[]> => this.wallet.getBalances();
+  public sendTransaction = (recipients: Recipient[]): Promise<SentTransaction> => this.wallet.sendTransaction(recipients);
 
-//   public getNextChangeAddress = (): Promise<AddressInterface> => this.wallet.getNextChangeAddress();
+  public getBalances = (): Promise<Balance[]> => this.wallet.getBalances();
 
-//   public reloadCoins = (): Promise<void> => this.wallet.reloadCoins();
+  public getNextChangeAddress = (): Promise<AddressInterface> => this.wallet.getNextChangeAddress();
 
-//   public getCoins = (): Promise<Utxo[]> => this.wallet.getCoins();
+  public reloadCoins = (): Promise<void> => this.wallet.reloadCoins();
 
-//   public getNetwork = (): Promise<NetworkString> => this.wallet.getNetwork();
-// }
+  public getCoins = (): Promise<Utxo[]> => this.wallet.getCoins();
+
+  public getNetwork = (): Promise<NetworkString> => this.wallet.getNetwork();
+}
