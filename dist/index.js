@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fundingTxForLiquidity = exports.fundingTx = exports.poolDeployment = exports.pool = exports.convertion = exports.commitmentTx = exports.commitmentOutput = exports.asset = exports.api = void 0;
+exports.fundingTxForLiquidity = exports.fundingTx = exports.Wallet = exports.poolDeployment = exports.pool = exports.convertion = exports.commitmentTx = exports.commitmentOutput = exports.asset = exports.api = void 0;
 var api = __importStar(require("./api"));
 exports.api = api;
 var asset = __importStar(require("./asset"));
@@ -41,4 +41,6 @@ var fundingTx_1 = __importDefault(require("./fundingTx"));
 exports.fundingTx = fundingTx_1.default;
 var fundingTxForLiquidity_1 = __importDefault(require("./fundingTxForLiquidity"));
 exports.fundingTxForLiquidity = fundingTxForLiquidity_1.default;
+var wallet_1 = require("./wallet");
+Object.defineProperty(exports, "Wallet", { enumerable: true, get: function () { return wallet_1.Wallet; } });
 //# sourceMappingURL=index.js.map
