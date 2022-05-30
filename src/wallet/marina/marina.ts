@@ -20,6 +20,10 @@ export default class Marina implements MarinaProvider {
     this.marina = marina;
   }
 
+  getAccountsIDs(): Promise<string[]> {
+    throw new Error("Method not implemented.");
+  }
+
   signTransaction(pset: string): Promise<string> {
     if (this.exist() && this.marina) return this.marina.signTransaction(pset);
 
