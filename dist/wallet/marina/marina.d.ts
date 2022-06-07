@@ -2,6 +2,7 @@ import { AddressInterface, Balance, DescriptorTemplate, EventListenerID, MarinaE
 export default class Marina implements MarinaProvider {
     private marina;
     constructor(marina: MarinaProvider);
+    getAccountsIDs(): Promise<string[]>;
     signTransaction(pset: string): Promise<string>;
     broadcastTransaction(signedTxHex: string): Promise<SentTransaction>;
     on: (type: MarinaEventType, callback: (payload: any) => void) => string;

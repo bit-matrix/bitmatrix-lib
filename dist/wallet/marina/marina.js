@@ -33,6 +33,9 @@ var Marina = /** @class */ (function () {
         };
         this.marina = marina;
     }
+    Marina.prototype.getAccountsIDs = function () {
+        throw new Error("Method not implemented.");
+    };
     Marina.prototype.signTransaction = function (pset) {
         if (this.exist() && this.marina)
             return this.marina.signTransaction(pset);
