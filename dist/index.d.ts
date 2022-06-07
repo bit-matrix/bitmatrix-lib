@@ -7,7 +7,5 @@ import * as convertion from "./convertion";
 import * as ldk from "./ldk";
 import * as pool from "./pool";
 import * as poolDeployment from "./poolDeployment";
-import fundingTx from "./fundingTx";
-import fundingTxForLiquidity from "./fundingTxForLiquidity";
 import { Wallet } from "./wallet";
-export { api, asset, commitmentOutput, commitmentSign, commitmentTx, convertion, ldk, pool, poolDeployment, Wallet, fundingTx, fundingTxForLiquidity };
+export { api, asset, commitmentOutput, commitmentSign, commitmentTx, convertion, ldk, pool, poolDeployment, Wallet };
