@@ -1,7 +1,7 @@
 import {
+  AccountInfo,
   AddressInterface,
   Balance,
-  DescriptorTemplate,
   EventListenerID,
   MarinaEventType,
   MarinaProvider,
@@ -9,6 +9,7 @@ import {
   Recipient,
   SentTransaction,
   SignedMessage,
+  Template,
   Transaction,
   Utxo,
 } from "marina-provider";
@@ -18,6 +19,12 @@ export default class Marina implements MarinaProvider {
 
   constructor(marina: MarinaProvider) {
     this.marina = marina;
+  }
+  importTemplate(template: Template<any>, changeTemplate?: Template<any> | undefined): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+  getAccountInfo(accountID: string): Promise<AccountInfo> {
+    throw new Error("Method not implemented.");
   }
 
   getAccountsIDs(): Promise<string[]> {
@@ -145,10 +152,6 @@ export default class Marina implements MarinaProvider {
   }
 
   useAccount(account: string): Promise<boolean> {
-    throw new Error("Method not implemented.");
-  }
-
-  importTemplate(template: DescriptorTemplate, changeTemplate?: DescriptorTemplate): Promise<void> {
     throw new Error("Method not implemented.");
   }
 }
