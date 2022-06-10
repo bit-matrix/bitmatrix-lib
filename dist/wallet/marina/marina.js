@@ -33,6 +33,12 @@ var Marina = /** @class */ (function () {
         };
         this.marina = marina;
     }
+    Marina.prototype.importTemplate = function (template, changeTemplate) {
+        throw new Error("Method not implemented.");
+    };
+    Marina.prototype.getAccountInfo = function (accountID) {
+        throw new Error("Method not implemented.");
+    };
     Marina.prototype.getAccountsIDs = function () {
         throw new Error("Method not implemented.");
     };
@@ -115,9 +121,6 @@ var Marina = /** @class */ (function () {
         throw new Error("Method not implemented.");
     };
     Marina.prototype.useAccount = function (account) {
-        throw new Error("Method not implemented.");
-    };
-    Marina.prototype.importTemplate = function (template, changeTemplate) {
         throw new Error("Method not implemented.");
     };
     return Marina;
