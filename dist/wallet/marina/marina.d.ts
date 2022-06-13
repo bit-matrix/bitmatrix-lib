@@ -1,7 +1,9 @@
-import { AddressInterface, Balance, DescriptorTemplate, EventListenerID, MarinaEventType, MarinaProvider, NetworkString, Recipient, SentTransaction, SignedMessage, Transaction, Utxo } from "marina-provider";
+import { AccountInfo, AddressInterface, Balance, EventListenerID, MarinaEventType, MarinaProvider, NetworkString, Recipient, SentTransaction, SignedMessage, Template, Transaction, Utxo } from "marina-provider";
 export default class Marina implements MarinaProvider {
     private marina;
     constructor(marina: MarinaProvider);
+    importTemplate(template: Template<any>, changeTemplate?: Template<any> | undefined): Promise<void>;
+    getAccountInfo(accountID: string): Promise<AccountInfo>;
     getAccountsIDs(): Promise<string[]>;
     signTransaction(pset: string): Promise<string>;
     broadcastTransaction(signedTxHex: string): Promise<SentTransaction>;
@@ -28,5 +30,4 @@ export default class Marina implements MarinaProvider {
     getSelectedAccount(): Promise<string>;
     createAccount(accountName: string): Promise<void>;
     useAccount(account: string): Promise<boolean>;
-    importTemplate(template: DescriptorTemplate, changeTemplate?: DescriptorTemplate): Promise<void>;
 }
