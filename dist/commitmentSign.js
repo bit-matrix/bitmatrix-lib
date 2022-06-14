@@ -37,11 +37,7 @@ var case1 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
     console.log("receivedAmount", receivedAmount);
     // Call data OP_RETURN
     var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
-<<<<<<< HEAD
-    var address = (0, commitmentOutput_1.commitmentOutputTapscript)(pool.quote.assetHash, config.innerPublicKey).taprootResult.address.testnet;
-=======
     var address = (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.testnet;
->>>>>>> master
     var totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
     var receipents = [
         {
@@ -64,11 +60,7 @@ var case2 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
     var receivedAmount = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(calculatedAmountWithSlippage)).hex;
     // Call data OP_RETURN
     var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
-<<<<<<< HEAD
-    var address = (0, commitmentOutput_1.commitmentOutputTapscript)(pool.quote.assetHash, config.innerPublicKey).taprootResult.address.testnet;
-=======
     var address = (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.testnet;
->>>>>>> master
     var totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
     var receipents = [
         {
@@ -92,11 +84,7 @@ var case3 = function (wallet, inputAmountPair1, inputAmountPair2, pool, config, 
     // const receivedAmountNumber = inputAmountPair1 + config.defaultOrderingFee.number + config.baseFee.number + config.serviceFee.number;
     // Call data OP_RETURN
     var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
-<<<<<<< HEAD
-    var address = (0, commitmentOutput_1.commitmentOutputTapscript)(pool.quote.assetHash, config.innerPublicKey).taprootResult.address.testnet;
-=======
     var address = (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.testnet;
->>>>>>> master
     var totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
     var receipents = [
         {
@@ -124,11 +112,7 @@ var case4 = function (wallet, lpAmount, pool, config, publicKey) {
     var receivedAmount = (0, wiz_data_1.hexLE)((0, helper_1.calculateAmountTotal)(0, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number));
     // Call data OP_RETURN
     var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
-<<<<<<< HEAD
-    var address = (0, commitmentOutput_1.commitmentOutputTapscript)(pool.quote.assetHash, config.innerPublicKey).taprootResult.address.testnet;
-=======
     var address = (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.testnet;
->>>>>>> master
     var totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
     var receipents = [
         {
