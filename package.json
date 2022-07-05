@@ -1,6 +1,6 @@
 {
   "name": "@bitmatrix/lib",
-  "version": "0.0.46",
+  "version": "0.0.47",
   "description": "",
   "scripts": {
     "build": "tsc",
@@ -31,6 +31,7 @@
     "@script-wiz/lib": "^0.1.75",
     "axios": "^0.24.0",
     "ldk": "^0.5.0",
-    "marina-provider": "^1.5.0"
+    "marina-provider": "^1.5.0",
+    "tiny-secp256k1": "^2.2.1"
   }
 }
