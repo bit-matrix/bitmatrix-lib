@@ -23,11 +23,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createCovenants = exports.bodyCalculaterN = void 0;
+exports.createCovenants = exports.bodyCalculaterN = exports.bandwithArray = void 0;
 var wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
 var lib_1 = require("@script-wiz/lib");
 var lib_core_1 = require("@script-wiz/lib-core");
-var bandwithArray = [
+exports.bandwithArray = [
     145,
     355,
     630,
@@ -195,7 +195,7 @@ var bodyCalculaterN = function (n, flagAssetId, pair1Coefficient) {
     var footer = "6cd4886c5293d5886c6c6d6c6c6d6c52cf69886c51cf69886c53cf69880401000000766e00cb8851cb8852cb8853cb8820" +
         reversedFlagAssetId +
         "7600c8698800ce698800ca6900d1698851ca6951d1698852ca6952d1698853ca6953d1698851c86951ce698852c86952ce698853c86953ce69880402000000d2880400000000d388d58c7676d14f8800a888cf696c756ce0" +
-        (0, lib_1.compileData)(wiz_data_1.default.fromNumber(bandwithArray[n]).hex) +
+        (0, lib_1.compileData)(wiz_data_1.default.fromNumber(exports.bandwithArray[n]).hex) +
         "e0d769888c7676ce697c8bce6988d1008814156e0dc932770529a4946433c500611b9ba7787188cd5387";
     return header + body + footer;
 };
