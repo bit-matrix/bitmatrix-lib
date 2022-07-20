@@ -2,7 +2,7 @@ import WizData, { hexLE } from "@script-wiz/wiz-data";
 import { compileData } from "@script-wiz/lib";
 import { taproot, TAPROOT_VERSION } from "@script-wiz/lib-core";
 
-const bandwithArray = [
+export const bandwithArray = [
   145, // n = 0
   355, // n = 1
   630, // n = 2
