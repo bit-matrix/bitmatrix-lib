@@ -3,22 +3,22 @@ import { compileData } from "@script-wiz/lib";
 import { taproot, TAPROOT_VERSION } from "@script-wiz/lib-core";
 
 export const bandwithArray = [
-  145, // n = 0
-  355, // n = 1
-  630, // n = 2
-  970, // n = 3
-  1375, // n = 4
-  1845, // n = 5
-  2380, // n = 6
-  2980, // n = 7
-  3645, // n = 8
-  4375, // n = 9
-  5170, // n = 10
-  6030, // n = 11
-  6955, // n = 12
-  7945, // n = 13
-  9000, // n = 14
-  10120, // n = 15
+  165, // n = 0
+  375, // n = 1
+  650, // n = 2
+  990, // n = 3
+  1395, // n = 4
+  1865, // n = 5
+  2400, // n = 6
+  3000, // n = 7
+  3665, // n = 8
+  4395, // n = 9
+  5190, // n = 10
+  6050, // n = 11
+  6975, // n = 12
+  7965, // n = 13
+  9020, // n = 14
+  10140, // n = 15
 ];
 
 // export const bodyCalculaterN = (n: number, flagAssetId: string) => {
