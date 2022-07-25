@@ -28,22 +28,22 @@ var wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
 var lib_1 = require("@script-wiz/lib");
 var lib_core_1 = require("@script-wiz/lib-core");
 exports.bandwithArray = [
-    145,
-    355,
-    630,
-    970,
-    1375,
-    1845,
-    2380,
-    2980,
-    3645,
-    4375,
-    5170,
-    6030,
-    6955,
-    7945,
-    9000,
-    10120, // n = 15
+    165,
+    375,
+    650,
+    990,
+    1395,
+    1865,
+    2400,
+    3000,
+    3665,
+    4395,
+    5190,
+    6050,
+    6975,
+    7965,
+    9020,
+    10140, // n = 15
 ];
 // export const bodyCalculaterN = (n: number, flagAssetId: string) => {
 //   let body = "";
