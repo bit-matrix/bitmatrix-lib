@@ -1,6 +1,6 @@
 {
   "name": "@bitmatrix/lib",
-  "version": "0.0.50",
+  "version": "0.0.51",
   "description": "",
   "scripts": {
     "npm-pubish": "npm version patch && npm publish --access public"
