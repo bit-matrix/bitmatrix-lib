@@ -1,6 +1,6 @@
 {
   "name": "@bitmatrix/lib",
-  "version": "0.0.52",
+  "version": "0.0.53",
   "description": "",
   "scripts": {
     "build": "tsc",
