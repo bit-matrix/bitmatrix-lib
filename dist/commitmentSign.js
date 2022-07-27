@@ -43,12 +43,12 @@ var case1 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
         {
             value: totalFee,
             address: address,
-            asset: pool.quote.asset,
+            asset: pool.quote.assetHash,
         },
         {
             value: inputAmount,
             address: address,
-            asset: pool.quote.asset,
+            asset: pool.quote.assetHash,
         },
     ];
     return (0, ldk_1.signTx)(wallet, callData, receipents);
@@ -66,12 +66,12 @@ var case2 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
         {
             value: totalFee,
             address: address,
-            asset: pool.quote.asset,
+            asset: pool.quote.assetHash,
         },
         {
             value: inputAmount,
             address: address,
-            asset: pool.token.asset,
+            asset: pool.token.assetHash,
         },
     ];
     return (0, ldk_1.signTx)(wallet, callData, receipents);
@@ -90,17 +90,17 @@ var case3 = function (wallet, inputAmountPair1, inputAmountPair2, pool, config, 
         {
             value: totalFee,
             address: address,
-            asset: pool.quote.asset,
+            asset: pool.quote.assetHash,
         },
         {
             value: inputAmountPair1,
             address: address,
-            asset: pool.quote.asset,
+            asset: pool.quote.assetHash,
         },
         {
             value: inputAmountPair2,
             address: address,
-            asset: pool.token.asset,
+            asset: pool.token.assetHash,
         },
     ];
     return (0, ldk_1.signTx)(wallet, callData, receipents);
@@ -118,12 +118,12 @@ var case4 = function (wallet, lpAmount, pool, config, publicKey) {
         {
             value: totalFee,
             address: address,
-            asset: pool.quote.asset,
+            asset: pool.quote.assetHash,
         },
         {
             value: lpAmount,
             address: address,
-            asset: pool.lp.asset,
+            asset: pool.lp.assetHash,
         },
     ];
     return (0, ldk_1.signTx)(wallet, callData, receipents);
