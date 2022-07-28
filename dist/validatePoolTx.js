@@ -59,7 +59,6 @@ var validatePoolTx = function (value) { return __awaiter(void 0, void 0, void 0,
     var _a, _b, _c;
     return __generator(this, function (_d) {
         cof = value;
-        console.log(cof);
         poolData = cof.pool;
         method = cof.methodCall;
         errorMessages = [];
