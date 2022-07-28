@@ -30,7 +30,7 @@
   "homepage": "https://github.com/bit-matrix/bitmatrix-lib#readme",
   "dependencies": {
     "@bitmatrix/esplora-api-client": "^0.0.8",
-    "@bitmatrix/models": "^1.0.0-24",
+    "@bitmatrix/models": "^1.0.0-28",
     "@script-wiz/lib": "^0.1.75",
     "@script-wiz/lib-core": "^0.0.47",
     "axios": "^0.24.0",
