@@ -75,7 +75,7 @@ export const case3 = (wallet: Wallet, inputAmountPair1: number, inputAmountPair2
   // Call data OP_RETURN
   const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
 
-  const address = commitmentOutputTapscript(pool.id, publicKey).taprootResult.address.testnet;
+  const address = commitmentOutputTapscript(pool.id, publicKey, true).taprootResult.address.testnet;
 
   const totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
 
