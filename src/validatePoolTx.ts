@@ -5,7 +5,6 @@ import { CTXFinderResult, CTXPTXResult, PTXFinderResult } from "@bitmatrix/model
 
 export const validatePoolTx = async (value: CTXFinderResult): Promise<PTXFinderResult> => {
   const cof = value;
-  console.log(cof);
   const poolData = cof.pool;
   const method = cof.methodCall;
 
