@@ -31,10 +31,10 @@
   "dependencies": {
     "@bitmatrix/esplora-api-client": "^0.0.8",
     "@bitmatrix/models": "^1.0.0-29",
-    "@script-wiz/lib": "^0.1.75",
-    "@script-wiz/lib-core": "^0.0.47",
-    "axios": "^0.24.0",
-    "ldk": "^0.5.3",
-    "marina-provider": "^1.7.1"
+    "@script-wiz/lib": "^0.1.82",
+    "@script-wiz/lib-core": "^0.0.48",
+    "axios": "^0.27.2",
+    "ldk": "^0.5.4",
+    "marina-provider": "^1.7.2"
   }
 }
