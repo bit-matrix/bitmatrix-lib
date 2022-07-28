@@ -25,12 +25,12 @@ export const case1 = (wallet: Wallet, inputAmount: number, calculatedAmountWithS
     {
       value: totalFee,
       address,
-      asset: pool.quote.asset,
+      asset: pool.quote.assetHash,
     },
     {
       value: inputAmount,
       address,
-      asset: pool.quote.asset,
+      asset: pool.quote.assetHash,
     },
   ];
 
@@ -53,12 +53,12 @@ export const case2 = (wallet: Wallet, inputAmount: number, calculatedAmountWithS
     {
       value: totalFee,
       address,
-      asset: pool.quote.asset,
+      asset: pool.quote.assetHash,
     },
     {
       value: inputAmount,
       address,
-      asset: pool.token.asset,
+      asset: pool.token.assetHash,
     },
   ];
 
@@ -83,17 +83,17 @@ export const case3 = (wallet: Wallet, inputAmountPair1: number, inputAmountPair2
     {
       value: totalFee,
       address,
-      asset: pool.quote.asset,
+      asset: pool.quote.assetHash,
     },
     {
       value: inputAmountPair1,
       address,
-      asset: pool.quote.asset,
+      asset: pool.quote.assetHash,
     },
     {
       value: inputAmountPair2,
       address,
-      asset: pool.token.asset,
+      asset: pool.token.assetHash,
     },
   ];
 
@@ -117,12 +117,12 @@ export const case4 = (wallet: Wallet, lpAmount: number, pool: Pool, config: BmCo
     {
       value: totalFee,
       address,
-      asset: pool.quote.asset,
+      asset: pool.quote.assetHash,
     },
     {
       value: lpAmount,
       address,
-      asset: pool.lp.asset,
+      asset: pool.lp.assetHash,
     },
   ];
 

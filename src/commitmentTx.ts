@@ -18,7 +18,7 @@ export const quoteToTokenCreateCommitmentTx = (
   pool: Pool
 ): string => {
   const methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-  const quoteAssetIdLE = hexLE(pool.quote.asset);
+  const quoteAssetIdLE = hexLE(pool.quote.assetHash);
   const poolIdLE = hexLE(pool.id);
 
   const receivedAmount = convertion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
@@ -84,7 +84,7 @@ export const tokenToQuoteCreateCommitmentTx = (
   pool: Pool
 ): string => {
   const methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
-  const quoteAssetIdLE = hexLE(pool.quote.asset);
+  const quoteAssetIdLE = hexLE(pool.quote.assetHash);
   const poolIdLE = hexLE(pool.id);
 
   const receivedAmount = convertion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
@@ -109,7 +109,7 @@ export const tokenToQuoteCreateCommitmentTx = (
 
   const scriptPubKey = taproot.tapRoot(WizData.fromHex(config.innerPublicKey), [WizData.fromHex(commitmentOutputTapscriptTemplate)], TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
 
-  const tokenAssetIdLE = hexLE(pool.token.asset);
+  const tokenAssetIdLE = hexLE(pool.token.assetHash);
 
   const constLength6 = "01" + tokenAssetIdLE + "01";
 
@@ -151,8 +151,8 @@ export const tokenToQuoteCreateCommitmentTx = (
 
 export const liquidityAddCreateCommitmentTx = (quoteAmount: number, tokenAmount: number, txId: string, publicKey: string, config: BmConfig, pool: Pool): string => {
   const methodCall = CALL_METHOD.ADD_LIQUIDITY;
-  const quoteAssetIdLE = hexLE(pool.quote.asset);
-  const tokenAssetIdLE = hexLE(pool.token.asset);
+  const quoteAssetIdLE = hexLE(pool.quote.assetHash);
+  const tokenAssetIdLE = hexLE(pool.token.assetHash);
   const poolIdLE = hexLE(pool.id);
 
   const receivedAmount = hexLE(calculateAmountTotal(quoteAmount, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number));
@@ -209,8 +209,8 @@ export const liquidityAddCreateCommitmentTx = (quoteAmount: number, tokenAmount:
 
 export const liquidityRemoveCreateCommitmentTx = (lpAmount: number, txId: string, publicKey: string, config: BmConfig, pool: Pool): string => {
   const methodCall = CALL_METHOD.REMOVE_LIQUIDITY;
-  const quoteAssetIdLE = hexLE(pool.quote.asset);
-  const lpAssetIdLE = hexLE(pool.lp.asset);
+  const quoteAssetIdLE = hexLE(pool.quote.assetHash);
+  const lpAssetIdLE = hexLE(pool.lp.assetHash);
   const poolIdLE = hexLE(pool.id);
 
   const receivedAmount = hexLE(calculateAmountTotal(0, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number));
