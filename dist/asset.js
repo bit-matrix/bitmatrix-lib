@@ -24,15 +24,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.calculateAssetId = void 0;
-const wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
-const lib_core_1 = require("@script-wiz/lib-core");
-const calculateAssetId = (txId, contractHash, vout) => {
-    const voutWiz = wiz_data_1.default.fromNumber(vout);
-    const vout4Byte = lib_core_1.convertion.numToLE32(voutWiz).hex;
-    const outpoint = (0, wiz_data_1.hexLE)(txId) + vout4Byte;
-    const midstatePreimage = lib_core_1.crypto.hash256(wiz_data_1.default.fromHex(outpoint)).toString() + (0, wiz_data_1.hexLE)(contractHash);
-    const entropy = lib_core_1.sha256d.sha256Midstate(midstatePreimage);
-    const assetId = (0, wiz_data_1.hexLE)(lib_core_1.sha256d.sha256Midstate(entropy.toString("hex") + "0000000000000000000000000000000000000000000000000000000000000000").toString("hex"));
+var wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
+var lib_core_1 = require("@script-wiz/lib-core");
+var calculateAssetId = function (txId, contractHash, vout) {
+    var voutWiz = wiz_data_1.default.fromNumber(vout);
+    var vout4Byte = lib_core_1.convertion.numToLE32(voutWiz).hex;
+    var outpoint = (0, wiz_data_1.hexLE)(txId) + vout4Byte;
+    var midstatePreimage = lib_core_1.crypto.hash256(wiz_data_1.default.fromHex(outpoint)).toString() + (0, wiz_data_1.hexLE)(contractHash);
+    var entropy = lib_core_1.sha256d.sha256Midstate(midstatePreimage);
+    var assetId = (0, wiz_data_1.hexLE)(lib_core_1.sha256d.sha256Midstate(entropy.toString("hex") + "0000000000000000000000000000000000000000000000000000000000000000").toString("hex"));
     return assetId;
 };
 exports.calculateAssetId = calculateAssetId;

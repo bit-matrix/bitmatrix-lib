@@ -24,37 +24,38 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.liquidityRemoveCreateCommitmentTx = exports.liquidityAddCreateCommitmentTx = exports.tokenToQuoteCreateCommitmentTx = exports.quoteToTokenCreateCommitmentTx = void 0;
-const wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
-const lib_core_1 = require("@script-wiz/lib-core");
-const models_1 = require("@bitmatrix/models");
-const calculateAmountTotal = (inputAmount, orderingFee, baseFee, serviceFee = 0) => {
-    const totalAmount = inputAmount + orderingFee + baseFee + serviceFee;
-    const totalAmount64 = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(totalAmount)).hex;
-    const totalAmount64BE = (0, wiz_data_1.hexLE)(totalAmount64);
+var wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
+var lib_core_1 = require("@script-wiz/lib-core");
+var models_1 = require("@bitmatrix/models");
+var calculateAmountTotal = function (inputAmount, orderingFee, baseFee, serviceFee) {
+    if (serviceFee === void 0) { serviceFee = 0; }
+    var totalAmount = inputAmount + orderingFee + baseFee + serviceFee;
+    var totalAmount64 = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(totalAmount)).hex;
+    var totalAmount64BE = (0, wiz_data_1.hexLE)(totalAmount64);
     return totalAmount64BE;
 };
-const quoteToTokenCreateCommitmentTx = (inputAmount, txId, publicKey, calculatedAmountWithSlippage, config, pool) => {
-    const methodCall = models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-    const quoteAssetIdLE = (0, wiz_data_1.hexLE)(pool.quote.assetHash);
-    const poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
-    const receivedAmount = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(calculatedAmountWithSlippage)).hex;
-    const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
-    const commitmentOutputTapscriptTemplate = "20" + poolIdLE + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
-    const constLength = "020000000102";
-    const rpcTxId = (0, wiz_data_1.hexLE)(txId);
-    const constLength2 = "0000000000ffffffff";
-    const constLength3 = "0100000000ffffffff0401" + quoteAssetIdLE + "01000000000000000000516a4c4e";
-    const constLength4 = "01" + quoteAssetIdLE + "01";
-    const inputMod2 = inputAmount % 2;
-    const ctxOutput1 = calculateAmountTotal(inputAmount / 2 + inputMod2, config.defaultOrderingFee.number, config.baseFee.number + config.serviceFee.number);
-    const constLength5 = "0022";
-    const scriptPubKey = lib_core_1.taproot.tapRoot(wiz_data_1.default.fromHex(config.innerPublicKey), [wiz_data_1.default.fromHex(commitmentOutputTapscriptTemplate)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
-    const ctxOutput2 = "01" + quoteAssetIdLE + "01" + (0, wiz_data_1.hexLE)(lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(inputAmount / 2)).hex) + "0022";
-    const constLength7 = "01" + quoteAssetIdLE + "01";
-    const commitmentTxFee64LE = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(config.commitmentTxFee.number)).hex;
-    const commitmentTxFee64BE = (0, wiz_data_1.hexLE)(commitmentTxFee64LE);
-    const constLength8 = "00007ba513000000010151000000010151000000000000000000";
-    const commitmentTransactionRaw = constLength +
+var quoteToTokenCreateCommitmentTx = function (inputAmount, txId, publicKey, calculatedAmountWithSlippage, config, pool) {
+    var methodCall = models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+    var quoteAssetIdLE = (0, wiz_data_1.hexLE)(pool.quote.assetHash);
+    var poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
+    var receivedAmount = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(calculatedAmountWithSlippage)).hex;
+    var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
+    var commitmentOutputTapscriptTemplate = "20" + poolIdLE + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
+    var constLength = "020000000102";
+    var rpcTxId = (0, wiz_data_1.hexLE)(txId);
+    var constLength2 = "0000000000ffffffff";
+    var constLength3 = "0100000000ffffffff0401" + quoteAssetIdLE + "01000000000000000000516a4c4e";
+    var constLength4 = "01" + quoteAssetIdLE + "01";
+    var inputMod2 = inputAmount % 2;
+    var ctxOutput1 = calculateAmountTotal(inputAmount / 2 + inputMod2, config.defaultOrderingFee.number, config.baseFee.number + config.serviceFee.number);
+    var constLength5 = "0022";
+    var scriptPubKey = lib_core_1.taproot.tapRoot(wiz_data_1.default.fromHex(config.innerPublicKey), [wiz_data_1.default.fromHex(commitmentOutputTapscriptTemplate)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
+    var ctxOutput2 = "01" + quoteAssetIdLE + "01" + (0, wiz_data_1.hexLE)(lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(inputAmount / 2)).hex) + "0022";
+    var constLength7 = "01" + quoteAssetIdLE + "01";
+    var commitmentTxFee64LE = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(config.commitmentTxFee.number)).hex;
+    var commitmentTxFee64BE = (0, wiz_data_1.hexLE)(commitmentTxFee64LE);
+    var constLength8 = "00007ba513000000010151000000010151000000000000000000";
+    var commitmentTransactionRaw = constLength +
         rpcTxId +
         constLength2 +
         rpcTxId +
@@ -72,31 +73,31 @@ const quoteToTokenCreateCommitmentTx = (inputAmount, txId, publicKey, calculated
     return commitmentTransactionRaw;
 };
 exports.quoteToTokenCreateCommitmentTx = quoteToTokenCreateCommitmentTx;
-const tokenToQuoteCreateCommitmentTx = (inputAmount, txId, publicKey, calculatedAmountWithSlippage, config, pool) => {
-    const methodCall = models_1.CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
-    const quoteAssetIdLE = (0, wiz_data_1.hexLE)(pool.quote.assetHash);
-    const poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
-    const receivedAmount = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(calculatedAmountWithSlippage)).hex;
-    const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
-    const commitmentOutputTapscriptTemplate = "20" + poolIdLE + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
-    const constLength = "020000000102";
-    const rpcTxId = (0, wiz_data_1.hexLE)(txId);
-    const constLength2 = "0000000000ffffffff";
-    const constLength3 = "0100000000ffffffff0401" + quoteAssetIdLE + "01000000000000000000516a4c4e";
-    const constLength4 = "01" + quoteAssetIdLE + "01";
-    const feeAmountsTotal = calculateAmountTotal(0, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number);
-    const constLength5 = "0022";
-    const scriptPubKey = lib_core_1.taproot.tapRoot(wiz_data_1.default.fromHex(config.innerPublicKey), [wiz_data_1.default.fromHex(commitmentOutputTapscriptTemplate)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
-    const tokenAssetIdLE = (0, wiz_data_1.hexLE)(pool.token.assetHash);
-    const constLength6 = "01" + tokenAssetIdLE + "01";
-    const inputAmount64LE = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(inputAmount)).hex;
-    const inputAmount64BE = (0, wiz_data_1.hexLE)(inputAmount64LE);
-    const constLength7 = "0022";
-    const constLength8 = "01" + quoteAssetIdLE + "01";
-    const commitmentTxFee64LE = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(config.commitmentTxFee.number)).hex;
-    const commitmentTxFee64BE = (0, wiz_data_1.hexLE)(commitmentTxFee64LE);
-    const constLength9 = "00007ba513000000010151000000010151000000000000000000";
-    const commitmentTransactionRaw = constLength +
+var tokenToQuoteCreateCommitmentTx = function (inputAmount, txId, publicKey, calculatedAmountWithSlippage, config, pool) {
+    var methodCall = models_1.CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+    var quoteAssetIdLE = (0, wiz_data_1.hexLE)(pool.quote.assetHash);
+    var poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
+    var receivedAmount = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(calculatedAmountWithSlippage)).hex;
+    var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
+    var commitmentOutputTapscriptTemplate = "20" + poolIdLE + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
+    var constLength = "020000000102";
+    var rpcTxId = (0, wiz_data_1.hexLE)(txId);
+    var constLength2 = "0000000000ffffffff";
+    var constLength3 = "0100000000ffffffff0401" + quoteAssetIdLE + "01000000000000000000516a4c4e";
+    var constLength4 = "01" + quoteAssetIdLE + "01";
+    var feeAmountsTotal = calculateAmountTotal(0, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number);
+    var constLength5 = "0022";
+    var scriptPubKey = lib_core_1.taproot.tapRoot(wiz_data_1.default.fromHex(config.innerPublicKey), [wiz_data_1.default.fromHex(commitmentOutputTapscriptTemplate)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
+    var tokenAssetIdLE = (0, wiz_data_1.hexLE)(pool.token.assetHash);
+    var constLength6 = "01" + tokenAssetIdLE + "01";
+    var inputAmount64LE = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(inputAmount)).hex;
+    var inputAmount64BE = (0, wiz_data_1.hexLE)(inputAmount64LE);
+    var constLength7 = "0022";
+    var constLength8 = "01" + quoteAssetIdLE + "01";
+    var commitmentTxFee64LE = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(config.commitmentTxFee.number)).hex;
+    var commitmentTxFee64BE = (0, wiz_data_1.hexLE)(commitmentTxFee64LE);
+    var constLength9 = "00007ba513000000010151000000010151000000000000000000";
+    var commitmentTransactionRaw = constLength +
         rpcTxId +
         constLength2 +
         rpcTxId +
@@ -116,28 +117,28 @@ const tokenToQuoteCreateCommitmentTx = (inputAmount, txId, publicKey, calculated
     return commitmentTransactionRaw;
 };
 exports.tokenToQuoteCreateCommitmentTx = tokenToQuoteCreateCommitmentTx;
-const liquidityAddCreateCommitmentTx = (quoteAmount, tokenAmount, txId, publicKey, config, pool) => {
-    const methodCall = models_1.CALL_METHOD.ADD_LIQUIDITY;
-    const quoteAssetIdLE = (0, wiz_data_1.hexLE)(pool.quote.assetHash);
-    const tokenAssetIdLE = (0, wiz_data_1.hexLE)(pool.token.assetHash);
-    const poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
-    const receivedAmount = (0, wiz_data_1.hexLE)(calculateAmountTotal(quoteAmount, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number));
-    const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
-    const commitmentOutputTapscriptTemplate = "20" + poolIdLE + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
-    const constLength = "020000000102";
-    const rpcTxId = (0, wiz_data_1.hexLE)(txId);
-    const constLength2 = "0000000000ffffffff";
-    const constLength3 = "0100000000ffffffff0401" + quoteAssetIdLE + "01000000000000000000516a4c4e";
-    const constLength4 = "01" + quoteAssetIdLE + "01";
-    const inputAmountTotal = calculateAmountTotal(quoteAmount, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number);
-    const constLength5 = "0022";
-    const scriptPubKey = lib_core_1.taproot.tapRoot(wiz_data_1.default.fromHex(config.innerPublicKey), [wiz_data_1.default.fromHex(commitmentOutputTapscriptTemplate)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
-    const constLength6 = "01" + tokenAssetIdLE + "01" + (0, wiz_data_1.hexLE)(lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(tokenAmount)).hex) + "0022";
-    const constLength7 = "01" + quoteAssetIdLE + "01";
-    const commitmentTxFee64LE = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(config.commitmentTxFee.number)).hex;
-    const commitmentTxFee64BE = (0, wiz_data_1.hexLE)(commitmentTxFee64LE);
-    const constLength8 = "00007ba513000000010151000000010151000000000000000000";
-    const commitmentTransactionRaw = constLength +
+var liquidityAddCreateCommitmentTx = function (quoteAmount, tokenAmount, txId, publicKey, config, pool) {
+    var methodCall = models_1.CALL_METHOD.ADD_LIQUIDITY;
+    var quoteAssetIdLE = (0, wiz_data_1.hexLE)(pool.quote.assetHash);
+    var tokenAssetIdLE = (0, wiz_data_1.hexLE)(pool.token.assetHash);
+    var poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
+    var receivedAmount = (0, wiz_data_1.hexLE)(calculateAmountTotal(quoteAmount, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number));
+    var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
+    var commitmentOutputTapscriptTemplate = "20" + poolIdLE + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
+    var constLength = "020000000102";
+    var rpcTxId = (0, wiz_data_1.hexLE)(txId);
+    var constLength2 = "0000000000ffffffff";
+    var constLength3 = "0100000000ffffffff0401" + quoteAssetIdLE + "01000000000000000000516a4c4e";
+    var constLength4 = "01" + quoteAssetIdLE + "01";
+    var inputAmountTotal = calculateAmountTotal(quoteAmount, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number);
+    var constLength5 = "0022";
+    var scriptPubKey = lib_core_1.taproot.tapRoot(wiz_data_1.default.fromHex(config.innerPublicKey), [wiz_data_1.default.fromHex(commitmentOutputTapscriptTemplate)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
+    var constLength6 = "01" + tokenAssetIdLE + "01" + (0, wiz_data_1.hexLE)(lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(tokenAmount)).hex) + "0022";
+    var constLength7 = "01" + quoteAssetIdLE + "01";
+    var commitmentTxFee64LE = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(config.commitmentTxFee.number)).hex;
+    var commitmentTxFee64BE = (0, wiz_data_1.hexLE)(commitmentTxFee64LE);
+    var constLength8 = "00007ba513000000010151000000010151000000000000000000";
+    var commitmentTransactionRaw = constLength +
         rpcTxId +
         constLength2 +
         rpcTxId +
@@ -155,28 +156,28 @@ const liquidityAddCreateCommitmentTx = (quoteAmount, tokenAmount, txId, publicKe
     return commitmentTransactionRaw;
 };
 exports.liquidityAddCreateCommitmentTx = liquidityAddCreateCommitmentTx;
-const liquidityRemoveCreateCommitmentTx = (lpAmount, txId, publicKey, config, pool) => {
-    const methodCall = models_1.CALL_METHOD.REMOVE_LIQUIDITY;
-    const quoteAssetIdLE = (0, wiz_data_1.hexLE)(pool.quote.assetHash);
-    const lpAssetIdLE = (0, wiz_data_1.hexLE)(pool.lp.assetHash);
-    const poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
-    const receivedAmount = (0, wiz_data_1.hexLE)(calculateAmountTotal(0, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number));
-    const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
-    const commitmentOutputTapscriptTemplate = "20" + poolIdLE + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
-    const constLength = "020000000102";
-    const rpcTxId = (0, wiz_data_1.hexLE)(txId);
-    const constLength2 = "0000000000ffffffff";
-    const constLength3 = "0100000000ffffffff0401" + quoteAssetIdLE + "01000000000000000000516a4c4e";
-    const constLength4 = "01" + quoteAssetIdLE + "01";
-    const inputAmountTotal = calculateAmountTotal(0, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number);
-    const constLength5 = "0022";
-    const scriptPubKey = lib_core_1.taproot.tapRoot(wiz_data_1.default.fromHex(config.innerPublicKey), [wiz_data_1.default.fromHex(commitmentOutputTapscriptTemplate)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
-    const constLength6 = "01" + lpAssetIdLE + "01" + (0, wiz_data_1.hexLE)(lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(lpAmount)).hex) + "0022";
-    const constLength7 = "01" + quoteAssetIdLE + "01";
-    const commitmentTxFee64LE = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(config.commitmentTxFee.number)).hex;
-    const commitmentTxFee64BE = (0, wiz_data_1.hexLE)(commitmentTxFee64LE);
-    const constLength8 = "00007ba513000000010151000000010151000000000000000000";
-    const commitmentTransactionRaw = constLength +
+var liquidityRemoveCreateCommitmentTx = function (lpAmount, txId, publicKey, config, pool) {
+    var methodCall = models_1.CALL_METHOD.REMOVE_LIQUIDITY;
+    var quoteAssetIdLE = (0, wiz_data_1.hexLE)(pool.quote.assetHash);
+    var lpAssetIdLE = (0, wiz_data_1.hexLE)(pool.lp.assetHash);
+    var poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
+    var receivedAmount = (0, wiz_data_1.hexLE)(calculateAmountTotal(0, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number));
+    var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
+    var commitmentOutputTapscriptTemplate = "20" + poolIdLE + "766b6b6351b27500c8696c876700c8696c87916960b27521" + publicKey + "ac68";
+    var constLength = "020000000102";
+    var rpcTxId = (0, wiz_data_1.hexLE)(txId);
+    var constLength2 = "0000000000ffffffff";
+    var constLength3 = "0100000000ffffffff0401" + quoteAssetIdLE + "01000000000000000000516a4c4e";
+    var constLength4 = "01" + quoteAssetIdLE + "01";
+    var inputAmountTotal = calculateAmountTotal(0, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number);
+    var constLength5 = "0022";
+    var scriptPubKey = lib_core_1.taproot.tapRoot(wiz_data_1.default.fromHex(config.innerPublicKey), [wiz_data_1.default.fromHex(commitmentOutputTapscriptTemplate)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
+    var constLength6 = "01" + lpAssetIdLE + "01" + (0, wiz_data_1.hexLE)(lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(lpAmount)).hex) + "0022";
+    var constLength7 = "01" + quoteAssetIdLE + "01";
+    var commitmentTxFee64LE = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(config.commitmentTxFee.number)).hex;
+    var commitmentTxFee64BE = (0, wiz_data_1.hexLE)(commitmentTxFee64LE);
+    var constLength8 = "00007ba513000000010151000000010151000000000000000000";
+    var commitmentTransactionRaw = constLength +
         rpcTxId +
         constLength2 +
         rpcTxId +
