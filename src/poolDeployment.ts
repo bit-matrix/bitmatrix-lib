@@ -27,6 +27,10 @@ export const poolDeploy = (
 
   let leafCount = 0;
 
+  if (poolVersion === 1) {
+    leafCount = 1;
+  }
+
   if (poolVersion === 2) {
     leafCount = 15;
   }
