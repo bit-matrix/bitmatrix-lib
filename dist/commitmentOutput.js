@@ -24,13 +24,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.commitmentOutputTapscript = exports.createCommitmentOutput = void 0;
-var wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
-var lib_core_1 = require("@script-wiz/lib-core");
-var createCommitmentOutput = function (flagAssetId, pubkey, isAddLiquidity) {
-    if (isAddLiquidity === void 0) { isAddLiquidity = false; }
-    var flagAssetIdLe = (0, wiz_data_1.hexLE)(flagAssetId);
-    var caseStaticValue = isAddLiquidity ? "51" : "00";
-    var commitmentOutput = caseStaticValue +
+const wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
+const lib_core_1 = require("@script-wiz/lib-core");
+const createCommitmentOutput = (flagAssetId, pubkey, isAddLiquidity = false) => {
+    const flagAssetIdLe = (0, wiz_data_1.hexLE)(flagAssetId);
+    const caseStaticValue = isAddLiquidity ? "51" : "00";
+    const commitmentOutput = caseStaticValue +
         "20" +
         flagAssetIdLe +
         "14" +
@@ -39,12 +38,12 @@ var createCommitmentOutput = function (flagAssetId, pubkey, isAddLiquidity) {
     return commitmentOutput;
 };
 exports.createCommitmentOutput = createCommitmentOutput;
-var commitmentOutputTapscript = function (flagAssetId, pubkey, isAddLiquidity) {
-    var commitmentOutput = (0, exports.createCommitmentOutput)(flagAssetId, pubkey, isAddLiquidity);
-    var innerKey = wiz_data_1.default.fromHex("1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624");
-    var taprootResult = lib_core_1.taproot.tapRoot(innerKey, [wiz_data_1.default.fromHex(commitmentOutput)], lib_core_1.TAPROOT_VERSION.LIQUID);
-    var controlBlock = lib_core_1.taproot.controlBlockCalculation([wiz_data_1.default.fromHex(commitmentOutput)], "c4", innerKey.hex, 0);
-    return { taprootResult: taprootResult, commitmentOutput: commitmentOutput, controlBlock: controlBlock };
+const commitmentOutputTapscript = (flagAssetId, pubkey, isAddLiquidity) => {
+    const commitmentOutput = (0, exports.createCommitmentOutput)(flagAssetId, pubkey, isAddLiquidity);
+    const innerKey = wiz_data_1.default.fromHex("1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624");
+    const taprootResult = lib_core_1.taproot.tapRoot(innerKey, [wiz_data_1.default.fromHex(commitmentOutput)], lib_core_1.TAPROOT_VERSION.LIQUID);
+    const controlBlock = lib_core_1.taproot.controlBlockCalculation([wiz_data_1.default.fromHex(commitmentOutput)], "c4", innerKey.hex, 0);
+    return { taprootResult, commitmentOutput, controlBlock };
 };
 exports.commitmentOutputTapscript = commitmentOutputTapscript;
 //# sourceMappingURL=commitmentOutput.js.map

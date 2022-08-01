@@ -24,21 +24,20 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.calculateAmountTotal = exports.uniqueArray = exports.div = void 0;
-var lib_core_1 = require("@script-wiz/lib-core");
-var wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
-var div = function (input1, input2) { return Math.floor(input1 / input2); };
+const lib_core_1 = require("@script-wiz/lib-core");
+const wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
+const div = (input1, input2) => Math.floor(input1 / input2);
 exports.div = div;
-var uniqueArray = function (data) {
+const uniqueArray = (data) => {
     return data.filter(function (item, pos) {
         return data.indexOf(item) == pos;
     });
 };
 exports.uniqueArray = uniqueArray;
-var calculateAmountTotal = function (inputAmount, orderingFee, baseFee, serviceFee) {
-    if (serviceFee === void 0) { serviceFee = 0; }
-    var totalAmount = inputAmount + orderingFee + baseFee + serviceFee;
-    var totalAmount64 = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(totalAmount)).hex;
-    var totalAmount64BE = (0, wiz_data_1.hexLE)(totalAmount64);
+const calculateAmountTotal = (inputAmount, orderingFee, baseFee, serviceFee = 0) => {
+    const totalAmount = inputAmount + orderingFee + baseFee + serviceFee;
+    const totalAmount64 = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(totalAmount)).hex;
+    const totalAmount64BE = (0, wiz_data_1.hexLE)(totalAmount64);
     return totalAmount64BE;
 };
 exports.calculateAmountTotal = calculateAmountTotal;

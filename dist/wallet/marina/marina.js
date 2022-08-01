@@ -1,129 +1,127 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Marina = /** @class */ (function () {
-    function Marina(marina) {
-        var _this = this;
-        this.on = function (type, callback) {
-            if (_this.exist() && _this.marina)
-                return _this.marina.on(type, callback);
+class Marina {
+    constructor(marina) {
+        this.on = (type, callback) => {
+            if (this.exist() && this.marina)
+                return this.marina.on(type, callback);
             return "Marina wallet disabled.";
         };
-        this.off = function (listenerId) {
-            if (_this.exist() && _this.marina)
-                _this.marina.off(listenerId);
+        this.off = (listenerId) => {
+            if (this.exist() && this.marina)
+                this.marina.off(listenerId);
         };
-        this.exist = function () { return typeof _this.marina !== "undefined"; };
-        this.isEnabled = function () {
-            if (_this.exist() && _this.marina)
-                return _this.marina.isEnabled();
+        this.exist = () => typeof this.marina !== "undefined";
+        this.isEnabled = () => {
+            if (this.exist() && this.marina)
+                return this.marina.isEnabled();
             // throw "Install Marina first";
             return Promise.resolve(false);
         };
-        this.enable = function () {
-            if (_this.exist() && _this.marina)
-                return _this.marina.enable();
+        this.enable = () => {
+            if (this.exist() && this.marina)
+                return this.marina.enable();
             // else throw "Install Marina first";
             return Promise.resolve();
         };
-        this.disable = function () {
-            if (_this.exist() && _this.marina)
-                return _this.marina.disable();
+        this.disable = () => {
+            if (this.exist() && this.marina)
+                return this.marina.disable();
             // else throw "Install Marina first";
             return Promise.resolve();
         };
         this.marina = marina;
     }
-    Marina.prototype.importTemplate = function (template, changeTemplate) {
+    importTemplate(template, changeTemplate) {
         throw new Error("Method not implemented.");
-    };
-    Marina.prototype.getAccountInfo = function (accountID) {
+    }
+    getAccountInfo(accountID) {
         throw new Error("Method not implemented.");
-    };
-    Marina.prototype.getAccountsIDs = function () {
+    }
+    getAccountsIDs() {
         throw new Error("Method not implemented.");
-    };
-    Marina.prototype.signTransaction = function (pset) {
+    }
+    signTransaction(pset) {
         if (this.exist() && this.marina)
             return this.marina.signTransaction(pset);
         throw new Error("Marina wallet disabled.");
-    };
-    Marina.prototype.broadcastTransaction = function (signedTxHex) {
+    }
+    broadcastTransaction(signedTxHex) {
         if (this.exist() && this.marina)
             return this.marina.broadcastTransaction(signedTxHex);
         throw new Error("Marina wallet disabled.");
-    };
-    Marina.prototype.getNextAddress = function () {
+    }
+    getNextAddress() {
         if (this.exist() && this.marina)
             return this.marina.getNextAddress();
         // else throw "Install Marina first";
         throw new Error("Marina wallet disabled.");
-    };
-    Marina.prototype.getAddresses = function () {
+    }
+    getAddresses() {
         if (this.exist() && this.marina)
             return this.marina.getAddresses();
         // else throw "Install Marina first";
         throw new Error("Marina wallet disabled.");
-    };
-    Marina.prototype.sendTransaction = function (recipients) {
+    }
+    sendTransaction(recipients) {
         if (this.exist() && this.marina)
             return this.marina.sendTransaction(recipients);
         // else throw "Install Marina first";
         throw new Error("Marina wallet disabled.");
-    };
-    Marina.prototype.getNextChangeAddress = function () {
+    }
+    getNextChangeAddress() {
         if (this.exist() && this.marina)
             return this.marina.getNextChangeAddress();
         throw new Error("Marina wallet disabled.");
-    };
-    Marina.prototype.getBalances = function () {
+    }
+    getBalances() {
         if (this.exist() && this.marina)
             return this.marina.getBalances();
         // else throw "Install Marina first";
         throw new Error("Marina wallet disabled.");
-    };
-    Marina.prototype.reloadCoins = function () {
+    }
+    reloadCoins() {
         if (this.exist() && this.marina)
             return this.marina.reloadCoins();
         return Promise.reject("Marina wallet disabled.");
-    };
-    Marina.prototype.getCoins = function () {
+    }
+    getCoins() {
         if (this.exist() && this.marina)
             return this.marina.getCoins();
         return Promise.reject("Marina wallet disabled.");
-    };
-    Marina.prototype.getNetwork = function () {
+    }
+    getNetwork() {
         if (this.exist() && this.marina)
             return this.marina.getNetwork();
         return Promise.reject("Marina wallet disabled.");
-    };
-    Marina.prototype.setAccount = function ( /*account: number*/) {
+    }
+    setAccount( /*account: number*/) {
         throw new Error("Method not implemented.");
-    };
-    Marina.prototype.blindTransaction = function ( /*pset: string*/) {
+    }
+    blindTransaction( /*pset: string*/) {
         throw new Error("Method not implemented.");
-    };
-    Marina.prototype.signMessage = function ( /*message: string*/) {
+    }
+    signMessage( /*message: string*/) {
         throw new Error("Method not implemented.");
-    };
-    Marina.prototype.getTransactions = function () {
+    }
+    getTransactions() {
         throw new Error("Method not implemented.");
-    };
-    Marina.prototype.getFeeAssets = function () {
+    }
+    getFeeAssets() {
         throw new Error("Method not implemented.");
-    };
-    Marina.prototype.isReady = function () {
+    }
+    isReady() {
         throw new Error("Method not implemented.");
-    };
-    Marina.prototype.getSelectedAccount = function () {
+    }
+    getSelectedAccount() {
         throw new Error("Method not implemented.");
-    };
-    Marina.prototype.createAccount = function (accountName) {
+    }
+    createAccount(accountName) {
         throw new Error("Method not implemented.");
-    };
-    Marina.prototype.useAccount = function (account) {
+    }
+    useAccount(account) {
         throw new Error("Method not implemented.");
-    };
-    return Marina;
-}());
+    }
+}
 exports.default = Marina;
 //# sourceMappingURL=marina.js.map

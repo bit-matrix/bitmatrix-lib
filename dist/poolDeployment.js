@@ -24,21 +24,21 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.calculateInitialLpCirculation = exports.poolDeploy = void 0;
-var asset_1 = require("./asset");
-var lib_core_1 = require("@script-wiz/lib-core");
-var pool_1 = require("./pool");
-var wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
-var helper_1 = require("./utils/helper");
-var maxLpSupply = 2000000000;
-var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenAmount, userPubkey, poolVersion, pair1Coefficient) {
-    var flagContractHash = "2c4b31700fd1a93f25db0a70037c38c812b61441d0aeb757824cbb1d366d3c23";
-    var lpContractHash = "26842dfd877abe7ae07a7f925fe0223996a4d6f4233d3eca06dd72c8bb26eb75";
-    var innerkey = wiz_data_1.default.fromHex("1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624");
-    var prevTxId = (0, wiz_data_1.hexLE)(txId);
-    var quoteAssetIdLE = (0, wiz_data_1.hexLE)(quoteAssetId);
-    var newFlagAssetId = (0, asset_1.calculateAssetId)(txId, flagContractHash, 0);
-    var newLpAssetId = (0, asset_1.calculateAssetId)(txId, lpContractHash, 1);
-    var leafCount = 0;
+const asset_1 = require("./asset");
+const lib_core_1 = require("@script-wiz/lib-core");
+const pool_1 = require("./pool");
+const wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
+const helper_1 = require("./utils/helper");
+const maxLpSupply = 2000000000;
+const poolDeploy = (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenAmount, userPubkey, poolVersion, pair1Coefficient) => {
+    const flagContractHash = "2c4b31700fd1a93f25db0a70037c38c812b61441d0aeb757824cbb1d366d3c23";
+    const lpContractHash = "26842dfd877abe7ae07a7f925fe0223996a4d6f4233d3eca06dd72c8bb26eb75";
+    const innerkey = wiz_data_1.default.fromHex("1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624");
+    const prevTxId = (0, wiz_data_1.hexLE)(txId);
+    const quoteAssetIdLE = (0, wiz_data_1.hexLE)(quoteAssetId);
+    const newFlagAssetId = (0, asset_1.calculateAssetId)(txId, flagContractHash, 0);
+    const newLpAssetId = (0, asset_1.calculateAssetId)(txId, lpContractHash, 1);
+    let leafCount = 0;
     if (poolVersion === 2) {
         leafCount = 15;
     }
@@ -48,21 +48,21 @@ var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenA
     if (poolVersion === 4) {
         leafCount = 63;
     }
-    var mainCovenantScriptPubkey = (0, pool_1.createCovenants)(leafCount, 0, newFlagAssetId, pair1Coefficient).taprootResult.scriptPubkey.hex;
-    var flagScriptPubkey = "512070d3017ab2a8ae4cccdb0537a45fb4a3192bff79c49cf54bd9edd508dcc93f55";
-    var lpHolderCovenantScript = "20" + (0, wiz_data_1.hexLE)(newFlagAssetId) + "00c86987";
-    var lpHolderCovenantScriptPubkey = lib_core_1.taproot.tapRoot(innerkey, [wiz_data_1.default.fromHex(lpHolderCovenantScript)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
-    var tokenHolderCovenantScriptPubkey = lpHolderCovenantScriptPubkey;
-    var lpPrecision = 5 * pair1Coefficient;
+    const mainCovenantScriptPubkey = (0, pool_1.createCovenants)(leafCount, 0, newFlagAssetId, pair1Coefficient).taprootResult.scriptPubkey.hex;
+    const flagScriptPubkey = "512070d3017ab2a8ae4cccdb0537a45fb4a3192bff79c49cf54bd9edd508dcc93f55";
+    const lpHolderCovenantScript = "20" + (0, wiz_data_1.hexLE)(newFlagAssetId) + "00c86987";
+    const lpHolderCovenantScriptPubkey = lib_core_1.taproot.tapRoot(innerkey, [wiz_data_1.default.fromHex(lpHolderCovenantScript)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
+    const tokenHolderCovenantScriptPubkey = lpHolderCovenantScriptPubkey;
+    const lpPrecision = 5 * pair1Coefficient;
     //Initial LP supply
-    var deployerLpAmount = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber((0, helper_1.div)(quoteAmount, lpPrecision))).hex);
-    var lpPoolInitialSupply = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(maxLpSupply - (0, helper_1.div)(quoteAmount, lpPrecision))).hex);
-    var deployerScriptPubkey = "0014" + lib_core_1.crypto.hash160v2(wiz_data_1.default.fromHex(userPubkey));
-    var poolSatsInitialSupply = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(quoteAmount)).hex);
-    var poolTokensInitialSupply = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(tokenAmount)).hex);
-    var deploymentTxFees = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(1000)).hex);
-    var lookupKeyword = "6a0e6269746d6174726978"; // muz hash
-    var finalResult = "02000000" +
+    const deployerLpAmount = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber((0, helper_1.div)(quoteAmount, lpPrecision))).hex);
+    const lpPoolInitialSupply = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(maxLpSupply - (0, helper_1.div)(quoteAmount, lpPrecision))).hex);
+    const deployerScriptPubkey = "0014" + lib_core_1.crypto.hash160v2(wiz_data_1.default.fromHex(userPubkey));
+    const poolSatsInitialSupply = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(quoteAmount)).hex);
+    const poolTokensInitialSupply = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(tokenAmount)).hex);
+    const deploymentTxFees = (0, wiz_data_1.hexLE)(lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(1000)).hex);
+    const lookupKeyword = "6a0e6269746d6174726978"; // muz hash
+    const finalResult = "02000000" +
         "01" +
         "04" +
         prevTxId +
@@ -155,10 +155,10 @@ var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenA
     return finalResult;
 };
 exports.poolDeploy = poolDeploy;
-var calculateInitialLpCirculation = function (pair1Coefficient, pair1Amount) {
-    var lpPrecision = 5 * pair1Coefficient;
+const calculateInitialLpCirculation = (pair1Coefficient, pair1Amount) => {
+    const lpPrecision = 5 * pair1Coefficient;
     //Initial LP supply
-    var deployerLpAmount = (0, helper_1.div)(pair1Amount, lpPrecision) / 100000000;
+    const deployerLpAmount = (0, helper_1.div)(pair1Amount, lpPrecision) / 100000000;
     return deployerLpAmount;
 };
 exports.calculateInitialLpCirculation = calculateInitialLpCirculation;
