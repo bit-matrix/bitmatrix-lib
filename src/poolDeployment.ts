@@ -28,14 +28,18 @@ export const poolDeploy = (
   let leafCount = 0;
 
   if (poolVersion === 2) {
-    leafCount = 15;
+    leafCount = 1;
   }
 
   if (poolVersion === 3) {
-    leafCount = 31;
+    leafCount = 15;
   }
 
   if (poolVersion === 4) {
+    leafCount = 31;
+  }
+
+  if (poolVersion === 5) {
     leafCount = 63;
   }
 
