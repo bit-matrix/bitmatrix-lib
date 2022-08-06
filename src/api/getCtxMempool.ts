@@ -1,6 +1,6 @@
 import axios from "axios";
 import { BmCtxMempool } from "@bitmatrix/models";
-import { bmUrl } from "../env";
+import { bmUrl } from "../envtest";
 
 export const getCtxMempool = async (ctxId: string, poolId: string): Promise<BmCtxMempool> => {
   return axios

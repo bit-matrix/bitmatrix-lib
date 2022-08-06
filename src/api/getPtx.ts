@@ -1,6 +1,6 @@
 import axios from "axios";
 import { BmPtx } from "@bitmatrix/models";
-import { bmUrl } from "../env";
+import { bmUrl } from "../envtest";
 
 export const getPtx = async (ctxId: string, poolId: string): Promise<BmPtx> => {
   return axios

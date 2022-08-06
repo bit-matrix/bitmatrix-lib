@@ -1,5 +1,5 @@
 import { BmConfig, CALL_METHOD, Pool } from "@bitmatrix/models";
-import { lpFeeRate, quotePrecisionCoefficient, tokenPrecisionCoefficient } from "./env";
+import { lpFeeRate, quotePrecisionCoefficient, tokenPrecisionCoefficient } from "./envtest";
 import { div } from "./utils/helper";
 
 export const convertForCtx = (value: number, slippage: number, pool: Pool, config: BmConfig, callMethod: CALL_METHOD): { amount: number; amountWithSlipapge: number } => {

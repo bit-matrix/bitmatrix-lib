@@ -1,5 +1,5 @@
 import axios from "axios";
-import { rpcUrl } from "../env";
+import { rpcUrl } from "../envtest";
 
 export const sendRawTransaction = async (param: string): Promise<string> => {
   return axios

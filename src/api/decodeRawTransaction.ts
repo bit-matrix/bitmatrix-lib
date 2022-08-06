@@ -1,5 +1,5 @@
 import axios from "axios";
-import { rpcUrl } from "../env";
+import { rpcUrl } from "../envtest";
 
 export const decodeRawTransaction = async (param: string) => {
   return axios

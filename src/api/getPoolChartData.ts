@@ -1,6 +1,6 @@
 import { BmChart } from "@bitmatrix/models";
 import axios from "axios";
-import { bmApiUrl } from "../env";
+import { bmApiUrl } from "../envtest";
 
 export const getPoolChartData = async (poolId: string): Promise<BmChart[]> => {
   return axios

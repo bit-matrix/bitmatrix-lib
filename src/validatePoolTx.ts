@@ -431,5 +431,6 @@ export const validatePoolTx = async (value: CTXFinderResult): Promise<PTXFinderR
     output,
     case3outputs,
     case4outputs,
+    errorMessages,
   };
 };
