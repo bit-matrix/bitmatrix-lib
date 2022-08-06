@@ -385,6 +385,7 @@ var validatePoolTx = function (value) { return __awaiter(void 0, void 0, void 0,
                 output: output,
                 case3outputs: case3outputs,
                 case4outputs: case4outputs,
+                errorMessages: errorMessages,
             }];
     });
 }); };

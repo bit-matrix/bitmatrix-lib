@@ -41,11 +41,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.decodeRawTransaction = void 0;
 var axios_1 = __importDefault(require("axios"));
-var env_1 = require("../env");
+var envtest_1 = require("../envtest");
 var decodeRawTransaction = function (param) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         return [2 /*return*/, axios_1.default
-                .post(env_1.rpcUrl, JSON.stringify({
+                .post(envtest_1.rpcUrl, JSON.stringify({
                 jsonrpc: "1.0",
                 id: "curltest",
                 method: "decoderawtransaction",

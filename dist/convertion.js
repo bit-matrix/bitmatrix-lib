@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertForLiquidityCtx = exports.calcRemoveLiquidityRecipientValue = exports.calcAddLiquidityRecipientValue = exports.convertForCtx2 = exports.convertForCtx = void 0;
 var models_1 = require("@bitmatrix/models");
-var env_1 = require("./env");
+var envtest_1 = require("./envtest");
 var helper_1 = require("./utils/helper");
 var convertForCtx = function (value, slippage, pool, config, callMethod) {
     if (callMethod === models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
@@ -11,23 +11,23 @@ var convertForCtx = function (value, slippage, pool, config, callMethod) {
             return { amount: 0, amountWithSlipapge: 0 };
         }
         // step1  (lp fee calculate)
-        var lpFee = (0, helper_1.div)(value, env_1.lpFeeRate);
+        var lpFee = (0, helper_1.div)(value, envtest_1.lpFeeRate);
         // step 2 (sub fee amount)
         var quoteAmountSubFee = value - lpFee;
         // step 3 (poolLbtcLiquidity  + lbtcAmountSubFee)
         var quotePoolTotalAmount = Number(pool.quote.value) + quoteAmountSubFee;
         // step 4 (lbtPoolTotalAmount with rate 16)
-        var quotePoolTotalAmountWithRate = (0, helper_1.div)(quotePoolTotalAmount, env_1.quotePrecisionCoefficient);
+        var quotePoolTotalAmountWithRate = (0, helper_1.div)(quotePoolTotalAmount, envtest_1.quotePrecisionCoefficient);
         // step 5 (lbtPoolAmount  with rate 16)
-        var quotePoolAmountWithRate = (0, helper_1.div)(Number(pool.quote.value), env_1.quotePrecisionCoefficient);
+        var quotePoolAmountWithRate = (0, helper_1.div)(Number(pool.quote.value), envtest_1.quotePrecisionCoefficient);
         // step 6 (usdtPoolAmount  with rate 2 million)
-        var usdtPoolAmountWithRate = (0, helper_1.div)(Number(pool.token.value), env_1.tokenPrecisionCoefficient);
+        var usdtPoolAmountWithRate = (0, helper_1.div)(Number(pool.token.value), envtest_1.tokenPrecisionCoefficient);
         // step 7 (mul step 5 , step6)
         var poolRateMul = quotePoolAmountWithRate * usdtPoolAmountWithRate;
         // step 8 (div step7  step4)
         var poolRateMulWithQuotePoolRate = (0, helper_1.div)(poolRateMul, quotePoolTotalAmountWithRate);
         // step 9  (step8 * 2 million)
-        var poolRateMulWithLbtcPoolRateMul = poolRateMulWithQuotePoolRate * env_1.tokenPrecisionCoefficient;
+        var poolRateMulWithLbtcPoolRateMul = poolRateMulWithQuotePoolRate * envtest_1.tokenPrecisionCoefficient;
         // step 10  (Pool Token liquidity - 9.step)
         var finalTokenPoolLiquidity = Number(pool.token.value) - poolRateMulWithLbtcPoolRateMul;
         //step11 ( step 10 - 1milion)
@@ -43,23 +43,23 @@ var convertForCtx = function (value, slippage, pool, config, callMethod) {
             return { amount: 0, amountWithSlipapge: 0 };
         }
         // step1 (fee calculation)
-        var lpFee = (0, helper_1.div)(value, env_1.lpFeeRate);
+        var lpFee = (0, helper_1.div)(value, envtest_1.lpFeeRate);
         // step2 (input new value without fee  input - step1)
         var usdtAmountWithoutFee = value - lpFee;
         // step3 (total token pool amount poolUsdtLiquidity + step2)
         var totalUsdtLiquidity = Number(pool.token.value) + usdtAmountWithoutFee;
         // step4  (usdt Liquidty rate calculation step3 % 2mn)
-        var usdtLiquidtyRate = (0, helper_1.div)(totalUsdtLiquidity, env_1.tokenPrecisionCoefficient);
+        var usdtLiquidtyRate = (0, helper_1.div)(totalUsdtLiquidity, envtest_1.tokenPrecisionCoefficient);
         // step5 (Pool L-BTC liquidity % 16)
-        var x = (0, helper_1.div)(Number(pool.quote.value), env_1.quotePrecisionCoefficient);
+        var x = (0, helper_1.div)(Number(pool.quote.value), envtest_1.quotePrecisionCoefficient);
         // step6 (Pool Token liquidity % 2MN)
-        var y = (0, helper_1.div)(Number(pool.token.value), env_1.tokenPrecisionCoefficient);
+        var y = (0, helper_1.div)(Number(pool.token.value), envtest_1.tokenPrecisionCoefficient);
         // step 7 (constant x*y = k step5*step6)
         var constant = x * y;
         // step 8 (constant * usdtLiquidtyRate  step7*step4
         var constantRate = (0, helper_1.div)(constant, usdtLiquidtyRate);
         //step 9 (step 8 * 16)
-        var lbtcAmount = constantRate * env_1.quotePrecisionCoefficient;
+        var lbtcAmount = constantRate * envtest_1.quotePrecisionCoefficient;
         //step 10 (poolLbtcLiquidity - step9)
         var tokenValue = Number(pool.quote.value) - lbtcAmount;
         var slippageAmount = (0, helper_1.div)(tokenValue, slippage);
@@ -76,22 +76,22 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
             return { amount: 0, amountWithSlipapge: 0 };
         }
         // extra
-        var quotePoolAmountWithRate = (0, helper_1.div)(Number(pool.quote.value), env_1.quotePrecisionCoefficient);
-        var usdtPoolAmountWithRate = (0, helper_1.div)(Number(pool.token.value), env_1.tokenPrecisionCoefficient);
+        var quotePoolAmountWithRate = (0, helper_1.div)(Number(pool.quote.value), envtest_1.quotePrecisionCoefficient);
+        var usdtPoolAmountWithRate = (0, helper_1.div)(Number(pool.token.value), envtest_1.tokenPrecisionCoefficient);
         var poolRateMul = quotePoolAmountWithRate * usdtPoolAmountWithRate;
         // step 1
         var finalTokenPoolLiquidity = value + config.recipientValueMinus;
         // step 2
         var poolRateMulWithLbtcPoolRateMul = Number(pool.token.value) - finalTokenPoolLiquidity;
         // step 3
-        var poolRateMulWithQuotePoolRate = (0, helper_1.div)(poolRateMulWithLbtcPoolRateMul, env_1.tokenPrecisionCoefficient);
+        var poolRateMulWithQuotePoolRate = (0, helper_1.div)(poolRateMulWithLbtcPoolRateMul, envtest_1.tokenPrecisionCoefficient);
         // step 4
         var quotePoolTotalAmountWithRate = (0, helper_1.div)(poolRateMul, poolRateMulWithQuotePoolRate);
         // step 5
-        var quotePoolTotalAmount = quotePoolTotalAmountWithRate * env_1.quotePrecisionCoefficient;
+        var quotePoolTotalAmount = quotePoolTotalAmountWithRate * envtest_1.quotePrecisionCoefficient;
         // step 6
         var quoteAmountSubFee = quotePoolTotalAmount - Number(pool.quote.value);
-        var inp = (0, helper_1.div)(env_1.lpFeeRate * quoteAmountSubFee, env_1.lpFeeRate - 1);
+        var inp = (0, helper_1.div)(envtest_1.lpFeeRate * quoteAmountSubFee, envtest_1.lpFeeRate - 1);
         var slippageAmount = (0, helper_1.div)(value, slippage);
         var receivedAmount = value - slippageAmount;
         if (inp < Number(config.minRemainingSupply)) {
@@ -107,14 +107,14 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
             return { amount: 0, amountWithSlipapge: 0 };
         }
         var lbtcAmount = Number(pool.quote.value) - value;
-        var constantRate = (0, helper_1.div)(lbtcAmount, env_1.quotePrecisionCoefficient);
-        var x = (0, helper_1.div)(Number(pool.quote.value), env_1.quotePrecisionCoefficient);
-        var y = (0, helper_1.div)(Number(pool.token.value), env_1.tokenPrecisionCoefficient);
+        var constantRate = (0, helper_1.div)(lbtcAmount, envtest_1.quotePrecisionCoefficient);
+        var x = (0, helper_1.div)(Number(pool.quote.value), envtest_1.quotePrecisionCoefficient);
+        var y = (0, helper_1.div)(Number(pool.token.value), envtest_1.tokenPrecisionCoefficient);
         var constant = x * y;
         var usdtLiquidtyRate = (0, helper_1.div)(constant, constantRate);
-        var totalUsdtLiquidity = usdtLiquidtyRate * env_1.tokenPrecisionCoefficient;
+        var totalUsdtLiquidity = usdtLiquidtyRate * envtest_1.tokenPrecisionCoefficient;
         var usdtAmountWithoutFee = totalUsdtLiquidity - Number(pool.token.value);
-        var inp = (0, helper_1.div)(env_1.lpFeeRate * usdtAmountWithoutFee, env_1.lpFeeRate - 1);
+        var inp = (0, helper_1.div)(envtest_1.lpFeeRate * usdtAmountWithoutFee, envtest_1.lpFeeRate - 1);
         var slippageAmount = (0, helper_1.div)(value, slippage);
         var receivedAmount = value - slippageAmount;
         if (inp < Number(config.minTokenValue)) {

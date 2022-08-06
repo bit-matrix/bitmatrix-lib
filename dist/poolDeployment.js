@@ -40,12 +40,15 @@ var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenA
     var newLpAssetId = (0, asset_1.calculateAssetId)(txId, lpContractHash, 1);
     var leafCount = 0;
     if (poolVersion === 2) {
-        leafCount = 15;
+        leafCount = 1;
     }
     if (poolVersion === 3) {
-        leafCount = 31;
+        leafCount = 15;
     }
     if (poolVersion === 4) {
+        leafCount = 31;
+    }
+    if (poolVersion === 5) {
         leafCount = 63;
     }
     var mainCovenantScriptPubkey = (0, pool_1.createCovenants)(leafCount, 0, newFlagAssetId, pair1Coefficient).taprootResult.scriptPubkey.hex;

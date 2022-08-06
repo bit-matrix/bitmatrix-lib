@@ -41,11 +41,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCtx = void 0;
 var axios_1 = __importDefault(require("axios"));
-var env_1 = require("../env");
+var envtest_1 = require("../envtest");
 var getCtx = function (ctxId, poolId) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         return [2 /*return*/, axios_1.default
-                .get("".concat(env_1.bmUrl, "/ctx/").concat(poolId, "/").concat(ctxId))
+                .get("".concat(envtest_1.bmUrl, "/ctx/").concat(poolId, "/").concat(ctxId))
                 .then(function (response) {
                 return response.data;
             })

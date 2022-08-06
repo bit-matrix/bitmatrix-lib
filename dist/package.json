@@ -18,7 +18,7 @@
   "homepage": "https://github.com/bit-matrix/bit-matrix-lib#readme",
   "dependencies": {
     "@bitmatrix/esplora-api-client": "^0.0.8",
-    "@bitmatrix/models": "^1.0.0-30",
+    "@bitmatrix/models": "^0.1.24",
     "@script-wiz/lib": "^0.1.82",
     "@script-wiz/lib-core": "^0.0.48",
     "axios": "^0.27.2",
