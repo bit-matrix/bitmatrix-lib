@@ -72,7 +72,7 @@ export const case3 = (wallet: Wallet, inputAmountPair1: number, inputAmountPair2
   // const receivedAmount = hexLE(calculateAmountTotal(inputAmountPair1, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number));
   // const receivedAmountNumber = inputAmountPair1 + config.defaultOrderingFee.number + config.baseFee.number + config.serviceFee.number;
 
-  const receivedAmount = 0;
+  const receivedAmount = "0000000000000000";
 
   // Call data OP_RETURN
   const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
