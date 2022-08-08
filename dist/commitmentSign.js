@@ -80,8 +80,9 @@ exports.case2 = case2;
 var case3 = function (wallet, inputAmountPair1, inputAmountPair2, pool, config, publicKey) {
     var methodCall = models_1.CALL_METHOD.ADD_LIQUIDITY;
     var poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
-    var receivedAmount = (0, wiz_data_1.hexLE)((0, helper_1.calculateAmountTotal)(inputAmountPair1, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number));
+    // const receivedAmount = hexLE(calculateAmountTotal(inputAmountPair1, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number));
     // const receivedAmountNumber = inputAmountPair1 + config.defaultOrderingFee.number + config.baseFee.number + config.serviceFee.number;
+    var receivedAmount = 0;
     // Call data OP_RETURN
     var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
     var address = (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey, true).taprootResult.address.testnet;
