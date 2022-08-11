@@ -211,7 +211,6 @@ var commitmentFinder = function (transaction, pools) { return __awaiter(void 0, 
                         cmtOutput2: cmtOutput2,
                         cmtOutput3: cmtOutput3,
                         transaction: transaction,
-                        pool: pool,
                     }];
         }
     });

@@ -54,12 +54,11 @@ exports.validatePoolTx = void 0;
 var decimal_js_1 = __importDefault(require("decimal.js"));
 var lib_core_1 = require("@script-wiz/lib-core");
 var wiz_data_1 = __importDefault(require("@script-wiz/wiz-data"));
-var validatePoolTx = function (value) { return __awaiter(void 0, void 0, void 0, function () {
-    var cof, poolData, method, errorMessages, output, case3outputs, case4outputs, result, pool_pair_1_liquidity, pool_pair_2_liquidity, commitmentOutputs, commitmentOutput2, commitmentOutput2AssetId, pair_1_asset_id, pair_2_asset_id, lp_asset_id, pair_1_pool_supply, pair_2_pool_supply, pair_1_coefficient, pair_2_coefficient, pool_pair_1_liquidity_downgraded, pool_pair_2_liquidity_downgraded, pool_constant, commitmentOutput3, commitmentOutput3AssetId;
+var validatePoolTx = function (value, poolData) { return __awaiter(void 0, void 0, void 0, function () {
+    var cof, method, errorMessages, output, case3outputs, case4outputs, result, pool_pair_1_liquidity, pool_pair_2_liquidity, commitmentOutputs, commitmentOutput2, commitmentOutput2AssetId, pair_1_asset_id, pair_2_asset_id, lp_asset_id, pair_1_pool_supply, pair_2_pool_supply, pair_1_coefficient, pair_2_coefficient, pool_pair_1_liquidity_downgraded, pool_pair_2_liquidity_downgraded, pool_constant, commitmentOutput3, commitmentOutput3AssetId;
     var _a, _b, _c;
     return __generator(this, function (_d) {
         cof = value;
-        poolData = cof.pool;
         method = cof.methodCall;
         errorMessages = [];
         output = {
