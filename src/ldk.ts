@@ -29,10 +29,10 @@ export const signTx = async (marina: Wallet, callData: string, recipients: Recip
 
   const assets = recipients.map((r) => r.asset);
 
-  const uniquAssets = uniqueArray(assets);
+  const uniqueAssets = uniqueArray(assets);
 
   //todo
-  const changeAddressGetter = await makeGetter(uniquAssets);
+  const changeAddressGetter = await makeGetter(uniqueAssets);
 
   // 5. Craft the transaction with multiple outputs and add fee & change output to the psbt
   const unsignedTx = craftMultipleRecipientsPset({
