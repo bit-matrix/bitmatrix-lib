@@ -66,7 +66,7 @@ var ecc = __importStar(require("tiny-secp256k1"));
 var utils_1 = require("./utils/utils");
 var helper_1 = require("./utils/helper");
 var signTx = function (marina, callData, recipients) { return __awaiter(void 0, void 0, void 0, function () {
-    var coins, pset, tx, makeGetter, assets, uniquAssets, changeAddressGetter, unsignedTx, ptx, inputBlindingMap, outputBlindingMap, signedTx, finalTx, txFinal;
+    var coins, pset, tx, makeGetter, assets, uniqueAssets, changeAddressGetter, unsignedTx, ptx, inputBlindingMap, outputBlindingMap, signedTx, finalTx, txFinal;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, marina.getCoins()];
@@ -83,8 +83,8 @@ var signTx = function (marina, callData, recipients) { return __awaiter(void 0, 
                 tx = pset.toBase64();
                 makeGetter = makeAssetChangeGetter(marina);
                 assets = recipients.map(function (r) { return r.asset; });
-                uniquAssets = (0, helper_1.uniqueArray)(assets);
-                return [4 /*yield*/, makeGetter(uniquAssets)];
+                uniqueAssets = (0, helper_1.uniqueArray)(assets);
+                return [4 /*yield*/, makeGetter(uniqueAssets)];
             case 2:
                 changeAddressGetter = _a.sent();
                 unsignedTx = (0, ldk_1.craftMultipleRecipientsPset)({

@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Wallet = exports.validatePoolTx = exports.poolDeployment = exports.pool = exports.ldk = exports.convertion = exports.commitmentTx = exports.commitmentSign = exports.commitmentOutput = exports.commitmentFinder = exports.asset = exports.api = void 0;
+exports.esplora = exports.Wallet = exports.validatePoolTx = exports.poolDeployment = exports.pool = exports.ldk = exports.convertion = exports.commitmentTx = exports.commitmentSign = exports.commitmentOutput = exports.commitmentFinder = exports.asset = exports.api = void 0;
 var api = __importStar(require("./api"));
 exports.api = api;
 var asset = __importStar(require("./asset"));
@@ -48,4 +48,6 @@ var commitmentFinder_1 = require("./commitmentFinder");
 Object.defineProperty(exports, "commitmentFinder", { enumerable: true, get: function () { return commitmentFinder_1.commitmentFinder; } });
 var wallet_1 = require("./wallet");
 Object.defineProperty(exports, "Wallet", { enumerable: true, get: function () { return wallet_1.Wallet; } });
+var esplora = __importStar(require("./esplora"));
+exports.esplora = esplora;
 //# sourceMappingURL=index.js.map

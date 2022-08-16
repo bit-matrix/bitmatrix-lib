@@ -10,4 +10,5 @@ import * as poolDeployment from "./poolDeployment";
 import { validatePoolTx } from "./validatePoolTx";
 import { commitmentFinder } from "./commitmentFinder";
 import { Wallet } from "./wallet";
-export { api, asset, commitmentFinder, commitmentOutput, commitmentSign, commitmentTx, convertion, ldk, pool, poolDeployment, validatePoolTx, Wallet };
+import * as esplora from "./esplora";
+export { api, asset, commitmentFinder, commitmentOutput, commitmentSign, commitmentTx, convertion, ldk, pool, poolDeployment, validatePoolTx, Wallet, esplora };
