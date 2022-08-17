@@ -15,4 +15,4 @@ export declare const calcRemoveLiquidityRecipientValue: (pool: Pool, valLp: numb
     user_lbtc_received: number;
     user_token_received: number;
 };
-export declare const convertForLiquidityCtx: (value: number, pool: Pool, config: BmConfig, isToken?: boolean) => number;
+export declare const convertForLiquidityCtx: (value: number, pool: Pool, isToken?: boolean) => number;

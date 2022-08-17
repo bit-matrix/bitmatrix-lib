@@ -170,13 +170,9 @@ var calcRemoveLiquidityRecipientValue = function (pool, valLp) {
     };
 };
 exports.calcRemoveLiquidityRecipientValue = calcRemoveLiquidityRecipientValue;
-var convertForLiquidityCtx = function (value, pool, config, isToken) {
+var convertForLiquidityCtx = function (value, pool, isToken) {
     if (isToken === void 0) { isToken = false; }
     if (isToken) {
-        if (value < Number(config.minTokenValue)) {
-            // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
-            return 0;
-        }
         var tokenInput = value;
         var quotePoolAmount = Number(pool.quote.value);
         var tokenPoolAmount = Number(pool.token.value);
@@ -184,10 +180,6 @@ var convertForLiquidityCtx = function (value, pool, config, isToken) {
         return quoteOutput;
     }
     else {
-        if (value < Number(config.minRemainingSupply)) {
-            // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
-            return 0;
-        }
         var quoteInput = value;
         var quotePoolAmount = Number(pool.quote.value);
         var tokenPoolAmount = Number(pool.token.value);
