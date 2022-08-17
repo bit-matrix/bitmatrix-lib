@@ -235,13 +235,8 @@ export const calcRemoveLiquidityRecipientValue = (pool: Pool, valLp: number) => 
   };
 };
 
-export const convertForLiquidityCtx = (value: number, pool: Pool, config: BmConfig, isToken = false): number => {
+export const convertForLiquidityCtx = (value: number, pool: Pool, isToken = false): number => {
   if (isToken) {
-    if (value < Number(config.minTokenValue)) {
-      // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
-      return 0;
-    }
-
     const tokenInput = value;
 
     const quotePoolAmount = Number(pool.quote.value);
@@ -251,10 +246,6 @@ export const convertForLiquidityCtx = (value: number, pool: Pool, config: BmConf
 
     return quoteOutput;
   } else {
-    if (value < Number(config.minRemainingSupply)) {
-      // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
-      return 0;
-    }
     const quoteInput = value;
     const quotePoolAmount = Number(pool.quote.value);
     const tokenPoolAmount = Number(pool.token.value);
