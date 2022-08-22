@@ -29,13 +29,13 @@ var lib_core_1 = require("@script-wiz/lib-core");
 var createCommitmentOutput = function (flagAssetId, pubkey, isAddLiquidity) {
     if (isAddLiquidity === void 0) { isAddLiquidity = false; }
     var flagAssetIdLe = (0, wiz_data_1.hexLE)(flagAssetId);
-    var caseStaticValue = isAddLiquidity ? "51" : "00";
-    var commitmentOutput = caseStaticValue +
-        "20" +
+    //const caseStaticValue = isAddLiquidity ? "51" : "00"; 
+    //No longer used
+    var commitmentOutput = "00c86920" +
         flagAssetIdLe +
-        "14" +
+        "876351675ab276a914" +
         lib_core_1.crypto.hash160v2(wiz_data_1.default.fromHex(pubkey)) +
-        "537a63757700c869876777766bd4d58804050000007600cb8851cb8800d14f8800a88851d100888800c86900ce698851c86951ce698800c96900cf698851c96951cf698800c7010088040100000088766b51c7010088d288886353d48852c70100880403000000886c8852d100886c8852c86952ce698852c96952cf698851cb52cb886752d48868d2040200000088d304000000008768";
+        "88ac68";
     return commitmentOutput;
 };
 exports.createCommitmentOutput = createCommitmentOutput;
