@@ -142,7 +142,7 @@ export const poolDeploy = (
     "01" +
     "0000000000000000" +
     "00" +
-    "10" +
+    "11" +
     lookupKeyword +
     WizData.fromNumber(poolVersion).hex +
     convertion.convert32(WizData.fromNumber(pair1Coefficient)).hex +
