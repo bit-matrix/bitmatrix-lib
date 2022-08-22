@@ -44,9 +44,9 @@ export const poolDeploy = (
   }
 
   // @to-do will added params for this const with ui.
-  const lpFeeTier = 2;
+  const lpFeeTier = WizData.fromNumber(2);
 
-  const mainCovenantScriptPubkey = createCovenants(leafCount, 0, newFlagAssetId, pair1Coefficient, lpFeeTier).taprootResult.scriptPubkey.hex;
+  const mainCovenantScriptPubkey = createCovenants(leafCount, 0, newFlagAssetId, pair1Coefficient, lpFeeTier.number || 0).taprootResult.scriptPubkey.hex;
 
   const flagScriptPubkey = "512070d3017ab2a8ae4cccdb0537a45fb4a3192bff79c49cf54bd9edd508dcc93f55";
   const lpHolderCovenantScript = "20" + hexLE(newFlagAssetId) + "00c86987";
@@ -146,7 +146,7 @@ export const poolDeploy = (
     lookupKeyword +
     WizData.fromNumber(poolVersion).hex +
     convertion.convert32(WizData.fromNumber(pair1Coefficient)).hex +
-    lpFeeTier +
+    lpFeeTier.hex +
     "01" +
     "499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c14" +
     "01" +
