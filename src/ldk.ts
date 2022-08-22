@@ -12,13 +12,13 @@ export const signTx = async (marina: Wallet, callData: string, recipients: Recip
   // 1. create an empty psbt object
   const pset = new Psbt({ network: networks.testnet });
 
-  // 2. add a custom OP_RETURN output to psbt
-  pset.addOutput({
-    script: script.compile([script.OPS.OP_RETURN, Buffer.from(callData, "hex")]),
-    value: confidential.satoshiToConfidentialValue(0),
-    asset: AssetHash.fromHex(networks.testnet.assetHash, false).bytes,
-    nonce: Buffer.alloc(0),
-  });
+  // // 2. add a custom OP_RETURN output to psbt
+  // pset.addOutput({
+  //   script: script.compile([script.OPS.OP_RETURN, Buffer.from(callData, "hex")]),
+  //   value: confidential.satoshiToConfidentialValue(0),
+  //   asset: AssetHash.fromHex(networks.testnet.assetHash, false).bytes,
+  //   nonce: Buffer.alloc(0),
+  // });
 
   // 3. add P2TR address(es) as recipient(s) to psbt
 
@@ -46,6 +46,13 @@ export const signTx = async (marina: Wallet, callData: string, recipients: Recip
 
   // deserialize and inspect the transaction
   const ptx = Psbt.fromBase64(unsignedTx);
+
+  ptx.addOutput({
+    script: script.compile([script.OPS.OP_RETURN, Buffer.from(callData, "hex")]),
+    value: confidential.satoshiToConfidentialValue(0),
+    asset: AssetHash.fromHex(networks.testnet.assetHash, false).bytes,
+    nonce: Buffer.alloc(0),
+  });
 
   const inputBlindingMap = inputBlindingDataMap(unsignedTx, coins);
   const outputBlindingMap = outPubKeysMap(unsignedTx, [changeAddressGetter(networks.testnet.assetHash), recipients[0].address]);
