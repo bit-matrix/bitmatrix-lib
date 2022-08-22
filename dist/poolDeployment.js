@@ -52,8 +52,8 @@ var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenA
         leafCount = 63;
     }
     // @to-do will added params for this const with ui.
-    var lpFeeTier = 2;
-    var mainCovenantScriptPubkey = (0, pool_1.createCovenants)(leafCount, 0, newFlagAssetId, pair1Coefficient, lpFeeTier).taprootResult.scriptPubkey.hex;
+    var lpFeeTier = wiz_data_1.default.fromNumber(2);
+    var mainCovenantScriptPubkey = (0, pool_1.createCovenants)(leafCount, 0, newFlagAssetId, pair1Coefficient, lpFeeTier.number || 0).taprootResult.scriptPubkey.hex;
     var flagScriptPubkey = "512070d3017ab2a8ae4cccdb0537a45fb4a3192bff79c49cf54bd9edd508dcc93f55";
     var lpHolderCovenantScript = "20" + (0, wiz_data_1.hexLE)(newFlagAssetId) + "00c86987";
     var lpHolderCovenantScriptPubkey = lib_core_1.taproot.tapRoot(innerkey, [wiz_data_1.default.fromHex(lpHolderCovenantScript)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
@@ -141,7 +141,7 @@ var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenA
         lookupKeyword +
         wiz_data_1.default.fromNumber(poolVersion).hex +
         lib_core_1.convertion.convert32(wiz_data_1.default.fromNumber(pair1Coefficient)).hex +
-        lpFeeTier +
+        lpFeeTier.hex +
         "01" +
         "499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c14" +
         "01" +
