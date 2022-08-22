@@ -136,7 +136,7 @@ var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenA
         "01" +
         "0000000000000000" +
         "00" +
-        "10" +
+        "11" +
         lookupKeyword +
         wiz_data_1.default.fromNumber(poolVersion).hex +
         lib_core_1.convertion.convert32(wiz_data_1.default.fromNumber(pair1Coefficient)).hex +
