@@ -30,7 +30,7 @@ var pool_1 = require("./pool");
 var wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
 var helper_1 = require("./utils/helper");
 var maxLpSupply = 2000000000;
-var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenAmount, userPubkey, poolVersion, pair1Coefficient) {
+var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenAmount, userPubkey, poolVersion, pair1Coefficient, lpFeeTierIndex) {
     var flagContractHash = "2c4b31700fd1a93f25db0a70037c38c812b61441d0aeb757824cbb1d366d3c23";
     var lpContractHash = "26842dfd877abe7ae07a7f925fe0223996a4d6f4233d3eca06dd72c8bb26eb75";
     var innerkey = wiz_data_1.default.fromHex("1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624");
@@ -51,9 +51,8 @@ var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenA
     if (poolVersion === 5) {
         leafCount = 63;
     }
-    // @to-do will added params for this const with ui.
-    var lpFeeTier = wiz_data_1.default.fromNumber(2);
-    var mainCovenantScriptPubkey = (0, pool_1.createCovenants)(leafCount, 0, newFlagAssetId, pair1Coefficient, lpFeeTier.number || 0).taprootResult.scriptPubkey.hex;
+    var lpFeeTier = wiz_data_1.default.fromNumber(lpFeeTierIndex);
+    var mainCovenantScriptPubkey = (0, pool_1.createCovenants)(leafCount, 0, newFlagAssetId, pair1Coefficient, lpFeeTierIndex).taprootResult.scriptPubkey.hex;
     var flagScriptPubkey = "512070d3017ab2a8ae4cccdb0537a45fb4a3192bff79c49cf54bd9edd508dcc93f55";
     var lpHolderCovenantScript = "20" + (0, wiz_data_1.hexLE)(newFlagAssetId) + "00c86987";
     var lpHolderCovenantScriptPubkey = lib_core_1.taproot.tapRoot(innerkey, [wiz_data_1.default.fromHex(lpHolderCovenantScript)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
