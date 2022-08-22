@@ -73,13 +73,6 @@ var signTx = function (marina, callData, recipients) { return __awaiter(void 0, 
             case 1:
                 coins = _a.sent();
                 pset = new liquidjs_lib_1.Psbt({ network: liquidjs_lib_1.networks.testnet });
-                // 2. add a custom OP_RETURN output to psbt
-                pset.addOutput({
-                    script: liquidjs_lib_1.script.compile([liquidjs_lib_1.script.OPS.OP_RETURN, Buffer.from(callData, "hex")]),
-                    value: liquidjs_lib_1.confidential.satoshiToConfidentialValue(0),
-                    asset: liquidjs_lib_1.AssetHash.fromHex(liquidjs_lib_1.networks.testnet.assetHash, false).bytes,
-                    nonce: Buffer.alloc(0),
-                });
                 tx = pset.toBase64();
                 makeGetter = makeAssetChangeGetter(marina);
                 assets = recipients.map(function (r) { return r.asset; });
@@ -96,6 +89,12 @@ var signTx = function (marina, callData, recipients) { return __awaiter(void 0, 
                     addFee: true,
                 });
                 ptx = liquidjs_lib_1.Psbt.fromBase64(unsignedTx);
+                ptx.addOutput({
+                    script: liquidjs_lib_1.script.compile([liquidjs_lib_1.script.OPS.OP_RETURN, Buffer.from(callData, "hex")]),
+                    value: liquidjs_lib_1.confidential.satoshiToConfidentialValue(0),
+                    asset: liquidjs_lib_1.AssetHash.fromHex(liquidjs_lib_1.networks.testnet.assetHash, false).bytes,
+                    nonce: Buffer.alloc(0),
+                });
                 inputBlindingMap = (0, utils_1.inputBlindingDataMap)(unsignedTx, coins);
                 outputBlindingMap = (0, utils_1.outPubKeysMap)(unsignedTx, [changeAddressGetter(liquidjs_lib_1.networks.testnet.assetHash), recipients[0].address]);
                 return [4 /*yield*/, ptx.blindOutputsByIndex(liquidjs_lib_1.Psbt.ECCKeysGenerator(ecc), inputBlindingMap, outputBlindingMap)];
