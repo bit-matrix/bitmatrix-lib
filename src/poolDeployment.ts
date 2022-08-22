@@ -43,7 +43,10 @@ export const poolDeploy = (
     leafCount = 63;
   }
 
-  const mainCovenantScriptPubkey = createCovenants(leafCount, 0, newFlagAssetId, pair1Coefficient).taprootResult.scriptPubkey.hex;
+  // @to-do will added params for this const with ui.
+  const lpFeeTier = 2;
+
+  const mainCovenantScriptPubkey = createCovenants(leafCount, 0, newFlagAssetId, pair1Coefficient, lpFeeTier).taprootResult.scriptPubkey.hex;
 
   const flagScriptPubkey = "512070d3017ab2a8ae4cccdb0537a45fb4a3192bff79c49cf54bd9edd508dcc93f55";
   const lpHolderCovenantScript = "20" + hexLE(newFlagAssetId) + "00c86987";
@@ -66,7 +69,7 @@ export const poolDeploy = (
 
   const deploymentTxFees = hexLE(convertion.convert64(WizData.fromNumber(1000)).hex);
 
-  const lookupKeyword = "6a0e6269746d6174726978"; // muz hash
+  const lookupKeyword = "6a0f6269746d6174726978";
 
   const finalResult =
     "02000000" +
@@ -143,6 +146,7 @@ export const poolDeploy = (
     lookupKeyword +
     WizData.fromNumber(poolVersion).hex +
     convertion.convert32(WizData.fromNumber(pair1Coefficient)).hex +
+    lpFeeTier +
     "01" +
     "499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c14" +
     "01" +
