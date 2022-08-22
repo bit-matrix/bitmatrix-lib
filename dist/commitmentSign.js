@@ -85,7 +85,7 @@ var case3 = function (wallet, inputAmountPair1, inputAmountPair2, pool, config, 
     var receivedAmount = "0000000000000000";
     // Call data OP_RETURN
     var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
-    var address = (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey, true).taprootResult.address.testnet;
+    var address = (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.testnet;
     var totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
     var receipents = [
         {

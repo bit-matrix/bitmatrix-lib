@@ -181,7 +181,7 @@ var commitmentFinder = function (transaction, pools) { return __awaiter(void 0, 
                 });
                 isAddLiquidity = false;
                 commitmentOutputResult = undefined;
-                commitmentOutputResult = _1.commitmentOutput.commitmentOutputTapscript(poolId, publicKey, isAddLiquidity);
+                commitmentOutputResult = _1.commitmentOutput.commitmentOutputTapscript(poolId, publicKey);
                 tapTweakedResult = commitmentOutputResult.taprootResult.tweak.hex;
                 tapTweakedResultPrefix = tapTweakedResult.substring(0, 2);
                 return [2 /*return*/, {
