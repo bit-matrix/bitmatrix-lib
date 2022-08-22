@@ -242,10 +242,10 @@ var bodyCalculaterN = function (n, flagAssetId, pair1Coefficient, lpFeeTierIndex
     return header + body + footer;
 };
 exports.bodyCalculaterN = bodyCalculaterN;
-var createCovenants = function (leafCount, lookupLeafIndex, flagAssetId, pair1Coefficient) {
+var createCovenants = function (leafCount, lookupLeafIndex, flagAssetId, pair1Coefficient, lpFeeTierIndex) {
     var mainCovenantScript = [];
     for (var i = 0; i <= leafCount; i++) {
-        mainCovenantScript.push((0, exports.bodyCalculaterN)(i, flagAssetId, pair1Coefficient));
+        mainCovenantScript.push((0, exports.bodyCalculaterN)(i, flagAssetId, pair1Coefficient, lpFeeTierIndex));
     }
     var pubKey = wiz_data_1.default.fromHex("1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624");
     var scriptsWizData = mainCovenantScript.map(function (mcs) { return wiz_data_1.default.fromHex(mcs); });
