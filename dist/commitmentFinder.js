@@ -67,7 +67,7 @@ var lib_core_1 = require("@script-wiz/lib-core");
 var wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
 var decimal_js_1 = __importDefault(require("decimal.js"));
 var _1 = require(".");
-var lbtcAssest = "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49";
+var helper_1 = require("./utils/helper");
 var commitmentFinder = function (transaction, pools) { return __awaiter(void 0, void 0, void 0, function () {
     var rawTransactionHex, decodedTransaction, outputs, outputCount, inputs, inputCount, cmtTxLocktimeByteLength, cmtTxInOutpoints, nSequences, nsequenceValue, opReturnOutput, opReturnOutputScriptHex, poolId, pool, methodCall, publicKey, slippageTolerance, orderingFee, cmtOutput1, cmtOutput2, changeOutputs, cmtOutput3, i, cmtOutput1Value, pair1Asset, pair2Asset, output2PairValue, cmtOutput2Value, cmtOutput3PairValue, cmtOutput3Value, cmtOutput3Asset, outputsLength, cmtOutputFeeValue, cmtOutputFeeHexValue, seperatedChangeOutputs, changeOutputFinal, isAddLiquidity, commitmentOutputResult, tapTweakedResult, tapTweakedResultPrefix;
     return __generator(this, function (_a) {
@@ -124,7 +124,7 @@ var commitmentFinder = function (transaction, pools) { return __awaiter(void 0, 
                     }
                 }
                 // 6. Commitment out 1 (Calldatadan hemen sonraki output)’in taşıdığı L-BTC değeri 8 byte LE olarak.
-                if (cmtOutput1.asset !== lbtcAssest)
+                if (cmtOutput1.asset !== helper_1.lbtcAssest)
                     Promise.reject("Asset must be L-BTC");
                 cmtOutput1Value = "01" + lib_core_1.convertion.numToLE64LE(wiz_data_1.default.fromNumber(new decimal_js_1.default(cmtOutput1.value).mul(100000000).toNumber())).hex;
                 pair1Asset = pool.quote.assetHash;

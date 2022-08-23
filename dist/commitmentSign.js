@@ -43,7 +43,7 @@ var case1 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
         {
             value: totalFee,
             address: address,
-            asset: pool.quote.assetHash,
+            asset: helper_1.lbtcAssest,
         },
         {
             value: inputAmount,
@@ -66,7 +66,7 @@ var case2 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
         {
             value: totalFee,
             address: address,
-            asset: pool.quote.assetHash,
+            asset: helper_1.lbtcAssest,
         },
         {
             value: inputAmount,
@@ -91,7 +91,7 @@ var case3 = function (wallet, inputAmountPair1, inputAmountPair2, pool, config, 
         {
             value: totalFee,
             address: address,
-            asset: pool.quote.assetHash,
+            asset: helper_1.lbtcAssest,
         },
         {
             value: inputAmountPair1,
@@ -119,7 +119,7 @@ var case4 = function (wallet, lpAmount, pool, config, publicKey) {
         {
             value: totalFee,
             address: address,
-            asset: pool.quote.assetHash,
+            asset: helper_1.lbtcAssest,
         },
         {
             value: lpAmount,
