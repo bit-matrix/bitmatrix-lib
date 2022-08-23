@@ -6,7 +6,7 @@ import { convertion } from "@script-wiz/lib-core";
 import { RecipientInterface } from "ldk";
 import { commitmentOutputTapscript } from "./commitmentOutput";
 import { signTx } from "./ldk";
-import { calculateAmountTotal } from "./utils/helper";
+import { calculateAmountTotal, lbtcAssest } from "./utils/helper";
 
 export const case1 = (wallet: Wallet, inputAmount: number, calculatedAmountWithSlippage: number, pool: Pool, config: BmConfig, publicKey: string): Promise<string> => {
   const methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
@@ -25,7 +25,7 @@ export const case1 = (wallet: Wallet, inputAmount: number, calculatedAmountWithS
     {
       value: totalFee,
       address,
-      asset: pool.quote.assetHash,
+      asset: lbtcAssest,
     },
     {
       value: inputAmount,
@@ -53,7 +53,7 @@ export const case2 = (wallet: Wallet, inputAmount: number, calculatedAmountWithS
     {
       value: totalFee,
       address,
-      asset: pool.quote.assetHash,
+      asset: lbtcAssest,
     },
     {
       value: inputAmount,
@@ -85,7 +85,7 @@ export const case3 = (wallet: Wallet, inputAmountPair1: number, inputAmountPair2
     {
       value: totalFee,
       address,
-      asset: pool.quote.assetHash,
+      asset: lbtcAssest,
     },
     {
       value: inputAmountPair1,
@@ -119,7 +119,7 @@ export const case4 = (wallet: Wallet, lpAmount: number, pool: Pool, config: BmCo
     {
       value: totalFee,
       address,
-      asset: pool.quote.assetHash,
+      asset: lbtcAssest,
     },
     {
       value: lpAmount,
