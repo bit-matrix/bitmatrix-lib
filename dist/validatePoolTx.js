@@ -379,7 +379,7 @@ var validatePoolTx = function (value, poolData) { return __awaiter(void 0, void 
                 pool_constant: pool_constant,
                 result: result,
                 lp_asset_id: lp_asset_id,
-                leafCount: poolData.maxLeaf,
+                leafCount: poolData.leafCount,
                 poolData: poolData,
                 output: output,
                 case3outputs: case3outputs,
