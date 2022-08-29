@@ -16,4 +16,14 @@ export const calculateAmountTotal = (inputAmount: number, orderingFee: number, b
   return totalAmount64BE;
 };
 
+export const replaceChar = (text: string, index: number, replacement: string) => {
+  if (index >= text.length) {
+    return text.valueOf();
+  }
+
+  var chars = text.split("");
+  chars[index] = replacement;
+  return chars.join("");
+};
+
 export const lbtcAssest = "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49";
