@@ -8,7 +8,6 @@ import { lbtcAssest, replaceChar } from "./utils/helper";
 
 export const commitmentFinder = async (transaction: TxDetail, pools: Pool[]): Promise<CTXFinderResult | undefined> => {
   // fetch tx details with rpc
-  console.log("DENEME TEST");
   const rawTransactionHex: string = await api.getRawTransaction(transaction.txid);
   const decodedTransaction: TxDetailRPC = await api.decodeRawTransaction(rawTransactionHex);
   //tx outputs
