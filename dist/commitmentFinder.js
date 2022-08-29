@@ -63,145 +63,75 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.commitmentFinder = void 0;
+var sha256streaming_1 = __importDefault(require("@bitmatrix/sha256streaming"));
 var lib_core_1 = require("@script-wiz/lib-core");
 var wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
-var decimal_js_1 = __importDefault(require("decimal.js"));
 var _1 = require(".");
 var helper_1 = require("./utils/helper");
 var commitmentFinder = function (transaction, pools) { return __awaiter(void 0, void 0, void 0, function () {
-    var rawTransactionHex, decodedTransaction, outputs, outputCount, inputs, inputCount, cmtTxLocktimeByteLength, cmtTxInOutpoints, nSequences, nsequenceValue, opReturnOutput, opReturnOutputScriptHex, poolId, pool, methodCall, publicKey, slippageTolerance, orderingFee, cmtOutput1, cmtOutput2, changeOutputs, cmtOutput3, i, cmtOutput1Value, pair1Asset, pair2Asset, output2PairValue, cmtOutput2Value, cmtOutput3PairValue, cmtOutput3Value, cmtOutput3Asset, outputsLength, cmtOutputFeeValue, cmtOutputFeeHexValue, seperatedChangeOutputs, changeOutputFinal, isAddLiquidity, commitmentOutputResult, tapTweakedResult, tapTweakedResultPrefix;
+    var rawTransactionHex, decodedTransaction, outputs, inputs, outputCount, opReturnOutput, locktimeHex, callData, poolId, pool, methodCall, publicKey, slippageTolerance, orderingFee, cmtOutput1, cmtOutput2, cmtOutput3, baseTransaction, replacedBaseTransaction, contextInput, sha256InitializeResult, sha256InitializeResultLength, part1, part2, part3, commitmentOutputResult, tapTweakedResult, tweakKeyPrefix;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, _1.api.getRawTransaction(transaction.txid)];
+            case 0:
+                // fetch tx details with rpc
+                console.log("DENEME TEST");
+                return [4 /*yield*/, _1.api.getRawTransaction(transaction.txid)];
             case 1:
                 rawTransactionHex = _a.sent();
                 return [4 /*yield*/, _1.api.decodeRawTransaction(rawTransactionHex)];
             case 2:
                 decodedTransaction = _a.sent();
                 outputs = decodedTransaction.vout;
-                if (outputs.length > 8 && outputs.length < 4)
-                    return [2 /*return*/, undefined];
-                outputCount = wiz_data_1.default.fromNumber(outputs.length);
                 inputs = decodedTransaction.vin;
-                if (inputs.length > 12)
-                    return [2 /*return*/, undefined];
-                inputCount = wiz_data_1.default.fromNumber(inputs.length);
-                cmtTxLocktimeByteLength = lib_core_1.convertion.numToLE32(wiz_data_1.default.fromNumber(decodedTransaction.locktime)).hex;
-                cmtTxInOutpoints = inputs.map(function (inp, index) {
-                    var vout32Byte = lib_core_1.convertion.numToLE32(wiz_data_1.default.fromNumber(inp.vout));
-                    return { index: index, data: (0, wiz_data_1.hexLE)(inp.txid) + vout32Byte.hex };
-                });
-                nSequences = inputs.map(function (inp) { return inp.sequence; });
-                //Every nsequence must equal
-                if (nSequences.every(function (ns) { return ns !== nSequences[0]; }))
-                    return [2 /*return*/, undefined];
-                nsequenceValue = nSequences[0].toString(16);
-                opReturnOutput = outputs[0].scriptPubKey.asm.split(" ");
+                outputCount = wiz_data_1.default.fromNumber(outputs.length);
+                opReturnOutput = outputs[outputs.length - 1].scriptPubKey.asm.split(" ");
                 if (opReturnOutput[0] !== "OP_RETURN")
                     return [2 /*return*/, undefined];
-                opReturnOutputScriptHex = opReturnOutput[1];
-                poolId = (0, wiz_data_1.hexLE)(opReturnOutputScriptHex.substring(0, 64));
+                if (decodedTransaction.locktime !== 0)
+                    return [2 /*return*/, undefined];
+                locktimeHex = lib_core_1.convertion.numToLE32(wiz_data_1.default.fromNumber(decodedTransaction.locktime)).hex;
+                callData = opReturnOutput[1];
+                if (callData.length !== 156)
+                    return [2 /*return*/, undefined];
+                poolId = (0, wiz_data_1.hexLE)(callData.substring(0, 64));
                 pool = pools.find(function (p) {
                     return p.id === poolId && p.active;
                 });
                 if (!pool)
                     return [2 /*return*/, undefined];
-                methodCall = opReturnOutputScriptHex.substring(64, 66);
-                publicKey = opReturnOutputScriptHex.substring(66, 132);
-                slippageTolerance = opReturnOutputScriptHex.substring(132, 148);
-                orderingFee = opReturnOutputScriptHex.substring(148, 156);
-                cmtOutput1 = outputs[1];
-                cmtOutput2 = outputs[2];
-                changeOutputs = [];
-                if (outputCount.number) {
-                    i = 3;
-                    if (methodCall === "03") {
-                        i = 4;
-                        cmtOutput3 = outputs[3];
-                    }
-                    for (i; i < outputCount.number - 1; i++) {
-                        changeOutputs.push(outputs[i]);
-                    }
+                methodCall = callData.substring(64, 66);
+                publicKey = callData.substring(66, 132);
+                slippageTolerance = callData.substring(132, 148);
+                orderingFee = callData.substring(148, 156);
+                cmtOutput1 = outputs[0];
+                cmtOutput2 = outputs[1];
+                if (methodCall === "03") {
+                    cmtOutput3 = outputs[2];
                 }
-                // 6. Commitment out 1 (Calldatadan hemen sonraki output)’in taşıdığı L-BTC değeri 8 byte LE olarak.
                 if (cmtOutput1.asset !== helper_1.lbtcAssest)
-                    Promise.reject("Asset must be L-BTC");
-                cmtOutput1Value = "01" + lib_core_1.convertion.numToLE64LE(wiz_data_1.default.fromNumber(new decimal_js_1.default(cmtOutput1.value).mul(100000000).toNumber())).hex;
-                pair1Asset = pool.quote.assetHash;
-                pair2Asset = pool.token.assetHash;
-                output2PairValue = "00";
-                if (cmtOutput2.asset === pair2Asset)
-                    output2PairValue = "01";
-                if (cmtOutput2.asset === pair1Asset)
-                    output2PairValue = "03";
-                if (methodCall === "04")
-                    output2PairValue = "02";
-                //   8. Commitment out 2 ’in taşıdığı asset değeri 8 byte LE olarak.
-                if (cmtOutput2.value === undefined)
-                    Promise.reject("Commitment Output Value musn't be confidential.");
-                cmtOutput2Value = "01" + lib_core_1.convertion.numToLE64LE(wiz_data_1.default.fromNumber(new decimal_js_1.default(cmtOutput2.value).mul(100000000).toNumber())).hex;
-                cmtOutput3PairValue = "00";
-                if (methodCall === "03" && cmtOutput3) {
-                    if (cmtOutput3.asset === pair2Asset)
-                        cmtOutput3PairValue = "01";
-                    if (cmtOutput3.asset === pair1Asset)
-                        cmtOutput3PairValue = "03";
-                    cmtOutput3Value = "01" + lib_core_1.convertion.numToLE64LE(wiz_data_1.default.fromNumber(new decimal_js_1.default(cmtOutput3.value).mul(100000000).toNumber())).hex;
-                    cmtOutput3Asset = cmtOutput3.asset;
-                }
-                outputsLength = outputCount.number;
-                cmtOutputFeeValue = outputs[outputsLength - 1].value || 0;
-                cmtOutputFeeHexValue = "01" + lib_core_1.convertion.numToLE64LE(wiz_data_1.default.fromNumber(new decimal_js_1.default(cmtOutputFeeValue).mul(100000000).toNumber())).hex;
-                seperatedChangeOutputs = changeOutputs.map(function (co, index) {
-                    if (co.asset) {
-                        return {
-                            index: index + 1,
-                            asset: "01" + (0, wiz_data_1.hexLE)(co.asset),
-                            value: "01" + (0, wiz_data_1.hexLE)(lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(new decimal_js_1.default(co.value).mul(100000000).toNumber())).hex),
-                            amount: "01" + lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(new decimal_js_1.default(co.value).mul(100000000).toNumber())).hex,
-                            nonce: "00",
-                            scriptpubkey: wiz_data_1.default.fromNumber(co.scriptPubKey.hex.length / 2).hex + co.scriptPubKey.hex,
-                        };
-                    }
-                    return {
-                        index: index + 1,
-                        asset: co.assetcommitment,
-                        value: co.valuecommitment,
-                        amount: co.valuecommitment,
-                        nonce: co.commitmentnonce,
-                        scriptpubkey: wiz_data_1.default.fromNumber(co.scriptPubKey.hex.length / 2).hex + co.scriptPubKey.hex,
-                    };
-                });
-                changeOutputFinal = seperatedChangeOutputs.map(function (cof) {
-                    return {
-                        index: cof.index,
-                        assetValue: cof.asset + cof.value,
-                        noncScpkey: cof.nonce + cof.scriptpubkey,
-                    };
-                });
-                isAddLiquidity = false;
-                commitmentOutputResult = undefined;
+                    return [2 /*return*/, undefined];
+                baseTransaction = rawTransactionHex.split(callData)[0] + callData + locktimeHex;
+                replacedBaseTransaction = (0, helper_1.replaceChar)(baseTransaction, 9, "0");
+                contextInput = replacedBaseTransaction.slice(0, -8);
+                sha256InitializeResult = sha256streaming_1.default.sha256Initializer(contextInput).toLowerCase();
+                sha256InitializeResultLength = sha256InitializeResult.length;
+                if (sha256InitializeResultLength <= 80 && sha256InitializeResultLength >= 206)
+                    return [2 /*return*/, undefined];
+                part1 = sha256InitializeResult.substring(0, 80);
+                part2 = sha256InitializeResult.substring(80);
+                part3 = callData.substring(0, 156 - part2.length);
                 commitmentOutputResult = _1.commitmentOutput.commitmentOutputTapscript(poolId, publicKey);
                 tapTweakedResult = commitmentOutputResult.taprootResult.tweak.hex;
-                tapTweakedResultPrefix = tapTweakedResult.substring(0, 2);
+                tweakKeyPrefix = tapTweakedResult.substring(0, 2);
                 return [2 /*return*/, {
-                        tapTweakedResultPrefix: tapTweakedResultPrefix,
-                        cmtTxLocktimeByteLength: cmtTxLocktimeByteLength,
+                        tweakKeyPrefix: tweakKeyPrefix,
+                        part1: part1,
+                        part2: part2,
+                        part3: part3,
+                        locktimeHex: locktimeHex,
                         outputCount: outputCount,
-                        inputCount: inputCount,
                         inputs: inputs,
                         outputs: outputs,
-                        nsequenceValue: nsequenceValue,
-                        cmtTxInOutpoints: cmtTxInOutpoints,
-                        cmtOutput1Value: cmtOutput1Value,
-                        output2PairValue: output2PairValue,
-                        cmtOutput2Value: cmtOutput2Value,
-                        cmtOutput3Value: cmtOutput3Value,
-                        cmtOutputFeeHexValue: cmtOutputFeeHexValue,
-                        cmtOutput3PairValue: cmtOutput3PairValue,
-                        cmtOutput3Asset: cmtOutput3Asset,
-                        changeOutputFinal: changeOutputFinal,
-                        seperatedChangeOutputs: seperatedChangeOutputs,
                         poolId: poolId,
                         methodCall: methodCall,
                         publicKey: publicKey,
