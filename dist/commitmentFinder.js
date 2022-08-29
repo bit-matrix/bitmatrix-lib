@@ -72,10 +72,7 @@ var commitmentFinder = function (transaction, pools) { return __awaiter(void 0, 
     var rawTransactionHex, decodedTransaction, outputs, inputs, outputCount, opReturnOutput, locktimeHex, callData, poolId, pool, methodCall, publicKey, slippageTolerance, orderingFee, cmtOutput1, cmtOutput2, cmtOutput3, baseTransaction, replacedBaseTransaction, contextInput, sha256InitializeResult, sha256InitializeResultLength, part1, part2, part3, commitmentOutputResult, tapTweakedResult, tweakKeyPrefix;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                // fetch tx details with rpc
-                console.log("DENEME TEST");
-                return [4 /*yield*/, _1.api.getRawTransaction(transaction.txid)];
+            case 0: return [4 /*yield*/, _1.api.getRawTransaction(transaction.txid)];
             case 1:
                 rawTransactionHex = _a.sent();
                 return [4 /*yield*/, _1.api.decodeRawTransaction(rawTransactionHex)];
