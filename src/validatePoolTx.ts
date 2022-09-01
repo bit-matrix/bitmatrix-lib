@@ -1,11 +1,16 @@
 import Decimal from "decimal.js";
-import { convertion } from "@script-wiz/lib-core";
+import { arithmetics64, convertion } from "@script-wiz/lib-core";
 import WizData from "@script-wiz/wiz-data";
-import { CTXFinderResult, CTXPTXResult, Pool, PTXFinderResult } from "@bitmatrix/models";
+import { CALL_METHOD, CTXPTXResult, Pool } from "@bitmatrix/models";
 
-export const validatePoolTx = async (value: CTXFinderResult, poolData: Pool): Promise<PTXFinderResult> => {
-  const cof = value;
-  const method = cof.methodCall;
+export const validatePoolTx = (
+  value: number,
+  slippageTolerance: number,
+  poolData: Pool,
+  methodCall: CALL_METHOD,
+  additionalValue?: number
+): { amount: number; amountWithSlipapge: number } => {
+  const slippageToleranceHex = convertion.numToLE64(WizData.fromNumber(slippageTolerance));
 
   let errorMessages = [];
 
@@ -69,15 +74,6 @@ export const validatePoolTx = async (value: CTXFinderResult, poolData: Pool): Pr
   // 2-Havuzun güncel pair_2 liquidity miktarına pool_pair_2_liquidity ismini ver.
   const pool_pair_2_liquidity = Number(poolData.token.value);
 
-  // transaction outputs
-  const commitmentOutputs = cof.outputs;
-
-  //commitment output 2
-  const commitmentOutput2 = commitmentOutputs[2];
-
-  // commitment Output2 Asset Id
-  const commitmentOutput2AssetId = commitmentOutput2.asset;
-
   //pool detail rocks db den geldiği için asset, yeni pool modelde assetHash olacak
   const pair_1_asset_id = poolData.quote.assetHash;
   const pair_2_asset_id = poolData.token.assetHash;
@@ -90,7 +86,17 @@ export const validatePoolTx = async (value: CTXFinderResult, poolData: Pool): Pr
 
   const pair_1_coefficient = poolData.pair1_coefficient.number;
 
-  const pair_2_coefficient = Math.floor(pair_2_pool_supply / pair_1_pool_supply) * pair_1_coefficient;
+  let pair_2_coefficient;
+
+  if (pair_2_pool_supply >= pair_1_pool_supply) {
+    pair_2_coefficient = Math.floor(pair_2_pool_supply / pair_1_pool_supply) * pair_1_coefficient;
+  } else {
+    pair_2_coefficient = Math.floor(pair_1_coefficient / Math.floor(pair_1_pool_supply / pair_2_pool_supply));
+  }
+
+  if (pair_2_coefficient < 1) {
+    pair_2_coefficient = 1;
+  }
 
   //   9-pool_pair_1_liquidity değerini pair_1_coefficient’a böl ve sonuca pool_pair_1_liquidity_downgraded ismini ver
   const pool_pair_1_liquidity_downgraded = Math.floor(pool_pair_1_liquidity / pair_1_coefficient);
@@ -101,12 +107,9 @@ export const validatePoolTx = async (value: CTXFinderResult, poolData: Pool): Pr
   // 11-pool_pair_1_liquidity_downgraded ile pool_pair_2_liquidity_downgraded ‘I çarp ve sonuca pool_constant ismini ver.
   const pool_constant = Math.floor(pool_pair_1_liquidity_downgraded * pool_pair_2_liquidity_downgraded);
 
-  if (method === "01") {
-    //3-Commitment output 2 asset ID’sinin pair_1_asset_id olduğunu kontrol et.
-    if (commitmentOutput2AssetId !== pair_1_asset_id) errorMessages.push("Commitment Output 2 AssetId must be equal to pair_1_asset_id");
-
+  if (methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
     //   4-Commitment output 2 miktarına user_supply_total ismini ver.
-    result.user_supply_total = new Decimal(commitmentOutput2.value).mul(100000000).toNumber();
+    result.user_supply_total = new Decimal(value).mul(100000000).toNumber();
 
     if (result.user_supply_total > pool_pair_1_liquidity) {
       errorMessages.push("Supply overflow");
@@ -115,6 +118,8 @@ export const validatePoolTx = async (value: CTXFinderResult, poolData: Pool): Pr
       output.value = result.user_supply_total;
       result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
       result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
+
+      return { amount: 0, amountWithSlipapge: 0 };
     }
 
     //5- user_supply_total ‘ı 500’e böl ve bölüm sonucu bir tam sayı olarak ele alıp user_supply_lp_fees ismini ver.
@@ -152,15 +157,19 @@ export const validatePoolTx = async (value: CTXFinderResult, poolData: Pool): Pr
       output.value = result.user_supply_total;
       result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
       result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
+      return { amount: 0, amountWithSlipapge: 0 };
     }
 
-    if (result.user_received_pair_2 < (convertion.LE64ToNum(WizData.fromHex(cof.slippageTolerance))?.number || 0)) {
+    const bn_user_received_pair_2 = convertion.numToLE64(WizData.fromNumber(result.user_received_pair_2));
+
+    if (arithmetics64.greaterThan64(slippageToleranceHex, bn_user_received_pair_2).number === 1) {
       errorMessages.push("Out of slippage");
 
       output.assetId = pair_1_asset_id;
       output.value = result.user_supply_total;
       result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
       result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
+      return { amount: 0, amountWithSlipapge: 0 };
     }
 
     if (errorMessages.length === 0) {
@@ -176,13 +185,12 @@ export const validatePoolTx = async (value: CTXFinderResult, poolData: Pool): Pr
 
       // pool_pair_2_liquidity değerinden user_received_pair_2 değerini çıkar ve sonuca new_pool_pair_2_liquidity ismini ver. Bu değeri havuzun güncel pair 2 liquidity miktarı olarak ata.
       result.new_pool_pair_2_liquidity = Math.floor(pool_pair_2_liquidity - result.user_received_pair_2);
-    }
-  } else if (method === "02") {
-    // 3- Commitment output 2 asset ID’sinin pair_2_asset_id olduğunu kontrol et.
-    if (commitmentOutput2AssetId !== pair_2_asset_id) errorMessages.push("Commitment Output 2 AssetId must be equal to pair_1_asset_id");
 
+      return { amount: result.user_received_pair_2, amountWithSlipapge: result.user_received_pair_2 };
+    }
+  } else if (methodCall === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
     // 4- Commitment output 2 miktarına user_supply_total ismini ver.
-    result.user_supply_total = new Decimal(commitmentOutput2.value).mul(100000000).toNumber();
+    result.user_supply_total = new Decimal(value).mul(100000000).toNumber();
 
     // 5- user_supply_total ‘ı 500’e böl ve bölüm sonucu bir tam sayı olarak ele alıp user_supply_lp_fees ismini ver.
     result.user_supply_lp_fees = Math.floor(result.user_supply_total / 500);
@@ -194,6 +202,8 @@ export const validatePoolTx = async (value: CTXFinderResult, poolData: Pool): Pr
       output.value = result.user_supply_total;
       result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
       result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
+
+      return { amount: 0, amountWithSlipapge: 0 };
     }
 
     // 6- user_supply_total ’dan user_supply_lp_fees ’ı çıkar ve sonuca user_supply_available ismini ver.
@@ -228,14 +238,20 @@ export const validatePoolTx = async (value: CTXFinderResult, poolData: Pool): Pr
       output.value = result.user_supply_total;
       result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
       result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
+
+      return { amount: 0, amountWithSlipapge: 0 };
     }
-    if (result.user_received_pair_1 < (convertion.LE64ToNum(WizData.fromHex(cof.slippageTolerance))?.number || 0)) {
+
+    const bn_user_received_pair_1 = convertion.numToLE64(WizData.fromNumber(result.user_received_pair_1));
+
+    if (arithmetics64.greaterThan64(slippageToleranceHex, bn_user_received_pair_1).number === 1) {
       errorMessages.push("Out of slippage");
 
       output.assetId = pair_2_asset_id;
       output.value = result.user_supply_total;
       result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
       result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
+      return { amount: 0, amountWithSlipapge: 0 };
     }
 
     if (errorMessages.length === 0) {
@@ -251,28 +267,18 @@ export const validatePoolTx = async (value: CTXFinderResult, poolData: Pool): Pr
 
       // pool_pair_1_liquidity değerinden user_received_pair_1 değerini çıkar ve sonuca new_pool_pair_1_liquidity ismini ver. Bu değeri havuzun güncel pair 1 liquidity miktarı olarak ata.
       result.new_pool_pair_1_liquidity = Math.floor(pool_pair_1_liquidity - result.user_received_pair_1);
+
+      return { amount: result.user_received_pair_1, amountWithSlipapge: result.user_received_pair_1 };
     }
-  } else if (method === "03") {
-    //commitment output 3
-    const commitmentOutput3 = commitmentOutputs[3];
-
-    // commitment Output2 Asset Id
-    const commitmentOutput3AssetId = commitmentOutput3.asset;
-
+  } else if (methodCall === CALL_METHOD.ADD_LIQUIDITY && additionalValue) {
     // 4- 2000000000 değerinden pool_lp_supply değerini çıkar ve sonuca lp_circulation ismini ver.
     result.lp_circulation = Math.floor(2000000000 - result.pool_lp_supply);
 
-    // 5- Commitment output 2 asset ID’sinin pair_1_asset_id olduğunu kontrol et.
-    if (commitmentOutput2AssetId !== pair_1_asset_id) errorMessages.push("Commitment Output 2 AssetId must be equal to pair_1_asset_id");
-
-    // 6- Commitment output 3 asset ID’sinin pair_2_asset_id olduğunu kontrol et.
-    if (commitmentOutput3AssetId !== pair_2_asset_id) errorMessages.push("Commitment Output 3 AssetId must be equal to pair_2_asset_id");
-
     // 7-Commitment output 2 miktarına user_pair_1_supply_total ismini ver.
-    result.user_pair_1_supply_total = new Decimal(commitmentOutput2.value).mul(100000000).toNumber();
+    result.user_pair_1_supply_total = new Decimal(value).mul(100000000).toNumber();
 
     // 8- Commitment output 3 miktarına user_pair_2_supply_total ismini ver.
-    result.user_pair_2_supply_total = new Decimal(commitmentOutput3.value).mul(100000000).toNumber();
+    result.user_pair_2_supply_total = new Decimal(additionalValue).mul(100000000).toNumber();
 
     // 9-user_pair_1_supply_total değerini pair_1_coefficient ’a böl ve sonuca user_pair_1_supply_total_downgraded ismini ver
 
@@ -307,9 +313,13 @@ export const validatePoolTx = async (value: CTXFinderResult, poolData: Pool): Pr
 
       result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
       result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
+
+      return { amount: 0, amountWithSlipapge: 0 };
     }
 
-    if (result.user_lp_received < (convertion.LE64ToNum(WizData.fromHex(cof.slippageTolerance))?.number || 0)) {
+    const bn_user_lp_received = convertion.numToLE64(WizData.fromNumber(result.user_lp_received));
+
+    if (arithmetics64.greaterThan64(slippageToleranceHex, bn_user_lp_received).number === 1) {
       errorMessages.push("Out of slippage");
       // İlgili slot için 2 tane settlement output oluştur. Birinci outputun asset ID ‘sini pair_1_asset id olarak, ikinci outputun asset ID’sini ise ise pair_1_asset ID olarak ayarla.
       // Birinci outpunun miktarını user_pair_1_supply_total olarak ayarla.
@@ -324,6 +334,8 @@ export const validatePoolTx = async (value: CTXFinderResult, poolData: Pool): Pr
 
       result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
       result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
+
+      return { amount: 0, amountWithSlipapge: 0 };
     }
 
     if (errorMessages.length === 0) {
@@ -337,16 +349,15 @@ export const validatePoolTx = async (value: CTXFinderResult, poolData: Pool): Pr
       result.new_pool_pair_1_liquidity = Math.floor(pool_pair_1_liquidity + result.user_pair_1_supply_total);
       result.new_pool_pair_2_liquidity = Math.floor(pool_pair_2_liquidity + result.user_pair_2_supply_total);
       result.new_pool_lp_liquidity = Math.floor(result.pool_lp_supply - result.user_lp_received);
+
+      return { amount: result.user_lp_received, amountWithSlipapge: result.user_lp_received };
     }
-  } else if (method === "04") {
+  } else if (methodCall === CALL_METHOD.REMOVE_LIQUIDITY) {
     // 2000000000 değerinden pool_lp_supply değerini çıkar ve sonuca lp_circulation ismini ver.
     result.lp_circulation = Math.floor(2000000000 - result.pool_lp_supply);
 
-    // Commitment output 2 asset ID’sinin lp_asset_id olduğunu kontrol et.
-    if (commitmentOutput2AssetId !== lp_asset_id) errorMessages.push("Commitment Output 2 AssetId must be equal to Lp Asset Id");
-
     // Commitment output 2 miktarına user_lp_supply_total ismini ver.
-    result.user_lp_supply_total = new Decimal(commitmentOutput2.value).mul(100000000).toNumber();
+    result.user_lp_supply_total = new Decimal(value).mul(100000000).toNumber();
 
     // user_lp_supply_total ile pool_pair_1_liquidity_downgraded değerini çarp ve bu değeri mul_1 ismini ver.
     result.mul_1 = Math.floor(result.user_lp_supply_total * pool_pair_1_liquidity_downgraded);
@@ -386,6 +397,8 @@ export const validatePoolTx = async (value: CTXFinderResult, poolData: Pool): Pr
       result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
       result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
       result.new_pool_lp_liquidity = result.pool_lp_supply;
+
+      return { amount: 0, amountWithSlipapge: 0 };
       // -------------------TODO-------------------
       // burası mastera geçince new_pool_lp_supply olarak geğiştirilecek result.new_pool_lp_liquidity = result.pool_lp_supply;
     }
@@ -406,30 +419,10 @@ export const validatePoolTx = async (value: CTXFinderResult, poolData: Pool): Pr
       result.new_pool_pair_1_liquidity = Math.floor(pool_pair_1_liquidity - result.pair_1_user_redeem);
       result.new_pool_pair_2_liquidity = Math.floor(pool_pair_2_liquidity - result.pair_2_user_redeem);
       result.new_pool_lp_liquidity = Math.floor(result.pool_lp_supply + result.user_lp_supply_total);
+
+      return { amount: result.pair_1_user_redeem, amountWithSlipapge: result.pair_2_user_redeem };
     }
   }
 
-  return {
-    method,
-    pool_pair_1_liquidity,
-    pool_pair_2_liquidity,
-    commitmentOutput2AssetId,
-    pair_1_asset_id,
-    pair_2_asset_id,
-    pair_1_pool_supply,
-    pair_2_pool_supply,
-    pair_1_coefficient,
-    pair_2_coefficient,
-    pool_pair_1_liquidity_downgraded,
-    pool_pair_2_liquidity_downgraded,
-    pool_constant,
-    result,
-    lp_asset_id,
-    leafCount: poolData.leafCount,
-    poolData,
-    output,
-    case3outputs,
-    case4outputs,
-    errorMessages,
-  };
+  return { amount: 0, amountWithSlipapge: 0 };
 };
