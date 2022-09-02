@@ -44,7 +44,7 @@ export const poolDeploy = (
     leafCount = 63;
   }
 
-  const lpFeeTier = convertion.convert64(WizData.fromNumber(lpFeeTierIndex));
+  const lpFeeTier = lpFeeTierIndex === 0 ? WizData.fromHex("00") : WizData.fromNumber(lpFeeTierIndex);
 
   const mainCovenantScriptPubkey = createCovenants(leafCount, 0, newFlagAssetId, pair1Coefficient, lpFeeTierIndex).taprootResult.scriptPubkey.hex;
 
