@@ -51,8 +51,7 @@ var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenA
     if (poolVersion === 5) {
         leafCount = 63;
     }
-    var lpFeeTier = lib_core_1.convertion.convert64(wiz_data_1.default.fromNumber(lpFeeTierIndex));
-    console.log("lpFeeTier", lpFeeTier.hex);
+    var lpFeeTier = lpFeeTierIndex === 0 ? wiz_data_1.default.fromHex("00") : wiz_data_1.default.fromNumber(lpFeeTierIndex);
     var mainCovenantScriptPubkey = (0, pool_1.createCovenants)(leafCount, 0, newFlagAssetId, pair1Coefficient, lpFeeTierIndex).taprootResult.scriptPubkey.hex;
     var flagScriptPubkey = "512070d3017ab2a8ae4cccdb0537a45fb4a3192bff79c49cf54bd9edd508dcc93f55";
     var lpHolderCovenantScript = "20" + (0, wiz_data_1.hexLE)(newFlagAssetId) + "00c86987";
