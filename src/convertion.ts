@@ -3,8 +3,22 @@ import { lpFeeRate } from "./envtest";
 import { div } from "./utils/helper";
 
 export const convertForCtx = (value: number, slippage: number, pool: Pool, config: BmConfig, callMethod: CALL_METHOD): { amount: number; amountWithSlipapge: number } => {
-  const quotePrecisionCoefficient = pool.pair1_coefficient.number;
-  const tokenPrecisionCoefficient = div(Number(pool.token.value), Number(pool.quote.value)) * quotePrecisionCoefficient;
+  const pair_1_coefficient = pool.pair1_coefficient.number;
+  const pair_1_pool_supply = Number(pool.quote.value);
+
+  const pair_2_pool_supply = Number(pool.token.value);
+
+  let pair_2_coefficient;
+
+  if (pair_2_pool_supply >= pair_1_pool_supply) {
+    pair_2_coefficient = Math.floor(pair_2_pool_supply / pair_1_pool_supply) * pair_1_coefficient;
+  } else {
+    pair_2_coefficient = Math.floor(pair_1_coefficient / Math.floor(pair_1_pool_supply / pair_2_pool_supply));
+  }
+
+  if (pair_2_coefficient < 1) {
+    pair_2_coefficient = 1;
+  }
 
   if (callMethod === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
     if (value < Number(config.minRemainingSupply)) {
@@ -22,22 +36,22 @@ export const convertForCtx = (value: number, slippage: number, pool: Pool, confi
     const quotePoolTotalAmount = Number(pool.quote.value) + quoteAmountSubFee;
 
     // step 4 (lbtPoolTotalAmount with rate 16)
-    const quotePoolTotalAmountWithRate = div(quotePoolTotalAmount, quotePrecisionCoefficient);
+    const quotePoolTotalAmountWithRate = div(quotePoolTotalAmount, pair_1_coefficient);
 
     // step 5 (lbtPoolAmount  with rate 16)
-    const quotePoolAmountWithRate = div(Number(pool.quote.value), quotePrecisionCoefficient);
+    const quotePoolAmountWithRate = div(Number(pool.quote.value), pair_1_coefficient);
 
-    // step 6 (usdtPoolAmount  with rate 2 million)
-    const usdtPoolAmountWithRate = div(Number(pool.token.value), tokenPrecisionCoefficient);
+    // step 6 (tokenPoolAmount  with rate 2 million)
+    const tokenPoolAmountWithRate = div(Number(pool.token.value), pair_2_coefficient);
 
     // step 7 (mul step 5 , step6)
-    const poolRateMul = quotePoolAmountWithRate * usdtPoolAmountWithRate;
+    const poolRateMul = quotePoolAmountWithRate * tokenPoolAmountWithRate;
 
     // step 8 (div step7  step4)
     const poolRateMulWithQuotePoolRate = div(poolRateMul, quotePoolTotalAmountWithRate);
 
     // step 9  (step8 * 2 million)
-    const poolRateMulWithLbtcPoolRateMul = poolRateMulWithQuotePoolRate * tokenPrecisionCoefficient;
+    const poolRateMulWithLbtcPoolRateMul = poolRateMulWithQuotePoolRate * pair_2_coefficient;
 
     // step 10  (Pool Token liquidity - 9.step)
     const finalTokenPoolLiquidity = Number(pool.token.value) - poolRateMulWithLbtcPoolRateMul;
@@ -61,31 +75,31 @@ export const convertForCtx = (value: number, slippage: number, pool: Pool, confi
     const lpFee = div(value, lpFeeRate);
 
     // step2 (input new value without fee  input - step1)
-    const usdtAmountWithoutFee = value - lpFee;
+    const tokenAmountWithoutFee = value - lpFee;
 
-    // step3 (total token pool amount poolUsdtLiquidity + step2)
-    const totalUsdtLiquidity = Number(pool.token.value) + usdtAmountWithoutFee;
+    // step3 (total token pool amount poolTokenLiquidity + step2)
+    const totalTokenLiquidity = pair_2_pool_supply + tokenAmountWithoutFee;
 
-    // step4  (usdt Liquidty rate calculation step3 % 2mn)
-    const usdtLiquidtyRate = div(totalUsdtLiquidity, tokenPrecisionCoefficient);
+    // step4  (token Liquidty rate calculation step3 % 2mn)
+    const tokenLiquidtyRate = div(totalTokenLiquidity, pair_2_coefficient);
 
     // step5 (Pool L-BTC liquidity % 16)
-    const x = div(Number(pool.quote.value), quotePrecisionCoefficient);
+    const x = div(pair_1_pool_supply, pair_1_coefficient);
 
     // step6 (Pool Token liquidity % 2MN)
-    const y = div(Number(pool.token.value), tokenPrecisionCoefficient);
+    const y = div(pair_2_pool_supply, pair_2_coefficient);
 
     // step 7 (constant x*y = k step5*step6)
     const constant = x * y;
 
-    // step 8 (constant * usdtLiquidtyRate  step7*step4
-    const constantRate = div(constant, usdtLiquidtyRate);
+    // step 8 (constant * tokenLiquidtyRate  step7*step4
+    const constantRate = div(constant, tokenLiquidtyRate);
 
     //step 9 (step 8 * 16)
-    const lbtcAmount = constantRate * quotePrecisionCoefficient;
+    const lbtcAmount = constantRate * pair_1_coefficient;
 
     //step 10 (poolLbtcLiquidity - step9)
-    const tokenValue = Number(pool.quote.value) - lbtcAmount;
+    const tokenValue = pair_1_pool_supply - lbtcAmount;
 
     const slippageAmount = div(tokenValue, slippage);
 
@@ -98,37 +112,52 @@ export const convertForCtx = (value: number, slippage: number, pool: Pool, confi
 };
 
 export const convertForCtx2 = (value: number, slippage: number, pool: Pool, config: BmConfig, callMethod: CALL_METHOD): { amount: number; amountWithSlipapge: number } => {
-  const quotePrecisionCoefficient = pool.pair1_coefficient.number;
-  const tokenPrecisionCoefficient = div(Number(pool.token.value), Number(pool.quote.value)) * quotePrecisionCoefficient;
+  const pair_1_coefficient = pool.pair1_coefficient.number;
+  const pair_1_pool_supply = Number(pool.quote.value);
+
+  const pair_2_pool_supply = Number(pool.token.value);
+
+  let pair_2_coefficient;
+
+  if (pair_2_pool_supply >= pair_1_pool_supply) {
+    pair_2_coefficient = Math.floor(pair_2_pool_supply / pair_1_pool_supply) * pair_1_coefficient;
+  } else {
+    pair_2_coefficient = Math.floor(pair_1_coefficient / Math.floor(pair_1_pool_supply / pair_2_pool_supply));
+  }
+
+  if (pair_2_coefficient < 1) {
+    pair_2_coefficient = 1;
+  }
 
   if (callMethod === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
     if (value < Number(config.minTokenValue)) {
+      console.log("2");
       // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
       return { amount: 0, amountWithSlipapge: 0 };
     }
 
     // extra
-    const quotePoolAmountWithRate = div(Number(pool.quote.value), quotePrecisionCoefficient);
-    const usdtPoolAmountWithRate = div(Number(pool.token.value), tokenPrecisionCoefficient);
-    const poolRateMul = quotePoolAmountWithRate * usdtPoolAmountWithRate;
+    const quotePoolAmountWithRate = div(pair_1_pool_supply, pair_1_coefficient);
+    const tokenPoolAmountWithRate = div(pair_2_pool_supply, pair_2_coefficient);
+    const poolRateMul = quotePoolAmountWithRate * tokenPoolAmountWithRate;
 
     // step 1
     const finalTokenPoolLiquidity = value + config.recipientValueMinus;
 
     // step 2
-    const poolRateMulWithLbtcPoolRateMul = Number(pool.token.value) - finalTokenPoolLiquidity;
+    const poolRateMulWithLbtcPoolRateMul = pair_2_pool_supply - finalTokenPoolLiquidity;
 
     // step 3
-    const poolRateMulWithQuotePoolRate = div(poolRateMulWithLbtcPoolRateMul, tokenPrecisionCoefficient);
+    const poolRateMulWithQuotePoolRate = div(poolRateMulWithLbtcPoolRateMul, pair_2_coefficient);
 
     // step 4
     const quotePoolTotalAmountWithRate = div(poolRateMul, poolRateMulWithQuotePoolRate);
 
     // step 5
-    const quotePoolTotalAmount = quotePoolTotalAmountWithRate * quotePrecisionCoefficient;
+    const quotePoolTotalAmount = quotePoolTotalAmountWithRate * pair_1_coefficient;
 
     // step 6
-    const quoteAmountSubFee = quotePoolTotalAmount - Number(pool.quote.value);
+    const quoteAmountSubFee = quotePoolTotalAmount - pair_1_pool_supply;
 
     const inp = div(lpFeeRate * quoteAmountSubFee, lpFeeRate - 1);
 
@@ -137,6 +166,7 @@ export const convertForCtx2 = (value: number, slippage: number, pool: Pool, conf
     const receivedAmount = value - slippageAmount;
 
     if (inp < Number(config.minRemainingSupply)) {
+      console.log("1");
       // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
       return { amount: 0, amountWithSlipapge: 0 };
     }
@@ -148,23 +178,23 @@ export const convertForCtx2 = (value: number, slippage: number, pool: Pool, conf
       // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
       return { amount: 0, amountWithSlipapge: 0 };
     }
-    const lbtcAmount = Number(pool.quote.value) - value;
+    const lbtcAmount = pair_1_pool_supply - value;
 
-    const constantRate = div(lbtcAmount, quotePrecisionCoefficient);
+    const constantRate = div(lbtcAmount, pair_1_coefficient);
 
-    const x = div(Number(pool.quote.value), quotePrecisionCoefficient);
+    const x = div(pair_1_pool_supply, pair_1_coefficient);
 
-    const y = div(Number(pool.token.value), tokenPrecisionCoefficient);
+    const y = div(pair_2_pool_supply, pair_2_coefficient);
 
     const constant = x * y;
 
-    const usdtLiquidtyRate = div(constant, constantRate);
+    const tokenLiquidtyRate = div(constant, constantRate);
 
-    const totalUsdtLiquidity = usdtLiquidtyRate * tokenPrecisionCoefficient;
+    const totalTokenLiquidity = tokenLiquidtyRate * pair_2_coefficient;
 
-    const usdtAmountWithoutFee = totalUsdtLiquidity - Number(pool.token.value);
+    const tokenAmountWithoutFee = totalTokenLiquidity - pair_2_pool_supply;
 
-    const inp = div(lpFeeRate * usdtAmountWithoutFee, lpFeeRate - 1);
+    const inp = div(lpFeeRate * tokenAmountWithoutFee, lpFeeRate - 1);
 
     const slippageAmount = div(value, slippage);
 
