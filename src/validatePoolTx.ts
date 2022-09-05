@@ -1,5 +1,5 @@
 import Decimal from "decimal.js";
-import { CALL_METHOD, CTXPTXResult, Pool } from "@bitmatrix/models";
+import { CALL_METHOD, Pool } from "@bitmatrix/models";
 import { div } from "./utils/helper";
 
 export const validatePoolTx = (value: number, slippageTolerance: number, poolData: Pool, methodCall: CALL_METHOD): { amount: number; amountWithSlipapge: number } => {
@@ -71,6 +71,8 @@ export const validatePoolTx = (value: number, slippageTolerance: number, poolDat
     const slippageAmount = div(user_received_pair_2, slippageTolerance);
 
     const receivedAmount = user_received_pair_2 - slippageAmount;
+
+    console.log("user_supply_available", user_supply_available);
 
     return { amount: user_received_pair_2, amountWithSlipapge: receivedAmount };
   } else if (methodCall === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
@@ -180,6 +182,28 @@ export const validatePoolTx2 = (value: number, slippageTolerance: number, poolDa
 
     // 16-user_received_pair_2_apx değerinden payout_additional_fees değerini çıkar ve sonuca user_received_pair_2 ismini ver.
     const user_received_pair_2 = Math.floor(user_received_pair_2_apx - payout_additional_fees);
+
+    // ------hesaplar ------
+    const user_received_pair_2_apx_w = payout_additional_fees + value;
+    console.log("1,", user_received_pair_2_apx_w);
+
+    const new_pair_2_pool_liquidity_apx_2_w = pool_pair_2_liquidity - user_received_pair_2_apx_w;
+    console.log("2", new_pair_2_pool_liquidity_apx_2_w);
+
+    const new_pair_2_pool_liquidity_apx_1_w = div(new_pair_2_pool_liquidity_apx_2_w, pair_2_coefficient);
+    console.log("3", new_pair_2_pool_liquidity_apx_1_w);
+
+    const constant_coefficient_downgraded_w = div(pool_constant, new_pair_2_pool_liquidity_apx_1_w);
+    console.log("4", constant_coefficient_downgraded_w);
+
+    const constant_coefficient_w = div(pair_1_coefficient, constant_coefficient_downgraded_w);
+    console.log("5,", constant_coefficient_w);
+
+    const user_supply_available_w = constant_coefficient_w - pool_pair_1_liquidity;
+
+    const user_supply_lp_fees_w = div(user_supply_available_w, 499) * 500;
+
+    console.log("user_supply_lp_fees_w", user_supply_lp_fees_w);
 
     const slippageAmount = div(user_received_pair_2, slippageTolerance);
 

@@ -131,7 +131,6 @@ export const convertForCtx2 = (value: number, slippage: number, pool: Pool, conf
 
   if (callMethod === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
     if (value < Number(config.minTokenValue)) {
-      console.log("2");
       // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
       return { amount: 0, amountWithSlipapge: 0 };
     }
