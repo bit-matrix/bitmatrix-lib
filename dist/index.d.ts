@@ -8,6 +8,7 @@ import * as ldk from "./ldk";
 import * as pool from "./pool";
 import * as poolDeployment from "./poolDeployment";
 import { validatePoolTx } from "./validatePoolTx";
+import { validatePoolTx2 } from "./validatePoolTx";
 import { Wallet } from "./wallet";
 import * as esplora from "./esplora";
-export { api, asset, commitmentOutput, commitmentSign, commitmentTx, convertion, ldk, pool, poolDeployment, validatePoolTx, Wallet, esplora };
+export { api, asset, validatePoolTx2, commitmentOutput, commitmentSign, commitmentTx, convertion, ldk, pool, poolDeployment, validatePoolTx, Wallet, esplora };
