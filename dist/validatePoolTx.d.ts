@@ -3,7 +3,3 @@ export declare const validatePoolTx: (value: number, slippageTolerance: number, 
     amount: number;
     amountWithSlipapge: number;
 };
-export declare const validatePoolTx2: (value: number, slippageTolerance: number, poolData: Pool, methodCall: CALL_METHOD) => {
-    amount: number;
-    amountWithSlipapge: number;
-};

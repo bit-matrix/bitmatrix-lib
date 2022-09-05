@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.esplora = exports.Wallet = exports.validatePoolTx = exports.poolDeployment = exports.pool = exports.ldk = exports.convertion = exports.commitmentTx = exports.commitmentSign = exports.commitmentOutput = exports.validatePoolTx2 = exports.asset = exports.api = void 0;
+exports.esplora = exports.Wallet = exports.validatePoolTx = exports.poolDeployment = exports.pool = exports.ldk = exports.convertion = exports.commitmentTx = exports.commitmentSign = exports.commitmentOutput = exports.asset = exports.api = void 0;
 var api = __importStar(require("./api"));
 exports.api = api;
 var asset = __importStar(require("./asset"));
@@ -44,8 +44,6 @@ var poolDeployment = __importStar(require("./poolDeployment"));
 exports.poolDeployment = poolDeployment;
 var validatePoolTx_1 = require("./validatePoolTx");
 Object.defineProperty(exports, "validatePoolTx", { enumerable: true, get: function () { return validatePoolTx_1.validatePoolTx; } });
-var validatePoolTx_2 = require("./validatePoolTx");
-Object.defineProperty(exports, "validatePoolTx2", { enumerable: true, get: function () { return validatePoolTx_2.validatePoolTx2; } });
 // import { commitmentFinder } from "./commitmentFinder";
 var wallet_1 = require("./wallet");
 Object.defineProperty(exports, "Wallet", { enumerable: true, get: function () { return wallet_1.Wallet; } });
