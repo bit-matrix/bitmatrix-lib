@@ -89,7 +89,6 @@ export const bandwithArray = [
   33000, // n = 61
   33500, // n = 62
   34000, // n = 63
-  34500, // n = 64
 ];
 
 // export const bodyCalculaterN = (n: number, flagAssetId: string) => {
