@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertForLiquidityCtx = exports.calcRemoveLiquidityRecipientValue = exports.calcAddLiquidityRecipientValue = exports.convertForCtx2 = exports.convertForCtx = void 0;
 var models_1 = require("@bitmatrix/models");
-var envtest_1 = require("./envtest");
 var helper_1 = require("./utils/helper");
 var convertForCtx = function (value, slippage, pool, config, callMethod) {
     var pair_1_coefficient = pool.pair1_coefficient.number;
@@ -24,7 +23,7 @@ var convertForCtx = function (value, slippage, pool, config, callMethod) {
             return { amount: 0, amountWithSlipapge: 0 };
         }
         // step1  (lp fee calculate)
-        var lpFee = (0, helper_1.div)(value, envtest_1.lpFeeRate);
+        var lpFee = (0, helper_1.div)(value, pool.lpFeeTierIndex.number);
         // step 2 (sub fee amount)
         var quoteAmountSubFee = value - lpFee;
         // step 3 (poolLbtcLiquidity  + lbtcAmountSubFee)
@@ -56,7 +55,7 @@ var convertForCtx = function (value, slippage, pool, config, callMethod) {
             return { amount: 0, amountWithSlipapge: 0 };
         }
         // step1 (fee calculation)
-        var lpFee = (0, helper_1.div)(value, envtest_1.lpFeeRate);
+        var lpFee = (0, helper_1.div)(value, pool.lpFeeTierIndex.number);
         // step2 (input new value without fee  input - step1)
         var tokenAmountWithoutFee = value - lpFee;
         // step3 (total token pool amount poolTokenLiquidity + step2)
@@ -117,7 +116,7 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
         var quotePoolTotalAmount = quotePoolTotalAmountWithRate * pair_1_coefficient;
         // step 6
         var quoteAmountSubFee = quotePoolTotalAmount - pair_1_pool_supply;
-        var inp = (0, helper_1.div)(envtest_1.lpFeeRate * quoteAmountSubFee, envtest_1.lpFeeRate - 1);
+        var inp = (0, helper_1.div)(pool.lpFeeTierIndex.number * quoteAmountSubFee, pool.lpFeeTierIndex.number - 1);
         var slippageAmount = (0, helper_1.div)(value, slippage);
         var receivedAmount = value - slippageAmount;
         if (inp < Number(config.minRemainingSupply)) {
@@ -141,7 +140,7 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
         var tokenLiquidtyRate = (0, helper_1.div)(constant, constantRate);
         var totalTokenLiquidity = tokenLiquidtyRate * pair_2_coefficient;
         var tokenAmountWithoutFee = totalTokenLiquidity - pair_2_pool_supply;
-        var inp = (0, helper_1.div)(envtest_1.lpFeeRate * tokenAmountWithoutFee, envtest_1.lpFeeRate - 1);
+        var inp = (0, helper_1.div)(pool.lpFeeTierIndex.number * tokenAmountWithoutFee, pool.lpFeeTierIndex.number - 1);
         var slippageAmount = (0, helper_1.div)(value, slippage);
         var receivedAmount = value - slippageAmount;
         if (inp < Number(config.minTokenValue)) {

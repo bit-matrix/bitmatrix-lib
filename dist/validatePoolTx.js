@@ -35,7 +35,7 @@ var validatePoolTx = function (value, slippageTolerance, poolData, methodCall) {
         //   4-Commitment output 2 miktarına user_supply_total ismini ver.
         var user_supply_total = new decimal_js_1.default(value).toNumber();
         //5- user_supply_total ‘ı 500’e böl ve bölüm sonucu bir tam sayı olarak ele alıp user_supply_lp_fees ismini ver.
-        var user_supply_lp_fees = Math.floor(user_supply_total / 500);
+        var user_supply_lp_fees = Math.floor(user_supply_total / poolData.lpFeeTierIndex.number);
         //   6-user_supply_total’ dan user_supply_lp_fees’ı çıkar ve sonuca user_supply_available ismini ver.
         var user_supply_available = Math.floor(user_supply_total - user_supply_lp_fees);
         //   7-pool_pair_1_liquidity ile user_supply_available’i topla ve sonuca constant_coefficient ismini ver.
@@ -60,7 +60,7 @@ var validatePoolTx = function (value, slippageTolerance, poolData, methodCall) {
         // 4- Commitment output 2 miktarına user_supply_total ismini ver.
         var user_supply_total = new decimal_js_1.default(value).toNumber();
         // 5- user_supply_total ‘ı 500’e böl ve bölüm sonucu bir tam sayı olarak ele alıp user_supply_lp_fees ismini ver.
-        var user_supply_lp_fees = Math.floor(user_supply_total / 500);
+        var user_supply_lp_fees = Math.floor(user_supply_total / poolData.lpFeeTierIndex.number);
         // 6- user_supply_total ’dan user_supply_lp_fees ’ı çıkar ve sonuca user_supply_available ismini ver.
         var user_supply_available = Math.floor(user_supply_total - user_supply_lp_fees);
         // 7-pool_pair_2_liquidity ile user_supply_available ’i topla ve sonuca constant_coefficient ismini ver.
