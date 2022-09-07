@@ -1,6 +1,7 @@
 import Decimal from "decimal.js";
 import { CALL_METHOD, Pool } from "@bitmatrix/models";
 import { div } from "./utils/helper";
+import { lpFeeTiers } from "./pool";
 
 export const validatePoolTx = (value: number, slippageTolerance: number, poolData: Pool, methodCall: CALL_METHOD): { amount: number; amountWithSlipapge: number } => {
   // 1-Havuzun güncel pair_1 liquidity miktarına pool_pair_1_liquidity ismini ver.
@@ -36,12 +37,14 @@ export const validatePoolTx = (value: number, slippageTolerance: number, poolDat
   // 11-pool_pair_1_liquidity_downgraded ile pool_pair_2_liquidity_downgraded ‘I çarp ve sonuca pool_constant ismini ver.
   const pool_constant = Math.floor(pool_pair_1_liquidity_downgraded * pool_pair_2_liquidity_downgraded);
 
+  const lpFeeTier = Object.values(lpFeeTiers)[poolData.lpFeeTierIndex.number];
+
   if (methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
     //   4-Commitment output 2 miktarına user_supply_total ismini ver.
     const user_supply_total = new Decimal(value).toNumber();
 
     //5- user_supply_total ‘ı 500’e böl ve bölüm sonucu bir tam sayı olarak ele alıp user_supply_lp_fees ismini ver.
-    const user_supply_lp_fees = Math.floor(user_supply_total / poolData.lpFeeTierIndex.number);
+    const user_supply_lp_fees = Math.floor(user_supply_total / lpFeeTier);
 
     //   6-user_supply_total’ dan user_supply_lp_fees’ı çıkar ve sonuca user_supply_available ismini ver.
     const user_supply_available = Math.floor(user_supply_total - user_supply_lp_fees);
@@ -78,7 +81,7 @@ export const validatePoolTx = (value: number, slippageTolerance: number, poolDat
     const user_supply_total = new Decimal(value).toNumber();
 
     // 5- user_supply_total ‘ı 500’e böl ve bölüm sonucu bir tam sayı olarak ele alıp user_supply_lp_fees ismini ver.
-    const user_supply_lp_fees = Math.floor(user_supply_total / poolData.lpFeeTierIndex.number);
+    const user_supply_lp_fees = Math.floor(user_supply_total / lpFeeTier);
 
     // 6- user_supply_total ’dan user_supply_lp_fees ’ı çıkar ve sonuca user_supply_available ismini ver.
     const user_supply_available = Math.floor(user_supply_total - user_supply_lp_fees);
