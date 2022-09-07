@@ -7,6 +7,7 @@ exports.validatePoolTx = void 0;
 var decimal_js_1 = __importDefault(require("decimal.js"));
 var models_1 = require("@bitmatrix/models");
 var helper_1 = require("./utils/helper");
+var pool_1 = require("./pool");
 var validatePoolTx = function (value, slippageTolerance, poolData, methodCall) {
     // 1-Havuzun güncel pair_1 liquidity miktarına pool_pair_1_liquidity ismini ver.
     var pool_pair_1_liquidity = Number(poolData.quote.value);
@@ -31,11 +32,12 @@ var validatePoolTx = function (value, slippageTolerance, poolData, methodCall) {
     var pool_pair_2_liquidity_downgraded = Math.floor(pool_pair_2_liquidity / pair_2_coefficient);
     // 11-pool_pair_1_liquidity_downgraded ile pool_pair_2_liquidity_downgraded ‘I çarp ve sonuca pool_constant ismini ver.
     var pool_constant = Math.floor(pool_pair_1_liquidity_downgraded * pool_pair_2_liquidity_downgraded);
+    var lpFeeTier = Object.values(pool_1.lpFeeTiers)[poolData.lpFeeTierIndex.number];
     if (methodCall === models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
         //   4-Commitment output 2 miktarına user_supply_total ismini ver.
         var user_supply_total = new decimal_js_1.default(value).toNumber();
         //5- user_supply_total ‘ı 500’e böl ve bölüm sonucu bir tam sayı olarak ele alıp user_supply_lp_fees ismini ver.
-        var user_supply_lp_fees = Math.floor(user_supply_total / poolData.lpFeeTierIndex.number);
+        var user_supply_lp_fees = Math.floor(user_supply_total / lpFeeTier);
         //   6-user_supply_total’ dan user_supply_lp_fees’ı çıkar ve sonuca user_supply_available ismini ver.
         var user_supply_available = Math.floor(user_supply_total - user_supply_lp_fees);
         //   7-pool_pair_1_liquidity ile user_supply_available’i topla ve sonuca constant_coefficient ismini ver.
@@ -60,7 +62,7 @@ var validatePoolTx = function (value, slippageTolerance, poolData, methodCall) {
         // 4- Commitment output 2 miktarına user_supply_total ismini ver.
         var user_supply_total = new decimal_js_1.default(value).toNumber();
         // 5- user_supply_total ‘ı 500’e böl ve bölüm sonucu bir tam sayı olarak ele alıp user_supply_lp_fees ismini ver.
-        var user_supply_lp_fees = Math.floor(user_supply_total / poolData.lpFeeTierIndex.number);
+        var user_supply_lp_fees = Math.floor(user_supply_total / lpFeeTier);
         // 6- user_supply_total ’dan user_supply_lp_fees ’ı çıkar ve sonuca user_supply_available ismini ver.
         var user_supply_available = Math.floor(user_supply_total - user_supply_lp_fees);
         // 7-pool_pair_2_liquidity ile user_supply_available ’i topla ve sonuca constant_coefficient ismini ver.
