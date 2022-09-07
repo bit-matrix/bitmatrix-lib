@@ -41,7 +41,7 @@ export const validatePoolTx = (value: number, slippageTolerance: number, poolDat
     const user_supply_total = new Decimal(value).toNumber();
 
     //5- user_supply_total ‘ı 500’e böl ve bölüm sonucu bir tam sayı olarak ele alıp user_supply_lp_fees ismini ver.
-    const user_supply_lp_fees = Math.floor(user_supply_total / 500);
+    const user_supply_lp_fees = Math.floor(user_supply_total / poolData.lpFeeTierIndex.number);
 
     //   6-user_supply_total’ dan user_supply_lp_fees’ı çıkar ve sonuca user_supply_available ismini ver.
     const user_supply_available = Math.floor(user_supply_total - user_supply_lp_fees);
@@ -78,7 +78,7 @@ export const validatePoolTx = (value: number, slippageTolerance: number, poolDat
     const user_supply_total = new Decimal(value).toNumber();
 
     // 5- user_supply_total ‘ı 500’e böl ve bölüm sonucu bir tam sayı olarak ele alıp user_supply_lp_fees ismini ver.
-    const user_supply_lp_fees = Math.floor(user_supply_total / 500);
+    const user_supply_lp_fees = Math.floor(user_supply_total / poolData.lpFeeTierIndex.number);
 
     // 6- user_supply_total ’dan user_supply_lp_fees ’ı çıkar ve sonuca user_supply_available ismini ver.
     const user_supply_available = Math.floor(user_supply_total - user_supply_lp_fees);
