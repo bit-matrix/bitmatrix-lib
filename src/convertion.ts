@@ -1,5 +1,4 @@
 import { BmConfig, CALL_METHOD, Pool } from "@bitmatrix/models";
-import { lpFeeRate } from "./envtest";
 import { div } from "./utils/helper";
 
 export const convertForCtx = (value: number, slippage: number, pool: Pool, config: BmConfig, callMethod: CALL_METHOD): { amount: number; amountWithSlipapge: number } => {
@@ -27,7 +26,7 @@ export const convertForCtx = (value: number, slippage: number, pool: Pool, confi
     }
 
     // step1  (lp fee calculate)
-    const lpFee = div(value, lpFeeRate);
+    const lpFee = div(value, pool.lpFeeTierIndex.number);
 
     // step 2 (sub fee amount)
     const quoteAmountSubFee = value - lpFee;
@@ -72,7 +71,7 @@ export const convertForCtx = (value: number, slippage: number, pool: Pool, confi
     }
 
     // step1 (fee calculation)
-    const lpFee = div(value, lpFeeRate);
+    const lpFee = div(value, pool.lpFeeTierIndex.number);
 
     // step2 (input new value without fee  input - step1)
     const tokenAmountWithoutFee = value - lpFee;
@@ -158,7 +157,7 @@ export const convertForCtx2 = (value: number, slippage: number, pool: Pool, conf
     // step 6
     const quoteAmountSubFee = quotePoolTotalAmount - pair_1_pool_supply;
 
-    const inp = div(lpFeeRate * quoteAmountSubFee, lpFeeRate - 1);
+    const inp = div(pool.lpFeeTierIndex.number * quoteAmountSubFee, pool.lpFeeTierIndex.number - 1);
 
     const slippageAmount = div(value, slippage);
 
@@ -193,7 +192,7 @@ export const convertForCtx2 = (value: number, slippage: number, pool: Pool, conf
 
     const tokenAmountWithoutFee = totalTokenLiquidity - pair_2_pool_supply;
 
-    const inp = div(lpFeeRate * tokenAmountWithoutFee, lpFeeRate - 1);
+    const inp = div(pool.lpFeeTierIndex.number * tokenAmountWithoutFee, pool.lpFeeTierIndex.number - 1);
 
     const slippageAmount = div(value, slippage);
 
