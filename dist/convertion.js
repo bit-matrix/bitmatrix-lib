@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertForLiquidityCtx = exports.calcRemoveLiquidityRecipientValue = exports.calcAddLiquidityRecipientValue = exports.convertForCtx2 = exports.convertForCtx = void 0;
 var models_1 = require("@bitmatrix/models");
+var pool_1 = require("./pool");
 var helper_1 = require("./utils/helper");
 var convertForCtx = function (value, slippage, pool, config, callMethod) {
     var pair_1_coefficient = pool.pair1_coefficient.number;
@@ -95,8 +96,10 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
     if (pair_2_coefficient < 1) {
         pair_2_coefficient = 1;
     }
+    var lpFeeTier = Object.values(pool_1.lpFeeTiers)[pool.lpFeeTierIndex.number];
     if (callMethod === models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
-        if (value < Number(config.minTokenValue)) {
+        if (value < 10 * pair_1_coefficient) {
+            console.log("1");
             // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
             return { amount: 0, amountWithSlipapge: 0 };
         }
@@ -107,7 +110,7 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
         // step 1
         var finalTokenPoolLiquidity = value + config.recipientValueMinus;
         // step 2
-        var poolRateMulWithLbtcPoolRateMul = pair_2_pool_supply - finalTokenPoolLiquidity;
+        var poolRateMulWithLbtcPoolRateMul = finalTokenPoolLiquidity - pair_2_pool_supply;
         // step 3
         var poolRateMulWithQuotePoolRate = (0, helper_1.div)(poolRateMulWithLbtcPoolRateMul, pair_2_coefficient);
         // step 4
@@ -115,12 +118,13 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
         // step 5
         var quotePoolTotalAmount = quotePoolTotalAmountWithRate * pair_1_coefficient;
         // step 6
-        var quoteAmountSubFee = quotePoolTotalAmount - pair_1_pool_supply;
-        var inp = (0, helper_1.div)(pool.lpFeeTierIndex.number * quoteAmountSubFee, pool.lpFeeTierIndex.number - 1);
+        var quoteAmountSubFee = pair_1_pool_supply - quotePoolTotalAmount;
+        var inp = (0, helper_1.div)(lpFeeTier * quoteAmountSubFee, lpFeeTier - 1);
         var slippageAmount = (0, helper_1.div)(value, slippage);
         var receivedAmount = value - slippageAmount;
-        if (inp < Number(config.minRemainingSupply)) {
-            console.log("1");
+        console.log(lpFeeTier * quoteAmountSubFee);
+        if (inp < 10 * pair_1_coefficient) {
+            console.log("2");
             // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
             return { amount: 0, amountWithSlipapge: 0 };
         }
@@ -128,7 +132,8 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
     }
     else if (callMethod === models_1.CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
         // validation
-        if (value < Number(config.minRemainingSupply)) {
+        if (value < 10 * pair_2_coefficient) {
+            console.log("3");
             // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
             return { amount: 0, amountWithSlipapge: 0 };
         }
@@ -140,10 +145,11 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
         var tokenLiquidtyRate = (0, helper_1.div)(constant, constantRate);
         var totalTokenLiquidity = tokenLiquidtyRate * pair_2_coefficient;
         var tokenAmountWithoutFee = totalTokenLiquidity - pair_2_pool_supply;
-        var inp = (0, helper_1.div)(pool.lpFeeTierIndex.number * tokenAmountWithoutFee, pool.lpFeeTierIndex.number - 1);
+        var inp = (0, helper_1.div)(lpFeeTier * tokenAmountWithoutFee, lpFeeTier - 1);
         var slippageAmount = (0, helper_1.div)(value, slippage);
         var receivedAmount = value - slippageAmount;
-        if (inp < Number(config.minTokenValue)) {
+        if (inp < 10 * pair_2_coefficient) {
+            console.log("4");
             // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
             return { amount: 0, amountWithSlipapge: 0 };
         }
