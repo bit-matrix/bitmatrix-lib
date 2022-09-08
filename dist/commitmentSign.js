@@ -34,7 +34,6 @@ var case1 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
     var methodCall = models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
     var poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
     var receivedAmount = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(calculatedAmountWithSlippage)).hex;
-    console.log("receivedAmount", receivedAmount);
     // Call data OP_RETURN
     var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
     var address = (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.testnet;

@@ -39,20 +39,11 @@ var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenA
     var newFlagAssetId = (0, asset_1.calculateAssetId)(txId, flagContractHash, 0);
     var newLpAssetId = (0, asset_1.calculateAssetId)(txId, lpContractHash, 1);
     var leafCount = 0;
-    if (poolVersion === 2) {
-        leafCount = 1;
-    }
-    if (poolVersion === 3) {
-        leafCount = 15;
-    }
-    if (poolVersion === 4) {
-        leafCount = 31;
-    }
-    if (poolVersion === 5) {
-        leafCount = 63;
+    if (poolVersion === 1) {
+        leafCount = 64;
     }
     var lpFeeTier = lpFeeTierIndex === 0 ? wiz_data_1.default.fromHex("00") : wiz_data_1.default.fromNumber(lpFeeTierIndex);
-    var mainCovenantScriptPubkey = (0, pool_1.createCovenants)(leafCount, 0, newFlagAssetId, pair1Coefficient, lpFeeTierIndex).taprootResult.scriptPubkey.hex;
+    var mainCovenantScriptPubkey = (0, pool_1.createCovenants)(leafCount - 1, 0, newFlagAssetId, pair1Coefficient, lpFeeTierIndex).taprootResult.scriptPubkey.hex;
     var flagScriptPubkey = "512070d3017ab2a8ae4cccdb0537a45fb4a3192bff79c49cf54bd9edd508dcc93f55";
     var lpHolderCovenantScript = "20" + (0, wiz_data_1.hexLE)(newFlagAssetId) + "00c86987";
     var lpHolderCovenantScriptPubkey = lib_core_1.taproot.tapRoot(innerkey, [wiz_data_1.default.fromHex(lpHolderCovenantScript)], lib_core_1.TAPROOT_VERSION.LIQUID).scriptPubkey.hex;

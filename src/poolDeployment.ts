@@ -28,25 +28,13 @@ export const poolDeploy = (
 
   let leafCount = 0;
 
-  if (poolVersion === 2) {
-    leafCount = 1;
-  }
-
-  if (poolVersion === 3) {
-    leafCount = 15;
-  }
-
-  if (poolVersion === 4) {
-    leafCount = 31;
-  }
-
-  if (poolVersion === 5) {
-    leafCount = 63;
+  if (poolVersion === 1) {
+    leafCount = 64;
   }
 
   const lpFeeTier = lpFeeTierIndex === 0 ? WizData.fromHex("00") : WizData.fromNumber(lpFeeTierIndex);
 
-  const mainCovenantScriptPubkey = createCovenants(leafCount, 0, newFlagAssetId, pair1Coefficient, lpFeeTierIndex).taprootResult.scriptPubkey.hex;
+  const mainCovenantScriptPubkey = createCovenants(leafCount - 1, 0, newFlagAssetId, pair1Coefficient, lpFeeTierIndex).taprootResult.scriptPubkey.hex;
 
   const flagScriptPubkey = "512070d3017ab2a8ae4cccdb0537a45fb4a3192bff79c49cf54bd9edd508dcc93f55";
   const lpHolderCovenantScript = "20" + hexLE(newFlagAssetId) + "00c86987";

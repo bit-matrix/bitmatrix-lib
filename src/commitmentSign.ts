@@ -12,7 +12,6 @@ export const case1 = (wallet: Wallet, inputAmount: number, calculatedAmountWithS
   const methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
   const poolIdLE = hexLE(pool.id);
   const receivedAmount = convertion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
-  console.log("receivedAmount", receivedAmount);
 
   // Call data OP_RETURN
   const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
