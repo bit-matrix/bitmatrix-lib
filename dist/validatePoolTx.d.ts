@@ -3,3 +3,7 @@ export declare const validatePoolTx: (value: number, slippageTolerance: number, 
     amount: number;
     amountWithSlipapge: number;
 };
+export declare const pairsCoefficientCalculation: (pool: Pool) => {
+    pair1Coefficent: number;
+    pair2coefficient: number;
+};
