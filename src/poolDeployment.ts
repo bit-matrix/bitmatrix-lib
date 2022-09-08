@@ -29,7 +29,7 @@ export const poolDeploy = (
   let leafCount = 0;
 
   if (poolVersion === 1) {
-    leafCount = 64;
+    leafCount = 32;
   }
 
   const lpFeeTier = lpFeeTierIndex === 0 ? WizData.fromHex("00") : WizData.fromNumber(lpFeeTierIndex);
