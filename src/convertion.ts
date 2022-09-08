@@ -1,4 +1,5 @@
 import { BmConfig, CALL_METHOD, Pool } from "@bitmatrix/models";
+import { lpFeeTiers } from "./pool";
 import { div } from "./utils/helper";
 
 export const convertForCtx = (value: number, slippage: number, pool: Pool, config: BmConfig, callMethod: CALL_METHOD): { amount: number; amountWithSlipapge: number } => {
@@ -128,8 +129,11 @@ export const convertForCtx2 = (value: number, slippage: number, pool: Pool, conf
     pair_2_coefficient = 1;
   }
 
+  const lpFeeTier = Object.values(lpFeeTiers)[pool.lpFeeTierIndex.number];
+
   if (callMethod === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
-    if (value < Number(config.minTokenValue)) {
+    if (value < 10 * pair_1_coefficient) {
+      console.log("1");
       // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
       return { amount: 0, amountWithSlipapge: 0 };
     }
@@ -143,7 +147,7 @@ export const convertForCtx2 = (value: number, slippage: number, pool: Pool, conf
     const finalTokenPoolLiquidity = value + config.recipientValueMinus;
 
     // step 2
-    const poolRateMulWithLbtcPoolRateMul = pair_2_pool_supply - finalTokenPoolLiquidity;
+    const poolRateMulWithLbtcPoolRateMul = finalTokenPoolLiquidity - pair_2_pool_supply;
 
     // step 3
     const poolRateMulWithQuotePoolRate = div(poolRateMulWithLbtcPoolRateMul, pair_2_coefficient);
@@ -157,14 +161,16 @@ export const convertForCtx2 = (value: number, slippage: number, pool: Pool, conf
     // step 6
     const quoteAmountSubFee = quotePoolTotalAmount - pair_1_pool_supply;
 
-    const inp = div(pool.lpFeeTierIndex.number * quoteAmountSubFee, pool.lpFeeTierIndex.number - 1);
+    const inp = div(lpFeeTier * quoteAmountSubFee, lpFeeTier - 1);
 
     const slippageAmount = div(value, slippage);
 
     const receivedAmount = value - slippageAmount;
 
-    if (inp < Number(config.minRemainingSupply)) {
-      console.log("1");
+    console.log(lpFeeTier * quoteAmountSubFee);
+
+    if (inp < 10 * pair_1_coefficient) {
+      console.log("2");
       // console.log(`Quote amount must greater or at least minimum equal ${config.minRemainingSupply}`);
       return { amount: 0, amountWithSlipapge: 0 };
     }
@@ -172,7 +178,8 @@ export const convertForCtx2 = (value: number, slippage: number, pool: Pool, conf
     return { amount: inp, amountWithSlipapge: receivedAmount };
   } else if (callMethod === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
     // validation
-    if (value < Number(config.minRemainingSupply)) {
+    if (value < 10 * pair_2_coefficient) {
+      console.log("3");
       // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
       return { amount: 0, amountWithSlipapge: 0 };
     }
@@ -192,13 +199,14 @@ export const convertForCtx2 = (value: number, slippage: number, pool: Pool, conf
 
     const tokenAmountWithoutFee = totalTokenLiquidity - pair_2_pool_supply;
 
-    const inp = div(pool.lpFeeTierIndex.number * tokenAmountWithoutFee, pool.lpFeeTierIndex.number - 1);
+    const inp = div(lpFeeTier * tokenAmountWithoutFee, lpFeeTier - 1);
 
     const slippageAmount = div(value, slippage);
 
     const receivedAmount = value - slippageAmount;
 
-    if (inp < Number(config.minTokenValue)) {
+    if (inp < 10 * pair_2_coefficient) {
+      console.log("4");
       // console.log(`Token amount must greater or at least minimum equal ${config.minTokenValue}`);
       return { amount: 0, amountWithSlipapge: 0 };
     }
