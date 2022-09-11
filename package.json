@@ -33,7 +33,6 @@
     "@bitmatrix/models": "^0.1.40",
     "@script-wiz/lib": "^0.1.82",
     "@script-wiz/lib-core": "^0.0.48",
-    "axios": "^0.27.2",
     "ldk": "^0.5.4",
     "marina-provider": "^1.7.2",
     "tiny-secp256k1": "^1.1.6"
