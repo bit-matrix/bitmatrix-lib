@@ -1,4 +1,3 @@
-import * as api from "./api";
 import * as asset from "./asset";
 import * as commitmentOutput from "./commitmentOutput";
 import * as commitmentSign from "./commitmentSign";
@@ -10,4 +9,4 @@ import * as poolDeployment from "./poolDeployment";
 import { validatePoolTx } from "./validatePoolTx";
 import { Wallet } from "./wallet";
 import * as esplora from "./esplora";
-export { api, asset, commitmentOutput, commitmentSign, commitmentTx, convertion, ldk, pool, poolDeployment, validatePoolTx, Wallet, esplora };
+export { asset, commitmentOutput, commitmentSign, commitmentTx, convertion, ldk, pool, poolDeployment, validatePoolTx, Wallet, esplora };
