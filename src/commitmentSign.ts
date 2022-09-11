@@ -8,7 +8,15 @@ import { commitmentOutputTapscript } from "./commitmentOutput";
 import { signTx } from "./ldk";
 import { calculateAmountTotal, lbtcAssest } from "./utils/helper";
 
-export const case1 = (wallet: Wallet, inputAmount: number, calculatedAmountWithSlippage: number, pool: Pool, config: BmConfig, publicKey: string): Promise<string> => {
+export const case1 = (
+  wallet: Wallet,
+  inputAmount: number,
+  calculatedAmountWithSlippage: number,
+  pool: Pool,
+  config: BmConfig,
+  publicKey: string,
+  isTestnet = false
+): Promise<string> => {
   const methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
   const poolIdLE = hexLE(pool.id);
   const receivedAmount = convertion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
@@ -16,7 +24,9 @@ export const case1 = (wallet: Wallet, inputAmount: number, calculatedAmountWithS
   // Call data OP_RETURN
   const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
 
-  const address = commitmentOutputTapscript(pool.id, publicKey).taprootResult.address.testnet;
+  const address = isTestnet
+    ? commitmentOutputTapscript(pool.id, publicKey).taprootResult.address.testnet
+    : commitmentOutputTapscript(pool.id, publicKey).taprootResult.address.mainnet;
 
   const totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
 
@@ -33,10 +43,18 @@ export const case1 = (wallet: Wallet, inputAmount: number, calculatedAmountWithS
     },
   ];
 
-  return signTx(wallet, callData, receipents);
+  return signTx(wallet, callData, receipents, isTestnet);
 };
 
-export const case2 = (wallet: Wallet, inputAmount: number, calculatedAmountWithSlippage: number, pool: Pool, config: BmConfig, publicKey: string): Promise<string> => {
+export const case2 = (
+  wallet: Wallet,
+  inputAmount: number,
+  calculatedAmountWithSlippage: number,
+  pool: Pool,
+  config: BmConfig,
+  publicKey: string,
+  isTestnet = false
+): Promise<string> => {
   const methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
   const poolIdLE = hexLE(pool.id);
   const receivedAmount = convertion.numToLE64(WizData.fromNumber(calculatedAmountWithSlippage)).hex;
@@ -44,7 +62,9 @@ export const case2 = (wallet: Wallet, inputAmount: number, calculatedAmountWithS
   // Call data OP_RETURN
   const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
 
-  const address = commitmentOutputTapscript(pool.id, publicKey).taprootResult.address.testnet;
+  const address = isTestnet
+    ? commitmentOutputTapscript(pool.id, publicKey).taprootResult.address.testnet
+    : commitmentOutputTapscript(pool.id, publicKey).taprootResult.address.mainnet;
 
   const totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
 
@@ -61,10 +81,10 @@ export const case2 = (wallet: Wallet, inputAmount: number, calculatedAmountWithS
     },
   ];
 
-  return signTx(wallet, callData, receipents);
+  return signTx(wallet, callData, receipents, isTestnet);
 };
 
-export const case3 = (wallet: Wallet, inputAmountPair1: number, inputAmountPair2: number, pool: Pool, config: BmConfig, publicKey: string): Promise<string> => {
+export const case3 = (wallet: Wallet, inputAmountPair1: number, inputAmountPair2: number, pool: Pool, config: BmConfig, publicKey: string, isTestnet = false): Promise<string> => {
   const methodCall = CALL_METHOD.ADD_LIQUIDITY;
   const poolIdLE = hexLE(pool.id);
 
@@ -76,7 +96,9 @@ export const case3 = (wallet: Wallet, inputAmountPair1: number, inputAmountPair2
   // Call data OP_RETURN
   const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
 
-  const address = commitmentOutputTapscript(pool.id, publicKey).taprootResult.address.testnet;
+  const address = isTestnet
+    ? commitmentOutputTapscript(pool.id, publicKey).taprootResult.address.testnet
+    : commitmentOutputTapscript(pool.id, publicKey).taprootResult.address.mainnet;
 
   const totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
 
@@ -98,10 +120,10 @@ export const case3 = (wallet: Wallet, inputAmountPair1: number, inputAmountPair2
     },
   ];
 
-  return signTx(wallet, callData, receipents);
+  return signTx(wallet, callData, receipents, isTestnet);
 };
 
-export const case4 = (wallet: Wallet, lpAmount: number, pool: Pool, config: BmConfig, publicKey: string): Promise<string> => {
+export const case4 = (wallet: Wallet, lpAmount: number, pool: Pool, config: BmConfig, publicKey: string, isTestnet = false): Promise<string> => {
   const methodCall = CALL_METHOD.REMOVE_LIQUIDITY;
   const poolIdLE = hexLE(pool.id);
 
@@ -110,7 +132,9 @@ export const case4 = (wallet: Wallet, lpAmount: number, pool: Pool, config: BmCo
   // Call data OP_RETURN
   const callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
 
-  const address = commitmentOutputTapscript(pool.id, publicKey).taprootResult.address.testnet;
+  const address = isTestnet
+    ? commitmentOutputTapscript(pool.id, publicKey).taprootResult.address.testnet
+    : commitmentOutputTapscript(pool.id, publicKey).taprootResult.address.mainnet;
 
   const totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
 
@@ -127,5 +151,5 @@ export const case4 = (wallet: Wallet, lpAmount: number, pool: Pool, config: BmCo
     },
   ];
 
-  return signTx(wallet, callData, receipents);
+  return signTx(wallet, callData, receipents, isTestnet);
 };
