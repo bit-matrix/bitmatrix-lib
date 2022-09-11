@@ -1,6 +1,6 @@
 {
   "name": "@bitmatrix/lib",
-  "version": "0.0.96",
+  "version": "0.0.98",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -30,7 +30,7 @@
   "homepage": "https://github.com/bit-matrix/bitmatrix-lib#readme",
   "dependencies": {
     "@bitmatrix/esplora-api-client": "^0.0.8",
-    "@bitmatrix/models": "^0.1.40",
+    "@bitmatrix/models": "^0.1.41",
     "@script-wiz/lib": "^0.1.82",
     "@script-wiz/lib-core": "^0.0.48",
     "ldk": "^0.5.4",
