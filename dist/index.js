@@ -23,9 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.esplora = exports.Wallet = exports.validatePoolTx = exports.poolDeployment = exports.pool = exports.ldk = exports.convertion = exports.commitmentTx = exports.commitmentSign = exports.commitmentOutput = exports.asset = exports.api = void 0;
-var api = __importStar(require("./api"));
-exports.api = api;
+exports.esplora = exports.Wallet = exports.validatePoolTx = exports.poolDeployment = exports.pool = exports.ldk = exports.convertion = exports.commitmentTx = exports.commitmentSign = exports.commitmentOutput = exports.asset = void 0;
 var asset = __importStar(require("./asset"));
 exports.asset = asset;
 var commitmentOutput = __importStar(require("./commitmentOutput"));

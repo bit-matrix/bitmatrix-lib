@@ -30,13 +30,16 @@ var lib_core_1 = require("@script-wiz/lib-core");
 var commitmentOutput_1 = require("./commitmentOutput");
 var ldk_1 = require("./ldk");
 var helper_1 = require("./utils/helper");
-var case1 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, config, publicKey) {
+var case1 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, config, publicKey, isTestnet) {
+    if (isTestnet === void 0) { isTestnet = false; }
     var methodCall = models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
     var poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
     var receivedAmount = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(calculatedAmountWithSlippage)).hex;
     // Call data OP_RETURN
     var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
-    var address = (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.testnet;
+    var address = isTestnet
+        ? (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.testnet
+        : (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.mainnet;
     var totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
     var receipents = [
         {
@@ -50,16 +53,19 @@ var case1 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
             asset: pool.quote.assetHash,
         },
     ];
-    return (0, ldk_1.signTx)(wallet, callData, receipents);
+    return (0, ldk_1.signTx)(wallet, callData, receipents, isTestnet);
 };
 exports.case1 = case1;
-var case2 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, config, publicKey) {
+var case2 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, config, publicKey, isTestnet) {
+    if (isTestnet === void 0) { isTestnet = false; }
     var methodCall = models_1.CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
     var poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
     var receivedAmount = lib_core_1.convertion.numToLE64(wiz_data_1.default.fromNumber(calculatedAmountWithSlippage)).hex;
     // Call data OP_RETURN
     var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
-    var address = (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.testnet;
+    var address = isTestnet
+        ? (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.testnet
+        : (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.mainnet;
     var totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
     var receipents = [
         {
@@ -73,10 +79,11 @@ var case2 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
             asset: pool.token.assetHash,
         },
     ];
-    return (0, ldk_1.signTx)(wallet, callData, receipents);
+    return (0, ldk_1.signTx)(wallet, callData, receipents, isTestnet);
 };
 exports.case2 = case2;
-var case3 = function (wallet, inputAmountPair1, inputAmountPair2, pool, config, publicKey) {
+var case3 = function (wallet, inputAmountPair1, inputAmountPair2, pool, config, publicKey, isTestnet) {
+    if (isTestnet === void 0) { isTestnet = false; }
     var methodCall = models_1.CALL_METHOD.ADD_LIQUIDITY;
     var poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
     // const receivedAmount = hexLE(calculateAmountTotal(inputAmountPair1, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number));
@@ -84,7 +91,9 @@ var case3 = function (wallet, inputAmountPair1, inputAmountPair2, pool, config, 
     var receivedAmount = "0000000000000000";
     // Call data OP_RETURN
     var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
-    var address = (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.testnet;
+    var address = isTestnet
+        ? (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.testnet
+        : (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.mainnet;
     var totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
     var receipents = [
         {
@@ -103,16 +112,19 @@ var case3 = function (wallet, inputAmountPair1, inputAmountPair2, pool, config, 
             asset: pool.token.assetHash,
         },
     ];
-    return (0, ldk_1.signTx)(wallet, callData, receipents);
+    return (0, ldk_1.signTx)(wallet, callData, receipents, isTestnet);
 };
 exports.case3 = case3;
-var case4 = function (wallet, lpAmount, pool, config, publicKey) {
+var case4 = function (wallet, lpAmount, pool, config, publicKey, isTestnet) {
+    if (isTestnet === void 0) { isTestnet = false; }
     var methodCall = models_1.CALL_METHOD.REMOVE_LIQUIDITY;
     var poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
     var receivedAmount = (0, wiz_data_1.hexLE)((0, helper_1.calculateAmountTotal)(0, config.defaultOrderingFee.number, config.baseFee.number, config.serviceFee.number));
     // Call data OP_RETURN
     var callData = poolIdLE + methodCall + publicKey + receivedAmount + config.defaultOrderingFee.hex;
-    var address = (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.testnet;
+    var address = isTestnet
+        ? (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.testnet
+        : (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.mainnet;
     var totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
     var receipents = [
         {
@@ -126,7 +138,7 @@ var case4 = function (wallet, lpAmount, pool, config, publicKey) {
             asset: pool.lp.assetHash,
         },
     ];
-    return (0, ldk_1.signTx)(wallet, callData, receipents);
+    return (0, ldk_1.signTx)(wallet, callData, receipents, isTestnet);
 };
 exports.case4 = case4;
 //# sourceMappingURL=commitmentSign.js.map

@@ -38,8 +38,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.txDetailPromise = void 0;
 var esplora_api_client_1 = require("@bitmatrix/esplora-api-client");
-var env_1 = require("./env");
-(0, esplora_api_client_1.init)(env_1.electrsUrl);
+var electrsUrl = "https://electrs.basebitmatrix.com/";
+(0, esplora_api_client_1.init)(electrsUrl);
 var txDetailPromise = function (txId) { return __awaiter(void 0, void 0, void 0, function () {
     var txDetail, txOutSpends;
     return __generator(this, function (_a) {

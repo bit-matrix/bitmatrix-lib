@@ -40,7 +40,7 @@ var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenA
     var newLpAssetId = (0, asset_1.calculateAssetId)(txId, lpContractHash, 1);
     var leafCount = 0;
     if (poolVersion === 1) {
-        leafCount = 64;
+        leafCount = 32;
     }
     var lpFeeTier = lpFeeTierIndex === 0 ? wiz_data_1.default.fromHex("00") : wiz_data_1.default.fromNumber(lpFeeTierIndex);
     var mainCovenantScriptPubkey = (0, pool_1.createCovenants)(leafCount - 1, 0, newFlagAssetId, pair1Coefficient, lpFeeTierIndex).taprootResult.scriptPubkey.hex;

@@ -6,11 +6,11 @@ import { MarinaProvider } from "marina-provider";
 import { inputBlindingDataMap, outPubKeysMap } from "./utils/utils";
 import { uniqueArray } from "./utils/helper";
 
-export const signTx = async (marina: Wallet, callData: string, recipients: RecipientInterface[]): Promise<string> => {
+export const signTx = async (marina: Wallet, callData: string, recipients: RecipientInterface[], isTestnet = false): Promise<string> => {
   const coins = await marina.getCoins();
 
   // 1. create an empty psbt object
-  const pset = new Psbt({ network: networks.testnet });
+  const pset = new Psbt({ network: isTestnet ? networks.testnet : networks.liquid });
 
   // // 2. add a custom OP_RETURN output to psbt
   // pset.addOutput({

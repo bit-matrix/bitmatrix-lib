@@ -1,5 +1,6 @@
 import { esploraClient, TxDetail, TxOutSpend, init } from "@bitmatrix/esplora-api-client";
-import { electrsUrl } from "./env";
+
+const electrsUrl = "https://electrs.basebitmatrix.com/";
 
 init(electrsUrl);
 

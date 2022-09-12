@@ -162,19 +162,31 @@ var calcAddLiquidityRecipientValue = function (pool, quoteAmount, tokenAmount) {
     var user_provided_remaining_lbtc_supply = quoteAmount;
     var user_provided_remaining_lbtc_supply_16 = Math.floor(user_provided_remaining_lbtc_supply / 16);
     var pool_lp_supply = Number(pool.lp.value);
+    var pair_1_pool_supply = Number(pool.quote.value);
+    var pair_2_pool_supply = Number(pool.token.value);
     var pool_lp_circulation = 2000000000 - pool_lp_supply;
     var mul_circ = user_provided_remaining_lbtc_supply_16 * pool_lp_circulation;
     var pool_lbtc_supply = Number(pool.quote.value);
-    var pool_lbtc_supply_down = Math.floor(pool_lbtc_supply / 16);
+    var pool_lbtc_supply_down = Math.floor(pool_lbtc_supply / pool.pair1_coefficient.number);
     var user_lp_receiving_1 = Math.floor(mul_circ / pool_lbtc_supply_down);
     var user_provided_token_supply = tokenAmount;
-    var user_provided_token_supply_down = Math.floor(user_provided_token_supply / 2000000);
+    var pair_2_coefficient;
+    if (pair_2_pool_supply >= pair_1_pool_supply) {
+        pair_2_coefficient = Math.floor(pair_2_pool_supply / pair_1_pool_supply) * pool.pair1_coefficient.number;
+    }
+    else {
+        pair_2_coefficient = Math.floor(pool.pair1_coefficient.number / Math.floor(pair_1_pool_supply / pair_2_pool_supply));
+    }
+    if (pair_2_coefficient < 1) {
+        pair_2_coefficient = 1;
+    }
+    var user_provided_token_supply_down = Math.floor(user_provided_token_supply / pair_2_coefficient);
     var mul_circ2 = user_provided_token_supply_down * pool_lp_circulation;
     var pool_token_supply = Number(pool.token.value);
-    var pool_token_supply_down = Math.floor(pool_token_supply / 2000000);
+    var pool_token_supply_down = Math.floor(pool_token_supply / pair_2_coefficient);
     var user_lp_receiving_2 = Math.floor(mul_circ2 / pool_token_supply_down);
     var user_lp_received = Math.min(user_lp_receiving_1, user_lp_receiving_2);
-    var poolRate = user_lp_received / pool_lp_circulation;
+    var poolRate = user_lp_received / (pool_lp_circulation + user_lp_received);
     return { lpReceived: user_lp_received, poolRate: poolRate };
 };
 exports.calcAddLiquidityRecipientValue = calcAddLiquidityRecipientValue;
@@ -183,15 +195,25 @@ var calcRemoveLiquidityRecipientValue = function (pool, valLp) {
     var pool_lbtc_supply = Number(pool.quote.value);
     var pool_token_supply = Number(pool.token.value);
     var pool_lp_supply = Number(pool.lp.value);
-    var pool_lbtc_supply_down = Math.floor(pool_lbtc_supply / 16);
+    var pool_lbtc_supply_down = Math.floor(pool_lbtc_supply / pool.pair1_coefficient.number);
     var mul_1 = user_lp_input * pool_lbtc_supply_down;
     var lp_circ = 2000000000 - pool_lp_supply;
     var div_1 = Math.floor(mul_1 / lp_circ);
-    var user_lbtc_received = div_1 * 16;
-    var pool_token_supply_down = Math.floor(pool_token_supply / 2000000);
+    var user_lbtc_received = div_1 * pool.pair1_coefficient.number;
+    var pair_2_coefficient;
+    if (pool_token_supply >= pool_lbtc_supply) {
+        pair_2_coefficient = Math.floor(pool_token_supply / pool_lbtc_supply) * pool.pair1_coefficient.number;
+    }
+    else {
+        pair_2_coefficient = Math.floor(pool.pair1_coefficient.number / Math.floor(pool_lbtc_supply / pool_token_supply));
+    }
+    if (pair_2_coefficient < 1) {
+        pair_2_coefficient = 1;
+    }
+    var pool_token_supply_down = Math.floor(pool_token_supply / pair_2_coefficient);
     var mul_2 = user_lp_input * pool_token_supply_down;
     var div_2 = Math.floor(mul_2 / lp_circ);
-    var user_token_received = div_2 * 2000000;
+    var user_token_received = div_2 * pair_2_coefficient;
     return {
         user_lbtc_received: user_lbtc_received,
         user_token_received: user_token_received,
