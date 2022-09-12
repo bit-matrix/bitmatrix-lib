@@ -118,7 +118,7 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
         // step 5
         var quotePoolTotalAmount = quotePoolTotalAmountWithRate * pair_1_coefficient;
         // step 6
-        var quoteAmountSubFee = pair_1_pool_supply - quotePoolTotalAmount;
+        var quoteAmountSubFee = quotePoolTotalAmount - pair_1_pool_supply;
         var inp = (0, helper_1.div)(lpFeeTier * quoteAmountSubFee, lpFeeTier - 1);
         var slippageAmount = (0, helper_1.div)(value, slippage);
         var receivedAmount = value - slippageAmount;
