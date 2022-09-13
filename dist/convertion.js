@@ -26,10 +26,6 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
     var pool_constant = Math.floor(pool_pair_1_liquidity_downgraded * pool_pair_2_liquidity_downgraded);
     var lpFeeTier = Object.values(pool_1.lpFeeTiers)[pool.lpFeeTierIndex.number];
     if (callMethod === models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
-        // // step 1
-        // const finalTokenPoolLiquidity = Math.floor(pair_2_pool_supply / pair_1_coefficient);
-        // // step 2
-        // const poolRateMulWithLbtcPoolRateMul = pair_2_pool_supply - finalTokenPoolLiquidity;
         var poolRateMulWithLbtcPoolRateMul = pair_2_pool_supply - value;
         // step 3
         var poolRateMulWithQuotePoolRate = (0, helper_1.div)(poolRateMulWithLbtcPoolRateMul, pair_2_coefficient);
@@ -44,7 +40,6 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
         var receivedAmount = value - slippageAmount;
         console.log(lpFeeTier * quoteAmountSubFee);
         if (inp < Math.floor(9 * pair_1_coefficient)) {
-            console.log("2");
             return { amount: 0, amountWithSlipapge: 0 };
         }
         return { amount: inp, amountWithSlipapge: receivedAmount };
