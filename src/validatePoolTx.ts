@@ -75,6 +75,10 @@ export const validatePoolTx = (value: number, slippageTolerance: number, poolDat
 
     const receivedAmount = user_received_pair_2 - slippageAmount;
 
+    if (user_received_pair_2 < Math.floor(9 * pair_2_coefficient)) {
+      return { amount: 0, amountWithSlipapge: 0 };
+    }
+
     return { amount: user_received_pair_2, amountWithSlipapge: receivedAmount };
   } else if (methodCall === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
     // 4- Commitment output 2 miktarına user_supply_total ismini ver.
@@ -111,6 +115,10 @@ export const validatePoolTx = (value: number, slippageTolerance: number, poolDat
     const slippageAmount = div(user_received_pair_1, slippageTolerance);
 
     const receivedAmount = user_received_pair_1 - slippageAmount;
+
+    if (user_received_pair_1 < Math.floor(9 * pair_1_coefficient)) {
+      return { amount: 0, amountWithSlipapge: 0 };
+    }
 
     return { amount: user_received_pair_1, amountWithSlipapge: receivedAmount };
   }
