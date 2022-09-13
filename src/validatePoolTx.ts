@@ -3,7 +3,12 @@ import { CALL_METHOD, Pool } from "@bitmatrix/models";
 import { div } from "./utils/helper";
 import { lpFeeTiers } from "./pool";
 
-export const validatePoolTx = (value: number, slippageTolerance: number, poolData: Pool, methodCall: CALL_METHOD): { amount: number; amountWithSlipapge: number } => {
+export const validatePoolTx = (
+  value: number,
+  slippageTolerance: number,
+  poolData: Pool,
+  methodCall: CALL_METHOD
+): { amount: number; amountWithSlipapge: number; minPair1Value: number; minPair2Value: number } => {
   // 1-Havuzun güncel pair_1 liquidity miktarına pool_pair_1_liquidity ismini ver.
   const pool_pair_1_liquidity = Number(poolData.quote.value);
 
@@ -38,6 +43,9 @@ export const validatePoolTx = (value: number, slippageTolerance: number, poolDat
   const pool_constant = Math.floor(pool_pair_1_liquidity_downgraded * pool_pair_2_liquidity_downgraded);
 
   const lpFeeTier = Object.values(lpFeeTiers)[poolData.lpFeeTierIndex.number];
+
+  const minPair1Value = Math.floor(9 * pair_2_coefficient);
+  const minPair2Value = Math.floor(9 * pair_1_coefficient);
 
   if (methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
     //   4-Commitment output 2 miktarına user_supply_total ismini ver.
@@ -75,11 +83,11 @@ export const validatePoolTx = (value: number, slippageTolerance: number, poolDat
 
     const receivedAmount = user_received_pair_2 - slippageAmount;
 
-    if (user_received_pair_2 < Math.floor(9 * pair_2_coefficient)) {
-      return { amount: 0, amountWithSlipapge: 0 };
+    if (user_received_pair_2 < minPair2Value) {
+      return { amount: 0, amountWithSlipapge: 0, minPair1Value, minPair2Value };
     }
 
-    return { amount: user_received_pair_2, amountWithSlipapge: receivedAmount };
+    return { amount: user_received_pair_2, amountWithSlipapge: receivedAmount, minPair1Value, minPair2Value };
   } else if (methodCall === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
     // 4- Commitment output 2 miktarına user_supply_total ismini ver.
     const user_supply_total = new Decimal(value).toNumber();
@@ -116,14 +124,14 @@ export const validatePoolTx = (value: number, slippageTolerance: number, poolDat
 
     const receivedAmount = user_received_pair_1 - slippageAmount;
 
-    if (user_received_pair_1 < Math.floor(9 * pair_1_coefficient)) {
-      return { amount: 0, amountWithSlipapge: 0 };
+    if (user_received_pair_1 < minPair1Value) {
+      return { amount: 0, amountWithSlipapge: 0, minPair1Value, minPair2Value };
     }
 
-    return { amount: user_received_pair_1, amountWithSlipapge: receivedAmount };
+    return { amount: user_received_pair_1, amountWithSlipapge: receivedAmount, minPair1Value, minPair2Value };
   }
 
-  return { amount: 0, amountWithSlipapge: 0 };
+  return { amount: 0, amountWithSlipapge: 0, minPair1Value, minPair2Value };
 };
 
 export const pairsCoefficientCalculation = (pool: Pool) => {

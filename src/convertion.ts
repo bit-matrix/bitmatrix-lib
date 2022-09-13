@@ -2,7 +2,12 @@ import { BmConfig, CALL_METHOD, Pool } from "@bitmatrix/models";
 import { lpFeeTiers } from "./pool";
 import { div } from "./utils/helper";
 
-export const convertForCtx2 = (value: number, slippage: number, pool: Pool, callMethod: CALL_METHOD): { amount: number; amountWithSlipapge: number } => {
+export const convertForCtx2 = (
+  value: number,
+  slippage: number,
+  pool: Pool,
+  callMethod: CALL_METHOD
+): { amount: number; amountWithSlipapge: number; minPair1Value: number; minPair2Value: number } => {
   const pair_1_coefficient = pool.pair1_coefficient.number;
   const pair_1_pool_supply = Number(pool.quote.value);
 
@@ -31,6 +36,9 @@ export const convertForCtx2 = (value: number, slippage: number, pool: Pool, call
 
   const lpFeeTier = Object.values(lpFeeTiers)[pool.lpFeeTierIndex.number];
 
+  const minPair1Value = Math.floor(9 * pair_2_coefficient);
+  const minPair2Value = Math.floor(9 * pair_1_coefficient);
+
   if (callMethod === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
     const poolRateMulWithLbtcPoolRateMul = pair_2_pool_supply - value;
 
@@ -54,11 +62,11 @@ export const convertForCtx2 = (value: number, slippage: number, pool: Pool, call
 
     console.log(lpFeeTier * quoteAmountSubFee);
 
-    if (inp < Math.floor(9 * pair_1_coefficient)) {
-      return { amount: 0, amountWithSlipapge: 0 };
+    if (inp < minPair1Value) {
+      return { amount: 0, amountWithSlipapge: 0, minPair1Value, minPair2Value };
     }
 
-    return { amount: inp, amountWithSlipapge: receivedAmount };
+    return { amount: inp, amountWithSlipapge: receivedAmount, minPair1Value, minPair2Value };
   } else if (callMethod === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
     const lbtcAmount = pair_1_pool_supply - value;
 
@@ -76,15 +84,15 @@ export const convertForCtx2 = (value: number, slippage: number, pool: Pool, call
 
     const receivedAmount = value - slippageAmount;
 
-    if (inp < Math.floor(9 * pair_2_coefficient)) {
+    if (inp < minPair2Value) {
       console.log("1");
-      return { amount: 0, amountWithSlipapge: 0 };
+      return { amount: 0, amountWithSlipapge: 0, minPair1Value, minPair2Value };
     }
 
-    return { amount: inp, amountWithSlipapge: receivedAmount };
+    return { amount: inp, amountWithSlipapge: receivedAmount, minPair1Value, minPair2Value };
   }
 
-  return { amount: 0, amountWithSlipapge: 0 };
+  return { amount: 0, amountWithSlipapge: 0, minPair1Value, minPair2Value };
 };
 
 export const calcAddLiquidityRecipientValue = (pool: Pool, quoteAmount: number, tokenAmount: number) => {
