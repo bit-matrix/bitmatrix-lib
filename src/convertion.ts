@@ -2,7 +2,7 @@ import { BmConfig, CALL_METHOD, Pool } from "@bitmatrix/models";
 import { lpFeeTiers } from "./pool";
 import { div } from "./utils/helper";
 
-export const convertForCtx2 = (value: number, slippage: number, pool: Pool, config: BmConfig, callMethod: CALL_METHOD): { amount: number; amountWithSlipapge: number } => {
+export const convertForCtx2 = (value: number, slippage: number, pool: Pool, callMethod: CALL_METHOD): { amount: number; amountWithSlipapge: number } => {
   const pair_1_coefficient = pool.pair1_coefficient.number;
   const pair_1_pool_supply = Number(pool.quote.value);
 
