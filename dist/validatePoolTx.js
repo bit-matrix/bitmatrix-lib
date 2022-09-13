@@ -56,7 +56,6 @@ var validatePoolTx = function (value, slippageTolerance, poolData, methodCall) {
         var user_received_pair_2 = Math.floor(user_received_pair_2_apx - payout_additional_fees);
         var slippageAmount = (0, helper_1.div)(user_received_pair_2, slippageTolerance);
         var receivedAmount = user_received_pair_2 - slippageAmount;
-        console.log("1", Math.floor(9 * pair_2_coefficient));
         if (user_received_pair_2 < Math.floor(9 * pair_2_coefficient)) {
             return { amount: 0, amountWithSlipapge: 0 };
         }
@@ -85,7 +84,6 @@ var validatePoolTx = function (value, slippageTolerance, poolData, methodCall) {
         var user_received_pair_1 = Math.floor(user_received_pair_1_apx - payout_additional_fees);
         var slippageAmount = (0, helper_1.div)(user_received_pair_1, slippageTolerance);
         var receivedAmount = user_received_pair_1 - slippageAmount;
-        console.log("2", Math.floor(9 * pair_1_coefficient));
         if (user_received_pair_1 < Math.floor(9 * pair_1_coefficient)) {
             return { amount: 0, amountWithSlipapge: 0 };
         }
