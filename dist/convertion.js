@@ -4,7 +4,7 @@ exports.convertForLiquidityCtx = exports.calcRemoveLiquidityRecipientValue = exp
 var models_1 = require("@bitmatrix/models");
 var pool_1 = require("./pool");
 var helper_1 = require("./utils/helper");
-var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
+var convertForCtx2 = function (value, slippage, pool, callMethod) {
     var pair_1_coefficient = pool.pair1_coefficient.number;
     var pair_1_pool_supply = Number(pool.quote.value);
     var pair_2_pool_supply = Number(pool.token.value);
@@ -25,6 +25,8 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
     // 11-pool_pair_1_liquidity_downgraded ile pool_pair_2_liquidity_downgraded ‘I çarp ve sonuca pool_constant ismini ver.
     var pool_constant = Math.floor(pool_pair_1_liquidity_downgraded * pool_pair_2_liquidity_downgraded);
     var lpFeeTier = Object.values(pool_1.lpFeeTiers)[pool.lpFeeTierIndex.number];
+    var minPair1Value = Math.floor(9 * pair_2_coefficient);
+    var minPair2Value = Math.floor(9 * pair_1_coefficient);
     if (callMethod === models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
         var poolRateMulWithLbtcPoolRateMul = pair_2_pool_supply - value;
         // step 3
@@ -39,10 +41,10 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
         var slippageAmount = (0, helper_1.div)(value, slippage);
         var receivedAmount = value - slippageAmount;
         console.log(lpFeeTier * quoteAmountSubFee);
-        if (inp < Math.floor(9 * pair_1_coefficient)) {
-            return { amount: 0, amountWithSlipapge: 0 };
+        if (inp < minPair1Value) {
+            return { amount: 0, amountWithSlipapge: 0, minPair1Value: minPair1Value, minPair2Value: minPair2Value };
         }
-        return { amount: inp, amountWithSlipapge: receivedAmount };
+        return { amount: inp, amountWithSlipapge: receivedAmount, minPair1Value: minPair1Value, minPair2Value: minPair2Value };
     }
     else if (callMethod === models_1.CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
         var lbtcAmount = pair_1_pool_supply - value;
@@ -53,13 +55,13 @@ var convertForCtx2 = function (value, slippage, pool, config, callMethod) {
         var inp = (0, helper_1.div)(lpFeeTier * tokenAmountWithoutFee, lpFeeTier - 1);
         var slippageAmount = (0, helper_1.div)(value, slippage);
         var receivedAmount = value - slippageAmount;
-        if (inp < Math.floor(9 * pair_2_coefficient)) {
+        if (inp < minPair2Value) {
             console.log("1");
-            return { amount: 0, amountWithSlipapge: 0 };
+            return { amount: 0, amountWithSlipapge: 0, minPair1Value: minPair1Value, minPair2Value: minPair2Value };
         }
-        return { amount: inp, amountWithSlipapge: receivedAmount };
+        return { amount: inp, amountWithSlipapge: receivedAmount, minPair1Value: minPair1Value, minPair2Value: minPair2Value };
     }
-    return { amount: 0, amountWithSlipapge: 0 };
+    return { amount: 0, amountWithSlipapge: 0, minPair1Value: minPair1Value, minPair2Value: minPair2Value };
 };
 exports.convertForCtx2 = convertForCtx2;
 var calcAddLiquidityRecipientValue = function (pool, quoteAmount, tokenAmount) {

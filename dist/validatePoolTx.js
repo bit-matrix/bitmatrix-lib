@@ -33,6 +33,8 @@ var validatePoolTx = function (value, slippageTolerance, poolData, methodCall) {
     // 11-pool_pair_1_liquidity_downgraded ile pool_pair_2_liquidity_downgraded ‘I çarp ve sonuca pool_constant ismini ver.
     var pool_constant = Math.floor(pool_pair_1_liquidity_downgraded * pool_pair_2_liquidity_downgraded);
     var lpFeeTier = Object.values(pool_1.lpFeeTiers)[poolData.lpFeeTierIndex.number];
+    var minPair1Value = Math.floor(9 * pair_2_coefficient);
+    var minPair2Value = Math.floor(9 * pair_1_coefficient);
     if (methodCall === models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
         //   4-Commitment output 2 miktarına user_supply_total ismini ver.
         var user_supply_total = new decimal_js_1.default(value).toNumber();
@@ -56,10 +58,10 @@ var validatePoolTx = function (value, slippageTolerance, poolData, methodCall) {
         var user_received_pair_2 = Math.floor(user_received_pair_2_apx - payout_additional_fees);
         var slippageAmount = (0, helper_1.div)(user_received_pair_2, slippageTolerance);
         var receivedAmount = user_received_pair_2 - slippageAmount;
-        if (user_received_pair_2 < Math.floor(9 * pair_2_coefficient)) {
-            return { amount: 0, amountWithSlipapge: 0 };
+        if (user_received_pair_2 < minPair2Value) {
+            return { amount: 0, amountWithSlipapge: 0, minPair1Value: minPair1Value, minPair2Value: minPair2Value };
         }
-        return { amount: user_received_pair_2, amountWithSlipapge: receivedAmount };
+        return { amount: user_received_pair_2, amountWithSlipapge: receivedAmount, minPair1Value: minPair1Value, minPair2Value: minPair2Value };
     }
     else if (methodCall === models_1.CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
         // 4- Commitment output 2 miktarına user_supply_total ismini ver.
@@ -84,12 +86,12 @@ var validatePoolTx = function (value, slippageTolerance, poolData, methodCall) {
         var user_received_pair_1 = Math.floor(user_received_pair_1_apx - payout_additional_fees);
         var slippageAmount = (0, helper_1.div)(user_received_pair_1, slippageTolerance);
         var receivedAmount = user_received_pair_1 - slippageAmount;
-        if (user_received_pair_1 < Math.floor(9 * pair_1_coefficient)) {
-            return { amount: 0, amountWithSlipapge: 0 };
+        if (user_received_pair_1 < minPair1Value) {
+            return { amount: 0, amountWithSlipapge: 0, minPair1Value: minPair1Value, minPair2Value: minPair2Value };
         }
-        return { amount: user_received_pair_1, amountWithSlipapge: receivedAmount };
+        return { amount: user_received_pair_1, amountWithSlipapge: receivedAmount, minPair1Value: minPair1Value, minPair2Value: minPair2Value };
     }
-    return { amount: 0, amountWithSlipapge: 0 };
+    return { amount: 0, amountWithSlipapge: 0, minPair1Value: minPair1Value, minPair2Value: minPair2Value };
 };
 exports.validatePoolTx = validatePoolTx;
 var pairsCoefficientCalculation = function (pool) {

@@ -1,7 +1,9 @@
-import { BmConfig, CALL_METHOD, Pool } from "@bitmatrix/models";
-export declare const convertForCtx2: (value: number, slippage: number, pool: Pool, config: BmConfig, callMethod: CALL_METHOD) => {
+import { CALL_METHOD, Pool } from "@bitmatrix/models";
+export declare const convertForCtx2: (value: number, slippage: number, pool: Pool, callMethod: CALL_METHOD) => {
     amount: number;
     amountWithSlipapge: number;
+    minPair1Value: number;
+    minPair2Value: number;
 };
 export declare const calcAddLiquidityRecipientValue: (pool: Pool, quoteAmount: number, tokenAmount: number) => {
     lpReceived: number;
