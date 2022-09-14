@@ -15,6 +15,7 @@ export const poolDeploy = (
   userPubkey: string,
   poolVersion: number,
   pair1Coefficient: number,
+  feeAssetHash: string,
   lpFeeTierIndex: number
 ) => {
   const flagContractHash = "2c4b31700fd1a93f25db0a70037c38c812b61441d0aeb757824cbb1d366d3c23";
@@ -126,7 +127,7 @@ export const poolDeploy = (
     "16" +
     deployerScriptPubkey +
     "01" +
-    "499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c14" +
+    hexLE(feeAssetHash) +
     "01" +
     "0000000000000000" +
     "00" +
@@ -136,7 +137,7 @@ export const poolDeploy = (
     convertion.convert32(WizData.fromNumber(pair1Coefficient)).hex +
     lpFeeTier.hex +
     "01" +
-    "499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c14" +
+    hexLE(feeAssetHash) +
     "01" +
     deploymentTxFees +
     "00" +

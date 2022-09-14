@@ -11,6 +11,7 @@ export const signTx = async (marina: Wallet, callData: string, recipients: Recip
 
   // 1. create an empty psbt object
   const pset = new Psbt({ network: isTestnet ? networks.testnet : networks.liquid });
+  const feeAsset = isTestnet ? networks.testnet.assetHash : networks.liquid.assetHash;
 
   // // 2. add a custom OP_RETURN output to psbt
   // pset.addOutput({
@@ -50,12 +51,13 @@ export const signTx = async (marina: Wallet, callData: string, recipients: Recip
   ptx.addOutput({
     script: script.compile([script.OPS.OP_RETURN, Buffer.from(callData, "hex")]),
     value: confidential.satoshiToConfidentialValue(0),
-    asset: AssetHash.fromHex(networks.testnet.assetHash, false).bytes,
+    asset: AssetHash.fromHex(feeAsset, false).bytes,
     nonce: Buffer.alloc(0),
   });
 
   const inputBlindingMap = inputBlindingDataMap(unsignedTx, coins);
-  const outputBlindingMap = outPubKeysMap(unsignedTx, [changeAddressGetter(networks.testnet.assetHash), recipients[0].address]);
+
+  const outputBlindingMap = outPubKeysMap(unsignedTx, [changeAddressGetter(feeAsset), recipients[0].address]);
 
   await ptx.blindOutputsByIndex(Psbt.ECCKeysGenerator(ecc), inputBlindingMap, outputBlindingMap);
 

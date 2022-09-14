@@ -6,7 +6,7 @@ import { convertion } from "@script-wiz/lib-core";
 import { RecipientInterface } from "ldk";
 import { commitmentOutputTapscript } from "./commitmentOutput";
 import { signTx } from "./ldk";
-import { calculateAmountTotal, lbtcAssest } from "./utils/helper";
+import { calculateAmountTotal } from "./utils/helper";
 
 export const case1 = (
   wallet: Wallet,
@@ -15,6 +15,7 @@ export const case1 = (
   pool: Pool,
   config: BmConfig,
   publicKey: string,
+  feeAssetHash: string,
   isTestnet = false
 ): Promise<string> => {
   const methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
@@ -34,7 +35,7 @@ export const case1 = (
     {
       value: totalFee,
       address,
-      asset: lbtcAssest,
+      asset: feeAssetHash,
     },
     {
       value: inputAmount,
@@ -53,6 +54,7 @@ export const case2 = (
   pool: Pool,
   config: BmConfig,
   publicKey: string,
+  feeAssetHash: string,
   isTestnet = false
 ): Promise<string> => {
   const methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
@@ -72,7 +74,7 @@ export const case2 = (
     {
       value: totalFee,
       address,
-      asset: lbtcAssest,
+      asset: feeAssetHash,
     },
     {
       value: inputAmount,
@@ -84,7 +86,16 @@ export const case2 = (
   return signTx(wallet, callData, receipents, isTestnet);
 };
 
-export const case3 = (wallet: Wallet, inputAmountPair1: number, inputAmountPair2: number, pool: Pool, config: BmConfig, publicKey: string, isTestnet = false): Promise<string> => {
+export const case3 = (
+  wallet: Wallet,
+  inputAmountPair1: number,
+  inputAmountPair2: number,
+  pool: Pool,
+  config: BmConfig,
+  publicKey: string,
+  feeAssetHash: string,
+  isTestnet = false
+): Promise<string> => {
   const methodCall = CALL_METHOD.ADD_LIQUIDITY;
   const poolIdLE = hexLE(pool.id);
 
@@ -106,7 +117,7 @@ export const case3 = (wallet: Wallet, inputAmountPair1: number, inputAmountPair2
     {
       value: totalFee,
       address,
-      asset: lbtcAssest,
+      asset: feeAssetHash,
     },
     {
       value: inputAmountPair1,
@@ -123,7 +134,7 @@ export const case3 = (wallet: Wallet, inputAmountPair1: number, inputAmountPair2
   return signTx(wallet, callData, receipents, isTestnet);
 };
 
-export const case4 = (wallet: Wallet, lpAmount: number, pool: Pool, config: BmConfig, publicKey: string, isTestnet = false): Promise<string> => {
+export const case4 = (wallet: Wallet, lpAmount: number, pool: Pool, config: BmConfig, publicKey: string, feeAssetHash: string, isTestnet = false): Promise<string> => {
   const methodCall = CALL_METHOD.REMOVE_LIQUIDITY;
   const poolIdLE = hexLE(pool.id);
 
@@ -142,7 +153,7 @@ export const case4 = (wallet: Wallet, lpAmount: number, pool: Pool, config: BmCo
     {
       value: totalFee,
       address,
-      asset: lbtcAssest,
+      asset: feeAssetHash,
     },
     {
       value: lpAmount,

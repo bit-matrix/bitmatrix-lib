@@ -15,5 +15,3 @@ export const calculateAmountTotal = (inputAmount: number, orderingFee: number, b
   const totalAmount64BE = hexLE(totalAmount64);
   return totalAmount64BE;
 };
-
-export const lbtcAssest = "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49";
