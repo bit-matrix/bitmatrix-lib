@@ -68,13 +68,14 @@ var helper_1 = require("./utils/helper");
 var signTx = function (marina, callData, recipients, isTestnet) {
     if (isTestnet === void 0) { isTestnet = false; }
     return __awaiter(void 0, void 0, void 0, function () {
-        var coins, pset, tx, makeGetter, assets, uniqueAssets, changeAddressGetter, unsignedTx, ptx, inputBlindingMap, outputBlindingMap, signedTx, finalTx, txFinal;
+        var coins, pset, feeAsset, tx, makeGetter, assets, uniqueAssets, changeAddressGetter, unsignedTx, ptx, inputBlindingMap, outputBlindingMap, signedTx, finalTx, txFinal;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, marina.getCoins()];
                 case 1:
                     coins = _a.sent();
                     pset = new liquidjs_lib_1.Psbt({ network: isTestnet ? liquidjs_lib_1.networks.testnet : liquidjs_lib_1.networks.liquid });
+                    feeAsset = isTestnet ? liquidjs_lib_1.networks.testnet.assetHash : liquidjs_lib_1.networks.liquid.assetHash;
                     tx = pset.toBase64();
                     makeGetter = makeAssetChangeGetter(marina);
                     assets = recipients.map(function (r) { return r.asset; });
@@ -94,11 +95,11 @@ var signTx = function (marina, callData, recipients, isTestnet) {
                     ptx.addOutput({
                         script: liquidjs_lib_1.script.compile([liquidjs_lib_1.script.OPS.OP_RETURN, Buffer.from(callData, "hex")]),
                         value: liquidjs_lib_1.confidential.satoshiToConfidentialValue(0),
-                        asset: liquidjs_lib_1.AssetHash.fromHex(liquidjs_lib_1.networks.testnet.assetHash, false).bytes,
+                        asset: liquidjs_lib_1.AssetHash.fromHex(feeAsset, false).bytes,
                         nonce: Buffer.alloc(0),
                     });
                     inputBlindingMap = (0, utils_1.inputBlindingDataMap)(unsignedTx, coins);
-                    outputBlindingMap = (0, utils_1.outPubKeysMap)(unsignedTx, [changeAddressGetter(liquidjs_lib_1.networks.testnet.assetHash), recipients[0].address]);
+                    outputBlindingMap = (0, utils_1.outPubKeysMap)(unsignedTx, [changeAddressGetter(feeAsset), recipients[0].address]);
                     return [4 /*yield*/, ptx.blindOutputsByIndex(liquidjs_lib_1.Psbt.ECCKeysGenerator(ecc), inputBlindingMap, outputBlindingMap)];
                 case 3:
                     _a.sent();

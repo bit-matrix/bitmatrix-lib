@@ -30,7 +30,7 @@ var pool_1 = require("./pool");
 var wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
 var helper_1 = require("./utils/helper");
 var maxLpSupply = 2000000000;
-var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenAmount, userPubkey, poolVersion, pair1Coefficient, lpFeeTierIndex) {
+var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenAmount, userPubkey, poolVersion, pair1Coefficient, feeAssetHash, lpFeeTierIndex) {
     var flagContractHash = "2c4b31700fd1a93f25db0a70037c38c812b61441d0aeb757824cbb1d366d3c23";
     var lpContractHash = "26842dfd877abe7ae07a7f925fe0223996a4d6f4233d3eca06dd72c8bb26eb75";
     var innerkey = wiz_data_1.default.fromHex("1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624");
@@ -123,7 +123,7 @@ var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenA
         "16" +
         deployerScriptPubkey +
         "01" +
-        "499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c14" +
+        (0, wiz_data_1.hexLE)(feeAssetHash) +
         "01" +
         "0000000000000000" +
         "00" +
@@ -133,7 +133,7 @@ var poolDeploy = function (txId, quoteAssetId, tokenAssetId, quoteAmount, tokenA
         lib_core_1.convertion.convert32(wiz_data_1.default.fromNumber(pair1Coefficient)).hex +
         lpFeeTier.hex +
         "01" +
-        "499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c14" +
+        (0, wiz_data_1.hexLE)(feeAssetHash) +
         "01" +
         deploymentTxFees +
         "00" +

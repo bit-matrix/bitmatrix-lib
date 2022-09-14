@@ -30,7 +30,7 @@ var lib_core_1 = require("@script-wiz/lib-core");
 var commitmentOutput_1 = require("./commitmentOutput");
 var ldk_1 = require("./ldk");
 var helper_1 = require("./utils/helper");
-var case1 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, config, publicKey, isTestnet) {
+var case1 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, config, publicKey, feeAssetHash, isTestnet) {
     if (isTestnet === void 0) { isTestnet = false; }
     var methodCall = models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
     var poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
@@ -45,7 +45,7 @@ var case1 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
         {
             value: totalFee,
             address: address,
-            asset: helper_1.lbtcAssest,
+            asset: feeAssetHash,
         },
         {
             value: inputAmount,
@@ -56,7 +56,7 @@ var case1 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
     return (0, ldk_1.signTx)(wallet, callData, receipents, isTestnet);
 };
 exports.case1 = case1;
-var case2 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, config, publicKey, isTestnet) {
+var case2 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, config, publicKey, feeAssetHash, isTestnet) {
     if (isTestnet === void 0) { isTestnet = false; }
     var methodCall = models_1.CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
     var poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
@@ -71,7 +71,7 @@ var case2 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
         {
             value: totalFee,
             address: address,
-            asset: helper_1.lbtcAssest,
+            asset: feeAssetHash,
         },
         {
             value: inputAmount,
@@ -82,7 +82,7 @@ var case2 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
     return (0, ldk_1.signTx)(wallet, callData, receipents, isTestnet);
 };
 exports.case2 = case2;
-var case3 = function (wallet, inputAmountPair1, inputAmountPair2, pool, config, publicKey, isTestnet) {
+var case3 = function (wallet, inputAmountPair1, inputAmountPair2, pool, config, publicKey, feeAssetHash, isTestnet) {
     if (isTestnet === void 0) { isTestnet = false; }
     var methodCall = models_1.CALL_METHOD.ADD_LIQUIDITY;
     var poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
@@ -99,7 +99,7 @@ var case3 = function (wallet, inputAmountPair1, inputAmountPair2, pool, config, 
         {
             value: totalFee,
             address: address,
-            asset: helper_1.lbtcAssest,
+            asset: feeAssetHash,
         },
         {
             value: inputAmountPair1,
@@ -115,7 +115,7 @@ var case3 = function (wallet, inputAmountPair1, inputAmountPair2, pool, config, 
     return (0, ldk_1.signTx)(wallet, callData, receipents, isTestnet);
 };
 exports.case3 = case3;
-var case4 = function (wallet, lpAmount, pool, config, publicKey, isTestnet) {
+var case4 = function (wallet, lpAmount, pool, config, publicKey, feeAssetHash, isTestnet) {
     if (isTestnet === void 0) { isTestnet = false; }
     var methodCall = models_1.CALL_METHOD.REMOVE_LIQUIDITY;
     var poolIdLE = (0, wiz_data_1.hexLE)(pool.id);
@@ -130,7 +130,7 @@ var case4 = function (wallet, lpAmount, pool, config, publicKey, isTestnet) {
         {
             value: totalFee,
             address: address,
-            asset: helper_1.lbtcAssest,
+            asset: feeAssetHash,
         },
         {
             value: lpAmount,

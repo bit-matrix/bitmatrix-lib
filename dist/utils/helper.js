@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.lbtcAssest = exports.calculateAmountTotal = exports.uniqueArray = exports.div = void 0;
+exports.calculateAmountTotal = exports.uniqueArray = exports.div = void 0;
 var lib_core_1 = require("@script-wiz/lib-core");
 var wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
 var div = function (input1, input2) { return Math.floor(input1 / input2); };
@@ -42,5 +42,4 @@ var calculateAmountTotal = function (inputAmount, orderingFee, baseFee, serviceF
     return totalAmount64BE;
 };
 exports.calculateAmountTotal = calculateAmountTotal;
-exports.lbtcAssest = "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49";
 //# sourceMappingURL=helper.js.map
