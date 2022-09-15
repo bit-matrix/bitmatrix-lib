@@ -35,8 +35,8 @@ export const validatePoolTx = (value: number, slippageTolerance: number, poolDat
 
   const lpFeeTier = Object.values(lpFeeTiers)[poolData.lpFeeTierIndex.number];
 
-  const minPair1Value = Math.floor(9 * pair_1_coefficient);
-  const minPair2Value = Math.floor(9 * pair_2_coefficient);
+  const minPair1Value = Math.floor(10 * pair_1_coefficient);
+  const minPair2Value = Math.floor(10 * pair_2_coefficient);
 
   if (methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
     //   4-Commitment output 2 miktarına user_supply_total ismini ver.

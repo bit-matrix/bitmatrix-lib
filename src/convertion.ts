@@ -36,8 +36,8 @@ export const convertForCtx2 = (
 
   const lpFeeTier = Object.values(lpFeeTiers)[pool.lpFeeTierIndex.number];
 
-  const minPair1Value = Math.floor(9 * pair_1_coefficient);
-  const minPair2Value = Math.floor(9 * pair_2_coefficient);
+  const minPair1Value = Math.floor(10 * pair_1_coefficient);
+  const minPair2Value = Math.floor(10 * pair_2_coefficient);
 
   if (callMethod === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
     const poolRateMulWithLbtcPoolRateMul = pair_2_pool_supply - value;

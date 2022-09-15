@@ -314,8 +314,8 @@ export const minimumPairValues = (pool: Pool): { minPair1Value: number; minPair2
     pair_2_coefficient = 1;
   }
 
-  const minPair1Value = Math.floor(9 * pair_1_coefficient);
-  const minPair2Value = Math.floor(9 * pair_2_coefficient);
+  const minPair1Value = Math.floor(10 * pair_1_coefficient);
+  const minPair2Value = Math.floor(10 * pair_2_coefficient);
 
   return { minPair1Value, minPair2Value };
 };
