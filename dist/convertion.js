@@ -25,8 +25,8 @@ var convertForCtx2 = function (value, slippage, pool, callMethod) {
     // 11-pool_pair_1_liquidity_downgraded ile pool_pair_2_liquidity_downgraded ‘I çarp ve sonuca pool_constant ismini ver.
     var pool_constant = Math.floor(pool_pair_1_liquidity_downgraded * pool_pair_2_liquidity_downgraded);
     var lpFeeTier = Object.values(pool_1.lpFeeTiers)[pool.lpFeeTierIndex.number];
-    var minPair1Value = Math.floor(9 * pair_2_coefficient);
-    var minPair2Value = Math.floor(9 * pair_1_coefficient);
+    var minPair1Value = Math.floor(9 * pair_1_coefficient);
+    var minPair2Value = Math.floor(9 * pair_2_coefficient);
     if (callMethod === models_1.CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
         var poolRateMulWithLbtcPoolRateMul = pair_2_pool_supply - value;
         // step 3
@@ -37,7 +37,10 @@ var convertForCtx2 = function (value, slippage, pool, callMethod) {
         var quotePoolTotalAmount = quotePoolTotalAmountWithRate * pair_1_coefficient;
         // step 6
         var quoteAmountSubFee = quotePoolTotalAmount - pair_1_pool_supply;
-        var inp = (0, helper_1.div)(lpFeeTier * quoteAmountSubFee, lpFeeTier - 1);
+        var payout_additional_fees = Math.floor(pair_1_coefficient * 2);
+        var totalPayout = payout_additional_fees + quoteAmountSubFee;
+        var payoutFee = (0, helper_1.div)(payout_additional_fees + quoteAmountSubFee, lpFeeTier - 1);
+        var inp = totalPayout + payoutFee;
         var slippageAmount = (0, helper_1.div)(value, slippage);
         var receivedAmount = value - slippageAmount;
         console.log(lpFeeTier * quoteAmountSubFee);
@@ -47,12 +50,15 @@ var convertForCtx2 = function (value, slippage, pool, callMethod) {
         return { amount: inp, amountWithSlipapge: receivedAmount, minPair1Value: minPair1Value, minPair2Value: minPair2Value };
     }
     else if (callMethod === models_1.CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
-        var lbtcAmount = pair_1_pool_supply - value;
-        var constantRate = (0, helper_1.div)(lbtcAmount, pair_1_coefficient);
+        var pair1Amount = pair_1_pool_supply - value;
+        var constantRate = (0, helper_1.div)(pair1Amount, pair_1_coefficient);
         var tokenLiquidtyRate = (0, helper_1.div)(pool_constant, constantRate);
         var totalTokenLiquidity = tokenLiquidtyRate * pair_2_coefficient;
         var tokenAmountWithoutFee = totalTokenLiquidity - pair_2_pool_supply;
-        var inp = (0, helper_1.div)(lpFeeTier * tokenAmountWithoutFee, lpFeeTier - 1);
+        var payout_additional_fees = Math.floor(pair_2_coefficient * 2);
+        var totalPayout = payout_additional_fees + tokenAmountWithoutFee;
+        var payoutFee = (0, helper_1.div)(payout_additional_fees + tokenAmountWithoutFee, lpFeeTier - 1);
+        var inp = totalPayout + payoutFee;
         var slippageAmount = (0, helper_1.div)(value, slippage);
         var receivedAmount = value - slippageAmount;
         if (inp < minPair2Value) {
