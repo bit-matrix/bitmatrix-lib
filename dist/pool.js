@@ -317,8 +317,8 @@ var minimumPairValues = function (pool) {
     if (pair_2_coefficient < 1) {
         pair_2_coefficient = 1;
     }
-    var minPair1Value = Math.floor(9 * pair_1_coefficient);
-    var minPair2Value = Math.floor(9 * pair_2_coefficient);
+    var minPair1Value = Math.floor(10 * pair_1_coefficient);
+    var minPair2Value = Math.floor(10 * pair_2_coefficient);
     return { minPair1Value: minPair1Value, minPair2Value: minPair2Value };
 };
 exports.minimumPairValues = minimumPairValues;
