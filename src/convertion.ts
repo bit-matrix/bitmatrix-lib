@@ -1,4 +1,4 @@
-import { BmConfig, CALL_METHOD, Pool } from "@bitmatrix/models";
+import { CALL_METHOD, Pool } from "@bitmatrix/models";
 import { lpFeeTiers } from "./pool";
 import { div } from "./utils/helper";
 
@@ -36,8 +36,8 @@ export const convertForCtx2 = (
 
   const lpFeeTier = Object.values(lpFeeTiers)[pool.lpFeeTierIndex.number];
 
-  const minPair1Value = Math.floor(9 * pair_2_coefficient);
-  const minPair2Value = Math.floor(9 * pair_1_coefficient);
+  const minPair1Value = Math.floor(9 * pair_1_coefficient);
+  const minPair2Value = Math.floor(9 * pair_2_coefficient);
 
   if (callMethod === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
     const poolRateMulWithLbtcPoolRateMul = pair_2_pool_supply - value;
@@ -54,13 +54,16 @@ export const convertForCtx2 = (
     // step 6
     const quoteAmountSubFee = quotePoolTotalAmount - pair_1_pool_supply;
 
-    const inp = div(lpFeeTier * quoteAmountSubFee, lpFeeTier - 1);
+    const payout_additional_fees = Math.floor(pair_1_coefficient * 2);
+
+    const totalPayout = payout_additional_fees + quoteAmountSubFee;
+    const payoutFee = div(payout_additional_fees + quoteAmountSubFee, lpFeeTier - 1);
+
+    const inp = totalPayout + payoutFee;
 
     const slippageAmount = div(value, slippage);
 
     const receivedAmount = value - slippageAmount;
-
-    console.log(lpFeeTier * quoteAmountSubFee);
 
     if (inp < minPair1Value) {
       return { amount: 0, amountWithSlipapge: 0, minPair1Value, minPair2Value };
@@ -68,9 +71,9 @@ export const convertForCtx2 = (
 
     return { amount: inp, amountWithSlipapge: receivedAmount, minPair1Value, minPair2Value };
   } else if (callMethod === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
-    const lbtcAmount = pair_1_pool_supply - value;
+    const pair1Amount = pair_1_pool_supply - value;
 
-    const constantRate = div(lbtcAmount, pair_1_coefficient);
+    const constantRate = div(pair1Amount, pair_1_coefficient);
 
     const tokenLiquidtyRate = div(pool_constant, constantRate);
 
@@ -78,7 +81,12 @@ export const convertForCtx2 = (
 
     const tokenAmountWithoutFee = totalTokenLiquidity - pair_2_pool_supply;
 
-    const inp = div(lpFeeTier * tokenAmountWithoutFee, lpFeeTier - 1);
+    const payout_additional_fees = Math.floor(pair_2_coefficient * 2);
+
+    const totalPayout = payout_additional_fees + tokenAmountWithoutFee;
+    const payoutFee = div(payout_additional_fees + tokenAmountWithoutFee, lpFeeTier - 1);
+
+    const inp = totalPayout + payoutFee;
 
     const slippageAmount = div(value, slippage);
 
