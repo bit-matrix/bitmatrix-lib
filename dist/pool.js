@@ -32,7 +32,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createCovenants = exports.bodyCalculaterN = exports.bandwithArray = exports.lpFeeTiers = void 0;
+exports.minimumPairValues = exports.createCovenants = exports.bodyCalculaterN = exports.bandwithArray = exports.lpFeeTiers = void 0;
 var wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
 var lib_1 = require("@script-wiz/lib");
 var lib_core_1 = require("@script-wiz/lib-core");
@@ -302,4 +302,24 @@ var createCovenants = function (leafCount, lookupLeafIndex, flagAssetId, pair1Co
     return { mainCovenantScript: mainCovenantScript, controlBlock: controlBlock, taprootResult: taprootResult };
 };
 exports.createCovenants = createCovenants;
+var minimumPairValues = function (pool) {
+    var pool_pair_1_liquidity = Number(pool.quote.value);
+    // 2-Havuzun güncel pair_2 liquidity miktarına pool_pair_2_liquidity ismini ver.
+    var pool_pair_2_liquidity = Number(pool.token.value);
+    var pair_1_coefficient = pool.pair1_coefficient.number;
+    var pair_2_coefficient;
+    if (pool_pair_2_liquidity >= pool_pair_1_liquidity) {
+        pair_2_coefficient = Math.floor(pool_pair_2_liquidity / pool_pair_1_liquidity) * pair_1_coefficient;
+    }
+    else {
+        pair_2_coefficient = Math.floor(pair_1_coefficient / Math.floor(pool_pair_1_liquidity / pool_pair_2_liquidity));
+    }
+    if (pair_2_coefficient < 1) {
+        pair_2_coefficient = 1;
+    }
+    var minPair1Value = Math.floor(9 * pair_1_coefficient);
+    var minPair2Value = Math.floor(9 * pair_2_coefficient);
+    return { minPair1Value: minPair1Value, minPair2Value: minPair2Value };
+};
+exports.minimumPairValues = minimumPairValues;
 //# sourceMappingURL=pool.js.map
