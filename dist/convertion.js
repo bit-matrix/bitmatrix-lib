@@ -43,7 +43,6 @@ var convertForCtx2 = function (value, slippage, pool, callMethod) {
         var inp = totalPayout + payoutFee;
         var slippageAmount = (0, helper_1.div)(value, slippage);
         var receivedAmount = value - slippageAmount;
-        console.log(lpFeeTier * quoteAmountSubFee);
         if (inp < minPair1Value) {
             return { amount: 0, amountWithSlipapge: 0, minPair1Value: minPair1Value, minPair2Value: minPair2Value };
         }
