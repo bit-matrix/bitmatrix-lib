@@ -1,6 +1,7 @@
 import WizData, { hexLE } from "@script-wiz/wiz-data";
 import { compileData } from "@script-wiz/lib";
 import { taproot, TAPROOT_VERSION } from "@script-wiz/lib-core";
+import { Pool } from "@bitmatrix/models";
 
 export const lpFeeTiers: { [key: string]: number } = {
   "%0.10": 1000,
@@ -291,4 +292,30 @@ export const createCovenants = (leafCount: number, lookupLeafIndex: number, flag
 
   const taprootResult = taproot.tapRoot(pubKey, scriptsWizData, TAPROOT_VERSION.LIQUID);
   return { mainCovenantScript, controlBlock, taprootResult };
+};
+
+export const minimumPairValues = (pool: Pool): { minPair1Value: number; minPair2Value: number } => {
+  const pool_pair_1_liquidity = Number(pool.quote.value);
+
+  // 2-Havuzun güncel pair_2 liquidity miktarına pool_pair_2_liquidity ismini ver.
+  const pool_pair_2_liquidity = Number(pool.token.value);
+
+  const pair_1_coefficient = pool.pair1_coefficient.number;
+
+  let pair_2_coefficient;
+
+  if (pool_pair_2_liquidity >= pool_pair_1_liquidity) {
+    pair_2_coefficient = Math.floor(pool_pair_2_liquidity / pool_pair_1_liquidity) * pair_1_coefficient;
+  } else {
+    pair_2_coefficient = Math.floor(pair_1_coefficient / Math.floor(pool_pair_1_liquidity / pool_pair_2_liquidity));
+  }
+
+  if (pair_2_coefficient < 1) {
+    pair_2_coefficient = 1;
+  }
+
+  const minPair1Value = Math.floor(9 * pair_1_coefficient);
+  const minPair2Value = Math.floor(9 * pair_2_coefficient);
+
+  return { minPair1Value, minPair2Value };
 };

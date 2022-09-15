@@ -3,30 +3,21 @@ import { CALL_METHOD, Pool } from "@bitmatrix/models";
 import { div } from "./utils/helper";
 import { lpFeeTiers } from "./pool";
 
-export const validatePoolTx = (
-  value: number,
-  slippageTolerance: number,
-  poolData: Pool,
-  methodCall: CALL_METHOD
-): { amount: number; amountWithSlipapge: number; minPair1Value: number; minPair2Value: number } => {
+export const validatePoolTx = (value: number, slippageTolerance: number, poolData: Pool, methodCall: CALL_METHOD): { amount: number; amountWithSlipapge: number } => {
   // 1-Havuzun güncel pair_1 liquidity miktarına pool_pair_1_liquidity ismini ver.
   const pool_pair_1_liquidity = Number(poolData.quote.value);
 
   // 2-Havuzun güncel pair_2 liquidity miktarına pool_pair_2_liquidity ismini ver.
   const pool_pair_2_liquidity = Number(poolData.token.value);
 
-  const pair_1_pool_supply = Number(poolData.quote.value);
-
-  const pair_2_pool_supply = Number(poolData.token.value);
-
   const pair_1_coefficient = poolData.pair1_coefficient.number;
 
   let pair_2_coefficient;
 
-  if (pair_2_pool_supply >= pair_1_pool_supply) {
-    pair_2_coefficient = Math.floor(pair_2_pool_supply / pair_1_pool_supply) * pair_1_coefficient;
+  if (pool_pair_2_liquidity >= pool_pair_1_liquidity) {
+    pair_2_coefficient = Math.floor(pool_pair_2_liquidity / pool_pair_1_liquidity) * pair_1_coefficient;
   } else {
-    pair_2_coefficient = Math.floor(pair_1_coefficient / Math.floor(pair_1_pool_supply / pair_2_pool_supply));
+    pair_2_coefficient = Math.floor(pair_1_coefficient / Math.floor(pool_pair_1_liquidity / pool_pair_2_liquidity));
   }
 
   if (pair_2_coefficient < 1) {
@@ -84,10 +75,10 @@ export const validatePoolTx = (
     const receivedAmount = user_received_pair_2 - slippageAmount;
 
     if (user_received_pair_2 < minPair2Value) {
-      return { amount: 0, amountWithSlipapge: 0, minPair1Value, minPair2Value };
+      return { amount: 0, amountWithSlipapge: 0 };
     }
 
-    return { amount: user_received_pair_2, amountWithSlipapge: receivedAmount, minPair1Value, minPair2Value };
+    return { amount: user_received_pair_2, amountWithSlipapge: receivedAmount };
   } else if (methodCall === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
     // 4- Commitment output 2 miktarına user_supply_total ismini ver.
     const user_supply_total = new Decimal(value).toNumber();
@@ -125,13 +116,13 @@ export const validatePoolTx = (
     const receivedAmount = user_received_pair_1 - slippageAmount;
 
     if (user_received_pair_1 < minPair1Value) {
-      return { amount: 0, amountWithSlipapge: 0, minPair1Value, minPair2Value };
+      return { amount: 0, amountWithSlipapge: 0 };
     }
 
-    return { amount: user_received_pair_1, amountWithSlipapge: receivedAmount, minPair1Value, minPair2Value };
+    return { amount: user_received_pair_1, amountWithSlipapge: receivedAmount };
   }
 
-  return { amount: 0, amountWithSlipapge: 0, minPair1Value, minPair2Value };
+  return { amount: 0, amountWithSlipapge: 0 };
 };
 
 export const pairsCoefficientCalculation = (pool: Pool) => {
