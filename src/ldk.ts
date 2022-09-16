@@ -69,9 +69,12 @@ export const signTx = async (marina: Wallet, callData: string, recipients: Recip
 
   finalTx.finalizeAllInputs();
 
-  const txFinal = await marina.broadcastTransaction(finalTx.extractTransaction().toHex());
-
-  return txFinal.txid;
+  try {
+    const txFinal = await marina.broadcastTransaction(finalTx.extractTransaction().toHex());
+    return txFinal.txid;
+  } catch(error:any) {
+    console.debug(error)
+  }
 };
 
 const makeAssetChangeGetter =
