@@ -68,12 +68,15 @@ export const signTx = async (marina: Wallet, callData: string, recipients: Recip
   const finalTx = Psbt.fromBase64(signedTx);
 
   finalTx.finalizeAllInputs();
+  
+  const rawHex = finalTx.extractTransaction().toHex();
 
   try {
-    const txFinal = await marina.broadcastTransaction(finalTx.extractTransaction().toHex());
+    const txFinal = await marina.broadcastTransaction(rawHex);
     return txFinal.txid;
   } catch(error:any) {
-    console.debug(error)
+    console.debug(rawHex);
+    throw error;
   }
 };
 
