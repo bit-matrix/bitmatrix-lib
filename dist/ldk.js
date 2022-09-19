@@ -68,7 +68,7 @@ var helper_1 = require("./utils/helper");
 var signTx = function (marina, callData, recipients, isTestnet) {
     if (isTestnet === void 0) { isTestnet = false; }
     return __awaiter(void 0, void 0, void 0, function () {
-        var coins, pset, feeAsset, tx, makeGetter, assets, uniqueAssets, changeAddressGetter, unsignedTx, ptx, inputBlindingMap, outputBlindingMap, signedTx, finalTx, txFinal;
+        var coins, pset, feeAsset, tx, makeGetter, assets, uniqueAssets, changeAddressGetter, unsignedTx, ptx, inputBlindingMap, outputBlindingMap, signedTx, finalTx, rawHex, txFinal, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, marina.getCoins()];
@@ -108,10 +108,19 @@ var signTx = function (marina, callData, recipients, isTestnet) {
                     signedTx = _a.sent();
                     finalTx = liquidjs_lib_1.Psbt.fromBase64(signedTx);
                     finalTx.finalizeAllInputs();
-                    return [4 /*yield*/, marina.broadcastTransaction(finalTx.extractTransaction().toHex())];
+                    rawHex = finalTx.extractTransaction().toHex();
+                    _a.label = 5;
                 case 5:
+                    _a.trys.push([5, 7, , 8]);
+                    return [4 /*yield*/, marina.broadcastTransaction(rawHex)];
+                case 6:
                     txFinal = _a.sent();
                     return [2 /*return*/, txFinal.txid];
+                case 7:
+                    error_1 = _a.sent();
+                    console.debug(rawHex);
+                    throw error_1;
+                case 8: return [2 /*return*/];
             }
         });
     });
