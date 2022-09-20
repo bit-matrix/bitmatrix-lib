@@ -1,5 +1,5 @@
-import { AddressInterface, ChangeAddressFromAssetGetter, craftMultipleRecipientsPset, greedyCoinSelector, RecipientInterface, UnblindedOutput } from "ldk";
-import { AssetHash, confidential, networks, Psbt, script, address as liquidAddress } from "liquidjs-lib";
+import { ChangeAddressFromAssetGetter, craftMultipleRecipientsPset, ElementsValue, greedyCoinSelector, RecipientInterface, UnblindedOutput } from "ldk";
+import { AssetHash, networks, Psbt, script } from "liquidjs-lib";
 import { Wallet } from "./wallet";
 import * as ecc from "tiny-secp256k1";
 import { MarinaProvider } from "marina-provider";
@@ -50,8 +50,8 @@ export const signTx = async (marina: Wallet, callData: string, recipients: Recip
 
   ptx.addOutput({
     script: script.compile([script.OPS.OP_RETURN, Buffer.from(callData, "hex")]),
-    value: confidential.satoshiToConfidentialValue(0),
-    asset: AssetHash.fromHex(feeAsset, false).bytes,
+    value: ElementsValue.fromNumber(0).bytes,
+    asset: AssetHash.fromHex(feeAsset).bytes,
     nonce: Buffer.alloc(0),
   });
 
@@ -68,13 +68,13 @@ export const signTx = async (marina: Wallet, callData: string, recipients: Recip
   const finalTx = Psbt.fromBase64(signedTx);
 
   finalTx.finalizeAllInputs();
-  
+
   const rawHex = finalTx.extractTransaction().toHex();
 
   try {
     const txFinal = await marina.broadcastTransaction(rawHex);
     return txFinal.txid;
-  } catch(error:any) {
+  } catch (error: any) {
     console.debug(rawHex);
     throw error;
   }
