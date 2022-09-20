@@ -21,8 +21,7 @@
     "@bitmatrix/models": "^0.1.41",
     "@script-wiz/lib": "^0.1.82",
     "@script-wiz/lib-core": "^0.0.48",
-    "ldk": "0.5.4",
-    "liquidjs-lib": "6.0.2-liquid.7",
+    "ldk": "^0.5.8",
     "marina-provider": "^1.7.2",
     "tiny-secp256k1": "^1.1.6"
   }

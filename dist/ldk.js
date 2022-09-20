@@ -95,7 +95,7 @@ var signTx = function (marina, callData, recipients, isTestnet) {
                     ptx.addOutput({
                         script: liquidjs_lib_1.script.compile([liquidjs_lib_1.script.OPS.OP_RETURN, Buffer.from(callData, "hex")]),
                         value: ldk_1.ElementsValue.fromNumber(0).bytes,
-                        asset: liquidjs_lib_1.AssetHash.fromHex(feeAsset, true).bytes,
+                        asset: liquidjs_lib_1.AssetHash.fromHex(feeAsset).bytes,
                         nonce: Buffer.alloc(0),
                     });
                     inputBlindingMap = (0, utils_1.inputBlindingDataMap)(unsignedTx, coins);
