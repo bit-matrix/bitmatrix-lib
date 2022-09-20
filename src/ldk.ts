@@ -1,4 +1,4 @@
-import { ChangeAddressFromAssetGetter, craftMultipleRecipientsPset, ElementsValue, greedyCoinSelector, RecipientInterface, UnblindedOutput } from "ldk";
+import { ChangeAddressFromAssetGetter, confidential, craftMultipleRecipientsPset, ElementsValue, greedyCoinSelector, RecipientInterface, UnblindedOutput } from "ldk";
 import { AssetHash, networks, Psbt, script } from "liquidjs-lib";
 import { Wallet } from "./wallet";
 import * as ecc from "tiny-secp256k1";
@@ -50,7 +50,7 @@ export const signTx = async (marina: Wallet, callData: string, recipients: Recip
 
   ptx.addOutput({
     script: script.compile([script.OPS.OP_RETURN, Buffer.from(callData, "hex")]),
-    value: ElementsValue.fromNumber(0).bytes,
+    value: confidential.satoshiToConfidentialValue(0),
     asset: AssetHash.fromHex(feeAsset).bytes,
     nonce: Buffer.alloc(0),
   });
