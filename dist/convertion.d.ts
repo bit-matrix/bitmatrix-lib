@@ -12,5 +12,6 @@ export declare const calcAddLiquidityRecipientValue: (pool: Pool, quoteAmount: n
 export declare const calcRemoveLiquidityRecipientValue: (pool: Pool, valLp: number) => {
     user_lbtc_received: number;
     user_token_received: number;
+    poolRate: number;
 };
 export declare const convertForLiquidityCtx: (value: number, pool: Pool, isToken?: boolean) => number;

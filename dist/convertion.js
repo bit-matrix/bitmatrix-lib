@@ -71,7 +71,7 @@ var convertForCtx2 = function (value, slippage, pool, callMethod) {
 exports.convertForCtx2 = convertForCtx2;
 var calcAddLiquidityRecipientValue = function (pool, quoteAmount, tokenAmount) {
     var user_provided_remaining_lbtc_supply = quoteAmount;
-    var user_provided_remaining_lbtc_supply_16 = Math.floor(user_provided_remaining_lbtc_supply / 16);
+    var user_provided_remaining_lbtc_supply_16 = Math.floor(user_provided_remaining_lbtc_supply / pool.pair1_coefficient.number);
     var pool_lp_supply = Number(pool.lp.value);
     var pair_1_pool_supply = Number(pool.quote.value);
     var pair_2_pool_supply = Number(pool.token.value);
@@ -125,9 +125,11 @@ var calcRemoveLiquidityRecipientValue = function (pool, valLp) {
     var mul_2 = user_lp_input * pool_token_supply_down;
     var div_2 = Math.floor(mul_2 / lp_circ);
     var user_token_received = div_2 * pair_2_coefficient;
+    var poolRate = valLp / (2000000000 - pool_lp_supply);
     return {
         user_lbtc_received: user_lbtc_received,
         user_token_received: user_token_received,
+        poolRate: poolRate,
     };
 };
 exports.calcRemoveLiquidityRecipientValue = calcRemoveLiquidityRecipientValue;
