@@ -106,7 +106,7 @@ export const convertForCtx2 = (
 export const calcAddLiquidityRecipientValue = (pool: Pool, quoteAmount: number, tokenAmount: number) => {
   const user_provided_remaining_lbtc_supply = quoteAmount;
 
-  const user_provided_remaining_lbtc_supply_16 = Math.floor(user_provided_remaining_lbtc_supply / 16);
+  const user_provided_remaining_lbtc_supply_16 = Math.floor(user_provided_remaining_lbtc_supply / pool.pair1_coefficient.number);
 
   const pool_lp_supply = Number(pool.lp.value);
   const pair_1_pool_supply = Number(pool.quote.value);
@@ -179,9 +179,12 @@ export const calcRemoveLiquidityRecipientValue = (pool: Pool, valLp: number) => 
   const div_2 = Math.floor(mul_2 / lp_circ);
   const user_token_received = div_2 * pair_2_coefficient;
 
+  const poolRate = valLp / (2000000000 - pool_lp_supply);
+
   return {
     user_lbtc_received,
     user_token_received,
+    poolRate,
   };
 };
 
