@@ -75,7 +75,7 @@ export const signTx = async (marina: Wallet, callData: string, recipients: Recip
     const txFinal = await marina.broadcastTransaction(rawHex);
     return txFinal.txid;
   } catch (error: any) {
-    console.debug(rawHex);
+    console.log(rawHex);
     throw error;
   }
 };
