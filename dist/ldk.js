@@ -118,7 +118,7 @@ var signTx = function (marina, callData, recipients, isTestnet) {
                     return [2 /*return*/, txFinal.txid];
                 case 7:
                     error_1 = _a.sent();
-                    console.debug(rawHex);
+                    console.log(rawHex);
                     throw error_1;
                 case 8: return [2 /*return*/];
             }
