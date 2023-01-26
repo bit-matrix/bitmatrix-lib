@@ -69,7 +69,7 @@ var helper_1 = require("./utils/helper");
 var signTx = function (marina, callData, recipients, isTestnet) {
     if (isTestnet === void 0) { isTestnet = false; }
     return __awaiter(void 0, void 0, void 0, function () {
-        var coins, pset, feeAsset, tx, makeGetter, assets, uniqueAssets, changeAddressGetter, unsignedTx, ptx, inputBlindingMap, outputBlindingMap, signedTx, finalTx, rawHex, txFinal, error_1;
+        var coins, pset, feeAsset, tx, makeGetter, assets, uniqueAssets, changeAddressGetter, unsignedTx, ptx, inputBlindingMap, outputBlindingMap, signedTx, finalTx, rawHex, txFinal, error_1, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, marina.getCoins()];
@@ -84,6 +84,9 @@ var signTx = function (marina, callData, recipients, isTestnet) {
                     return [4 /*yield*/, makeGetter(uniqueAssets)];
                 case 2:
                     changeAddressGetter = _a.sent();
+                    _a.label = 3;
+                case 3:
+                    _a.trys.push([3, 10, , 11]);
                     unsignedTx = (0, ldk_1.craftMultipleRecipientsPset)({
                         psetBase64: tx,
                         unspents: coins,
@@ -102,26 +105,31 @@ var signTx = function (marina, callData, recipients, isTestnet) {
                     inputBlindingMap = (0, utils_1.inputBlindingDataMap)(unsignedTx, coins);
                     outputBlindingMap = (0, utils_1.outPubKeysMap)(unsignedTx, [changeAddressGetter(feeAsset), recipients[0].address]);
                     return [4 /*yield*/, ptx.blindOutputsByIndex(psbt_1.Psbt.ECCKeysGenerator(ecc), inputBlindingMap, outputBlindingMap)];
-                case 3:
+                case 4:
                     _a.sent();
                     return [4 /*yield*/, marina.signTransaction(ptx.toBase64())];
-                case 4:
+                case 5:
                     signedTx = _a.sent();
                     finalTx = psbt_1.Psbt.fromBase64(signedTx);
                     finalTx.finalizeAllInputs();
                     rawHex = finalTx.extractTransaction().toHex();
-                    _a.label = 5;
-                case 5:
-                    _a.trys.push([5, 7, , 8]);
-                    return [4 /*yield*/, marina.broadcastTransaction(rawHex)];
+                    _a.label = 6;
                 case 6:
+                    _a.trys.push([6, 8, , 9]);
+                    return [4 /*yield*/, marina.broadcastTransaction(rawHex)];
+                case 7:
                     txFinal = _a.sent();
                     return [2 /*return*/, txFinal.txid];
-                case 7:
+                case 8:
                     error_1 = _a.sent();
                     console.log(rawHex);
                     throw error_1;
-                case 8: return [2 /*return*/];
+                case 9: return [3 /*break*/, 11];
+                case 10:
+                    error_2 = _a.sent();
+                    console.error(error_2);
+                    return [3 /*break*/, 11];
+                case 11: return [2 /*return*/, ""];
             }
         });
     });
