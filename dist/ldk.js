@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -62,6 +62,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.signTx = void 0;
 var ldk_1 = require("ldk");
 var liquidjs_lib_1 = require("liquidjs-lib");
+var psbt_1 = require("liquidjs-lib/src/psbt");
 var ecc = __importStar(require("tiny-secp256k1"));
 var utils_1 = require("./utils/utils");
 var helper_1 = require("./utils/helper");
@@ -74,7 +75,7 @@ var signTx = function (marina, callData, recipients, isTestnet) {
                 case 0: return [4 /*yield*/, marina.getCoins()];
                 case 1:
                     coins = _a.sent();
-                    pset = new liquidjs_lib_1.Psbt({ network: isTestnet ? liquidjs_lib_1.networks.testnet : liquidjs_lib_1.networks.liquid });
+                    pset = new psbt_1.Psbt({ network: isTestnet ? liquidjs_lib_1.networks.testnet : liquidjs_lib_1.networks.liquid });
                     feeAsset = isTestnet ? liquidjs_lib_1.networks.testnet.assetHash : liquidjs_lib_1.networks.liquid.assetHash;
                     tx = pset.toBase64();
                     makeGetter = makeAssetChangeGetter(marina);
@@ -91,22 +92,22 @@ var signTx = function (marina, callData, recipients, isTestnet) {
                         changeAddressByAsset: changeAddressGetter,
                         addFee: true,
                     });
-                    ptx = liquidjs_lib_1.Psbt.fromBase64(unsignedTx);
+                    ptx = psbt_1.Psbt.fromBase64(unsignedTx);
                     ptx.addOutput({
                         script: liquidjs_lib_1.script.compile([liquidjs_lib_1.script.OPS.OP_RETURN, Buffer.from(callData, "hex")]),
                         value: ldk_1.confidential.satoshiToConfidentialValue(0),
-                        asset: liquidjs_lib_1.AssetHash.fromHex(feeAsset).bytes,
+                        asset: liquidjs_lib_1.AssetHash.fromHex(feeAsset, false).bytes,
                         nonce: Buffer.alloc(0),
                     });
                     inputBlindingMap = (0, utils_1.inputBlindingDataMap)(unsignedTx, coins);
                     outputBlindingMap = (0, utils_1.outPubKeysMap)(unsignedTx, [changeAddressGetter(feeAsset), recipients[0].address]);
-                    return [4 /*yield*/, ptx.blindOutputsByIndex(liquidjs_lib_1.Psbt.ECCKeysGenerator(ecc), inputBlindingMap, outputBlindingMap)];
+                    return [4 /*yield*/, ptx.blindOutputsByIndex(psbt_1.Psbt.ECCKeysGenerator(ecc), inputBlindingMap, outputBlindingMap)];
                 case 3:
                     _a.sent();
                     return [4 /*yield*/, marina.signTransaction(ptx.toBase64())];
                 case 4:
                     signedTx = _a.sent();
-                    finalTx = liquidjs_lib_1.Psbt.fromBase64(signedTx);
+                    finalTx = psbt_1.Psbt.fromBase64(signedTx);
                     finalTx.finalizeAllInputs();
                     rawHex = finalTx.extractTransaction().toHex();
                     _a.label = 5;
