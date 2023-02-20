@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -58,98 +35,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signTx = void 0;
-var ldk_1 = require("ldk");
 var liquidjs_lib_1 = require("liquidjs-lib");
-var psbt_1 = require("liquidjs-lib/src/psbt");
-var ecc = __importStar(require("tiny-secp256k1"));
-var utils_1 = require("./utils/utils");
-var helper_1 = require("./utils/helper");
 var signTx = function (marina, callData, recipients, isTestnet) {
     if (isTestnet === void 0) { isTestnet = false; }
     return __awaiter(void 0, void 0, void 0, function () {
-        var coins, pset, feeAsset, tx, makeGetter, assets, uniqueAssets, changeAddressGetter, unsignedTx, ptx, inputBlindingMap, outputBlindingMap, signedTx, finalTx, rawHex, txFinal, error_1, error_2;
+        var network, lbtc, dataRecipient, sent;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, marina.getCoins()];
+                case 0:
+                    network = isTestnet ? liquidjs_lib_1.networks.testnet : liquidjs_lib_1.networks.liquid;
+                    lbtc = network.assetHash;
+                    dataRecipient = {
+                        asset: lbtc,
+                        value: 0,
+                        data: callData,
+                    };
+                    return [4 /*yield*/, marina.sendTransaction(__spreadArray(__spreadArray([], recipients, true), [dataRecipient], false))];
                 case 1:
-                    coins = _a.sent();
-                    pset = new psbt_1.Psbt({ network: isTestnet ? liquidjs_lib_1.networks.testnet : liquidjs_lib_1.networks.liquid });
-                    feeAsset = isTestnet ? liquidjs_lib_1.networks.testnet.assetHash : liquidjs_lib_1.networks.liquid.assetHash;
-                    tx = pset.toBase64();
-                    makeGetter = makeAssetChangeGetter(marina);
-                    assets = recipients.map(function (r) { return r.asset; });
-                    uniqueAssets = (0, helper_1.uniqueArray)(assets);
-                    return [4 /*yield*/, makeGetter(uniqueAssets)];
-                case 2:
-                    changeAddressGetter = _a.sent();
-                    _a.label = 3;
-                case 3:
-                    _a.trys.push([3, 10, , 11]);
-                    unsignedTx = (0, ldk_1.craftMultipleRecipientsPset)({
-                        psetBase64: tx,
-                        unspents: coins,
-                        recipients: recipients,
-                        coinSelector: (0, ldk_1.greedyCoinSelector)(),
-                        changeAddressByAsset: changeAddressGetter,
-                        addFee: true,
-                    });
-                    ptx = psbt_1.Psbt.fromBase64(unsignedTx);
-                    ptx.addOutput({
-                        script: liquidjs_lib_1.script.compile([liquidjs_lib_1.script.OPS.OP_RETURN, Buffer.from(callData, "hex")]),
-                        value: ldk_1.confidential.satoshiToConfidentialValue(0),
-                        asset: liquidjs_lib_1.AssetHash.fromHex(feeAsset, false).bytes,
-                        nonce: Buffer.alloc(0),
-                    });
-                    inputBlindingMap = (0, utils_1.inputBlindingDataMap)(unsignedTx, coins);
-                    outputBlindingMap = (0, utils_1.outPubKeysMap)(unsignedTx, [changeAddressGetter(feeAsset), recipients[0].address]);
-                    return [4 /*yield*/, ptx.blindOutputsByIndex(psbt_1.Psbt.ECCKeysGenerator(ecc), inputBlindingMap, outputBlindingMap)];
-                case 4:
-                    _a.sent();
-                    return [4 /*yield*/, marina.signTransaction(ptx.toBase64())];
-                case 5:
-                    signedTx = _a.sent();
-                    finalTx = psbt_1.Psbt.fromBase64(signedTx);
-                    finalTx.finalizeAllInputs();
-                    rawHex = finalTx.extractTransaction().toHex();
-                    _a.label = 6;
-                case 6:
-                    _a.trys.push([6, 8, , 9]);
-                    return [4 /*yield*/, marina.broadcastTransaction(rawHex)];
-                case 7:
-                    txFinal = _a.sent();
-                    return [2 /*return*/, txFinal.txid];
-                case 8:
-                    error_1 = _a.sent();
-                    console.log(rawHex);
-                    throw error_1;
-                case 9: return [3 /*break*/, 11];
-                case 10:
-                    error_2 = _a.sent();
-                    console.error(error_2);
-                    return [3 /*break*/, 11];
-                case 11: return [2 /*return*/, ""];
+                    sent = _a.sent();
+                    return [2 /*return*/, sent.txid];
             }
         });
     });
 };
 exports.signTx = signTx;
-var makeAssetChangeGetter = function (marina) {
-    return function (assets) { return __awaiter(void 0, void 0, void 0, function () {
-        var addresses;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, Promise.all(assets.map(function (_) { return marina.getNextChangeAddress(); }))];
-                case 1:
-                    addresses = _a.sent();
-                    return [2 /*return*/, function (asset) {
-                            console.log(asset);
-                            var index = assets.findIndex(function (a) { return a === asset; });
-                            return addresses[index].confidentialAddress;
-                        }];
-            }
-        });
-    }); };
-};
 //# sourceMappingURL=ldk.js.map

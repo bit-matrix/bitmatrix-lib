@@ -31,14 +31,11 @@
   "dependencies": {
     "@bitmatrix/esplora-api-client": "^0.0.8",
     "@bitmatrix/models": "0.1.47",
+    "@ionio-lang/ionio": "^0.3.0",
     "@script-wiz/lib": "^0.1.82",
     "@script-wiz/lib-core": "^0.0.48",
-    "ldk": "0.5.8",
-    "marina-provider": "1.7.2",
+    "liquidjs-lib": "^6.0.2-liquid.23",
+    "marina-provider": "git+https://github.com/louisinger/marina-provider#new-provider",
     "tiny-secp256k1": "1.1.6"
-  },
-  "resolutions": {
-    "liquidjs-lib": "6.0.2-liquid.7",
-    "ecpair": "2.0.1"
   }
 }

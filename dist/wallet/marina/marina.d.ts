@@ -1,8 +1,7 @@
-import { AccountInfo, AddressInterface, Balance, EventListenerID, MarinaEventType, MarinaProvider, NetworkString, Recipient, SentTransaction, SignedMessage, Template, Transaction, Utxo } from "marina-provider";
+import { AccountInfo, Address, Balance, EventListenerID, MarinaEventType, MarinaProvider, NetworkString, Recipient, SentTransaction, SignedMessage, Transaction, Utxo } from "marina-provider";
 export default class Marina implements MarinaProvider {
     private marina;
     constructor(marina: MarinaProvider);
-    importTemplate(template: Template<any>, changeTemplate?: Template<any> | undefined): Promise<void>;
     getAccountInfo(accountID: string): Promise<AccountInfo>;
     getAccountsIDs(): Promise<string[]>;
     signTransaction(pset: string): Promise<string>;
@@ -13,16 +12,14 @@ export default class Marina implements MarinaProvider {
     isEnabled: () => Promise<boolean>;
     enable: () => Promise<void>;
     disable: () => Promise<void>;
-    getNextAddress(): Promise<AddressInterface>;
-    getAddresses(): Promise<AddressInterface[]>;
+    getNextAddress(): Promise<Address>;
+    getAddresses(): Promise<Address[]>;
     sendTransaction(recipients: Recipient[]): Promise<SentTransaction>;
-    getNextChangeAddress(): Promise<AddressInterface>;
+    getNextChangeAddress(): Promise<Address>;
     getBalances(): Promise<Balance[]>;
-    reloadCoins(): Promise<void>;
     getCoins(): Promise<Utxo[]>;
     getNetwork(): Promise<NetworkString>;
-    setAccount(): Promise<void>;
-    blindTransaction(): Promise<string>;
+    blindTransaction(pset: string): Promise<string>;
     signMessage(): Promise<SignedMessage>;
     getTransactions(): Promise<Transaction[]>;
     getFeeAssets(): Promise<string[]>;

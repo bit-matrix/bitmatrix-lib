@@ -33,9 +33,6 @@ var Marina = /** @class */ (function () {
         };
         this.marina = marina;
     }
-    Marina.prototype.importTemplate = function (template, changeTemplate) {
-        throw new Error("Method not implemented.");
-    };
     Marina.prototype.getAccountInfo = function (accountID) {
         throw new Error("Method not implemented.");
     };
@@ -81,11 +78,6 @@ var Marina = /** @class */ (function () {
         // else throw "Install Marina first";
         throw new Error("Marina wallet disabled.");
     };
-    Marina.prototype.reloadCoins = function () {
-        if (this.exist() && this.marina)
-            return this.marina.reloadCoins();
-        return Promise.reject("Marina wallet disabled.");
-    };
     Marina.prototype.getCoins = function () {
         if (this.exist() && this.marina)
             return this.marina.getCoins();
@@ -96,11 +88,9 @@ var Marina = /** @class */ (function () {
             return this.marina.getNetwork();
         return Promise.reject("Marina wallet disabled.");
     };
-    Marina.prototype.setAccount = function ( /*account: number*/) {
-        throw new Error("Method not implemented.");
-    };
-    Marina.prototype.blindTransaction = function ( /*pset: string*/) {
-        throw new Error("Method not implemented.");
+    Marina.prototype.blindTransaction = function (pset) {
+        var _a;
+        return ((_a = this.marina) === null || _a === void 0 ? void 0 : _a.blindTransaction(pset)) || Promise.reject("Marina wallet disabled.");
     };
     Marina.prototype.signMessage = function ( /*message: string*/) {
         throw new Error("Method not implemented.");

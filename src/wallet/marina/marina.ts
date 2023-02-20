@@ -1,6 +1,6 @@
 import {
   AccountInfo,
-  AddressInterface,
+  Address,
   Balance,
   EventListenerID,
   MarinaEventType,
@@ -9,7 +9,6 @@ import {
   Recipient,
   SentTransaction,
   SignedMessage,
-  Template,
   Transaction,
   Utxo,
 } from "marina-provider";
@@ -19,9 +18,6 @@ export default class Marina implements MarinaProvider {
 
   constructor(marina: MarinaProvider) {
     this.marina = marina;
-  }
-  importTemplate(template: Template<any>, changeTemplate?: Template<any> | undefined): Promise<void> {
-    throw new Error("Method not implemented.");
   }
   getAccountInfo(accountID: string): Promise<AccountInfo> {
     throw new Error("Method not implemented.");
@@ -73,13 +69,13 @@ export default class Marina implements MarinaProvider {
     return Promise.resolve();
   };
 
-  getNextAddress(): Promise<AddressInterface> {
+  getNextAddress(): Promise<Address> {
     if (this.exist() && this.marina) return this.marina.getNextAddress();
     // else throw "Install Marina first";
     throw new Error("Marina wallet disabled.");
   }
 
-  getAddresses(): Promise<AddressInterface[]> {
+  getAddresses(): Promise<Address[]> {
     if (this.exist() && this.marina) return this.marina.getAddresses();
     // else throw "Install Marina first";
     throw new Error("Marina wallet disabled.");
@@ -91,7 +87,7 @@ export default class Marina implements MarinaProvider {
     throw new Error("Marina wallet disabled.");
   }
 
-  getNextChangeAddress(): Promise<AddressInterface> {
+  getNextChangeAddress(): Promise<Address> {
     if (this.exist() && this.marina) return this.marina.getNextChangeAddress();
 
     throw new Error("Marina wallet disabled.");
@@ -101,12 +97,6 @@ export default class Marina implements MarinaProvider {
     if (this.exist() && this.marina) return this.marina.getBalances();
     // else throw "Install Marina first";
     throw new Error("Marina wallet disabled.");
-  }
-
-  reloadCoins(): Promise<void> {
-    if (this.exist() && this.marina) return this.marina.reloadCoins();
-
-    return Promise.reject("Marina wallet disabled.");
   }
 
   getCoins(): Promise<Utxo[]> {
@@ -119,12 +109,8 @@ export default class Marina implements MarinaProvider {
     return Promise.reject("Marina wallet disabled.");
   }
 
-  setAccount(/*account: number*/): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-
-  blindTransaction(/*pset: string*/): Promise<string> {
-    throw new Error("Method not implemented.");
+  blindTransaction(pset: string): Promise<string> {
+    return this.marina?.blindTransaction(pset) || Promise.reject("Marina wallet disabled.");
   }
 
   signMessage(/*message: string*/): Promise<SignedMessage> {
