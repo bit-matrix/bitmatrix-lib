@@ -12,6 +12,7 @@
     "@babel/core": "^7.7.7",
     "@babel/preset-env": "^7.7.7",
     "@babel/preset-typescript": "^7.13.0",
+    "@ionio-lang/ionio": "^0.3.0",
     "@types/bn.js": "^5.1.0",
     "@types/crypto-js": "^4.0.2",
     "@types/jest": "^26.0.23",
@@ -31,7 +32,6 @@
   "dependencies": {
     "@bitmatrix/esplora-api-client": "^0.0.8",
     "@bitmatrix/models": "0.1.47",
-    "@ionio-lang/ionio": "^0.3.0",
     "@script-wiz/lib": "^0.1.82",
     "@script-wiz/lib-core": "^0.0.48",
     "liquidjs-lib": "^6.0.2-liquid.23",
