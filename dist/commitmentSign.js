@@ -53,7 +53,7 @@ var case1 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
             asset: pool.quote.assetHash,
         },
     ];
-    return (0, signer_1.signTx)(wallet, callData, recipients, isTestnet);
+    return (0, signer_1.signTx)(wallet, callData, recipients, feeAssetHash);
 };
 exports.case1 = case1;
 var case2 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, config, publicKey, feeAssetHash, isTestnet) {
@@ -79,7 +79,7 @@ var case2 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
             asset: pool.token.assetHash,
         },
     ];
-    return (0, signer_1.signTx)(wallet, callData, recipients, isTestnet);
+    return (0, signer_1.signTx)(wallet, callData, recipients, feeAssetHash);
 };
 exports.case2 = case2;
 var case3 = function (wallet, inputAmountPair1, inputAmountPair2, pool, config, publicKey, feeAssetHash, isTestnet) {
@@ -112,7 +112,7 @@ var case3 = function (wallet, inputAmountPair1, inputAmountPair2, pool, config, 
             asset: pool.token.assetHash,
         },
     ];
-    return (0, signer_1.signTx)(wallet, callData, recipients, isTestnet);
+    return (0, signer_1.signTx)(wallet, callData, recipients, feeAssetHash);
 };
 exports.case3 = case3;
 var case4 = function (wallet, lpAmount, pool, config, publicKey, feeAssetHash, isTestnet) {
@@ -138,7 +138,7 @@ var case4 = function (wallet, lpAmount, pool, config, publicKey, feeAssetHash, i
             asset: pool.lp.assetHash,
         },
     ];
-    return (0, signer_1.signTx)(wallet, callData, recipients, isTestnet);
+    return (0, signer_1.signTx)(wallet, callData, recipients, feeAssetHash);
 };
 exports.case4 = case4;
 //# sourceMappingURL=commitmentSign.js.map

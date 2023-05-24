@@ -44,7 +44,7 @@ export const case1 = (
     },
   ];
 
-  return signTx(wallet, callData, recipients, isTestnet);
+  return signTx(wallet, callData, recipients, feeAssetHash);
 };
 
 export const case2 = (
@@ -83,7 +83,7 @@ export const case2 = (
     },
   ];
 
-  return signTx(wallet, callData, recipients, isTestnet);
+  return signTx(wallet, callData, recipients, feeAssetHash);
 };
 
 export const case3 = (
@@ -131,7 +131,7 @@ export const case3 = (
     },
   ];
 
-  return signTx(wallet, callData, recipients, isTestnet);
+  return signTx(wallet, callData, recipients, feeAssetHash);
 };
 
 export const case4 = (wallet: Wallet, lpAmount: number, pool: Pool, config: BmConfig, publicKey: string, feeAssetHash: string, isTestnet = false): Promise<string> => {
@@ -162,5 +162,5 @@ export const case4 = (wallet: Wallet, lpAmount: number, pool: Pool, config: BmCo
     },
   ];
 
-  return signTx(wallet, callData, recipients, isTestnet);
+  return signTx(wallet, callData, recipients, feeAssetHash);
 };

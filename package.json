@@ -34,7 +34,6 @@
     "@bitmatrix/models": "0.1.47",
     "@script-wiz/lib": "^0.1.82",
     "@script-wiz/lib-core": "^0.0.48",
-    "liquidjs-lib": "^6.0.2-liquid.27",
     "marina-provider": "^2.0.0"
   }
 }
