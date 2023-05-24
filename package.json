@@ -12,7 +12,7 @@
     "@babel/core": "^7.7.7",
     "@babel/preset-env": "^7.7.7",
     "@babel/preset-typescript": "^7.13.0",
-    "@ionio-lang/ionio": "^0.3.0",
+    "@ionio-lang/ionio": "^0.4.1",
     "@types/bn.js": "^5.1.0",
     "@types/crypto-js": "^4.0.2",
     "@types/jest": "^26.0.23",
