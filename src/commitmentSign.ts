@@ -4,7 +4,7 @@ import WizData, { hexLE } from "@script-wiz/wiz-data";
 
 import { convertion } from "@script-wiz/lib-core";
 import { commitmentOutputTapscript } from "./commitmentOutput";
-import { signTx } from "./ldk";
+import { signTx } from "./signer";
 import { calculateAmountTotal } from "./utils/helper";
 import { AddressRecipient } from "marina-provider";
 
