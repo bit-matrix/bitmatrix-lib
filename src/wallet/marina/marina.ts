@@ -20,7 +20,8 @@ export default class Marina implements MarinaProvider {
     this.marina = marina;
   }
   getAccountInfo(accountID: string): Promise<AccountInfo> {
-    throw new Error("Method not implemented.");
+    if (!this.exist() || !this.marina) throw new Error("Marina wallet disabled.");
+    return this.marina.getAccountInfo(accountID);
   }
 
   getAccountsIDs(): Promise<string[]> {

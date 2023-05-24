@@ -26,6 +26,7 @@ var Wallet = /** @class */ (function () {
         this.getNextChangeAddress = function () { return _this.wallet.getNextChangeAddress(); };
         this.getCoins = function () { return _this.wallet.getCoins(); };
         this.getNetwork = function () { return _this.wallet.getNetwork(); };
+        this.getAccountInfo = function (accountID) { return _this.wallet.getAccountInfo(accountID); };
         if (walletName === WALLET_NAME_1.WALLET_NAME.MARINA)
             this.wallet = new marina_1.default(marina);
         // TODO default wallet

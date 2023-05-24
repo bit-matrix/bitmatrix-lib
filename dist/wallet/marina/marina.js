@@ -34,7 +34,9 @@ var Marina = /** @class */ (function () {
         this.marina = marina;
     }
     Marina.prototype.getAccountInfo = function (accountID) {
-        throw new Error("Method not implemented.");
+        if (!this.exist() || !this.marina)
+            throw new Error("Marina wallet disabled.");
+        return this.marina.getAccountInfo(accountID);
     };
     Marina.prototype.getAccountsIDs = function () {
         throw new Error("Method not implemented.");

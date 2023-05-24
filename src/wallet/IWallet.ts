@@ -1,4 +1,4 @@
-import { Address, Balance, EventListenerID, MarinaEventType, NetworkString, Recipient, SentTransaction, Utxo } from "marina-provider";
+import { AccountInfo, Address, Balance, EventListenerID, MarinaEventType, NetworkString, Recipient, SentTransaction, Utxo } from "marina-provider";
 
 export interface IWallet {
   exist(): boolean;
@@ -32,4 +32,6 @@ export interface IWallet {
   signTransaction(pset: string): Promise<string>;
 
   broadcastTransaction(signedTxHex: string): Promise<SentTransaction>;
+
+  getAccountInfo(accountID: string): Promise<AccountInfo>;
 }
