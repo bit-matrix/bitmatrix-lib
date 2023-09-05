@@ -6,12 +6,12 @@ export default class Marina implements MarinaProvider {
     getAccountsIDs(): Promise<string[]>;
     signTransaction(pset: string): Promise<string>;
     broadcastTransaction(signedTxHex: string): Promise<SentTransaction>;
-    on: (type: MarinaEventType, callback: (payload: any) => void) => string;
-    off: (listenerId: EventListenerID) => void;
-    exist: () => boolean;
-    isEnabled: () => Promise<boolean>;
-    enable: () => Promise<void>;
-    disable: () => Promise<void>;
+    on(type: MarinaEventType, callback: (payload: any) => void): string;
+    off(listenerId: EventListenerID): void;
+    exist(): boolean;
+    isEnabled(): Promise<boolean>;
+    enable(): Promise<void>;
+    disable(): Promise<void>;
     getNextAddress(): Promise<Address>;
     getAddresses(): Promise<Address[]>;
     sendTransaction(recipients: Recipient[]): Promise<SentTransaction>;
@@ -27,4 +27,5 @@ export default class Marina implements MarinaProvider {
     getSelectedAccount(): Promise<string>;
     createAccount(accountName: string): Promise<void>;
     useAccount(account: string): Promise<boolean>;
+    importScript(accountName: string, scriptHex: string, blindingPrivateKey?: string | undefined): Promise<void>;
 }

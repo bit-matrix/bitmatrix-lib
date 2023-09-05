@@ -2,35 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var Marina = /** @class */ (function () {
     function Marina(marina) {
-        var _this = this;
-        this.on = function (type, callback) {
-            if (_this.exist() && _this.marina)
-                return _this.marina.on(type, callback);
-            return "Marina wallet disabled.";
-        };
-        this.off = function (listenerId) {
-            if (_this.exist() && _this.marina)
-                _this.marina.off(listenerId);
-        };
-        this.exist = function () { return typeof _this.marina !== "undefined"; };
-        this.isEnabled = function () {
-            if (_this.exist() && _this.marina)
-                return _this.marina.isEnabled();
-            // throw "Install Marina first";
-            return Promise.resolve(false);
-        };
-        this.enable = function () {
-            if (_this.exist() && _this.marina)
-                return _this.marina.enable();
-            // else throw "Install Marina first";
-            return Promise.resolve();
-        };
-        this.disable = function () {
-            if (_this.exist() && _this.marina)
-                return _this.marina.disable();
-            // else throw "Install Marina first";
-            return Promise.resolve();
-        };
         this.marina = marina;
     }
     Marina.prototype.getAccountInfo = function (accountID) {
@@ -51,6 +22,41 @@ var Marina = /** @class */ (function () {
             return this.marina.broadcastTransaction(signedTxHex);
         throw new Error("Marina wallet disabled.");
     };
+    Marina.prototype.on = function (type, callback) {
+        if (this.exist() && this.marina)
+            return this.marina.on(type, callback);
+        return "Marina wallet disabled.";
+    };
+    ;
+    Marina.prototype.off = function (listenerId) {
+        if (this.exist() && this.marina)
+            this.marina.off(listenerId);
+    };
+    ;
+    Marina.prototype.exist = function () {
+        return typeof this.marina !== "undefined";
+    };
+    Marina.prototype.isEnabled = function () {
+        if (this.exist() && this.marina)
+            return this.marina.isEnabled();
+        // throw "Install Marina first";
+        return Promise.resolve(false);
+    };
+    ;
+    Marina.prototype.enable = function () {
+        if (this.exist() && this.marina)
+            return this.marina.enable();
+        // else throw "Install Marina first";
+        return Promise.resolve();
+    };
+    ;
+    Marina.prototype.disable = function () {
+        if (this.exist() && this.marina)
+            return this.marina.disable();
+        // else throw "Install Marina first";
+        return Promise.resolve();
+    };
+    ;
     Marina.prototype.getNextAddress = function () {
         if (this.exist() && this.marina)
             return this.marina.getNextAddress();
@@ -113,6 +119,9 @@ var Marina = /** @class */ (function () {
         throw new Error("Method not implemented.");
     };
     Marina.prototype.useAccount = function (account) {
+        throw new Error("Method not implemented.");
+    };
+    Marina.prototype.importScript = function (accountName, scriptHex, blindingPrivateKey) {
         throw new Error("Method not implemented.");
     };
     return Marina;

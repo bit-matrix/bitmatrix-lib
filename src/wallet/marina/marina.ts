@@ -40,31 +40,33 @@ export default class Marina implements MarinaProvider {
     throw new Error("Marina wallet disabled.");
   }
 
-  on = (type: MarinaEventType, callback: (payload: any) => void): string => {
+  on(type: MarinaEventType, callback: (payload: any) => void): string {
     if (this.exist() && this.marina) return this.marina.on(type, callback);
 
     return "Marina wallet disabled.";
   };
 
-  off = (listenerId: EventListenerID): void => {
+  off(listenerId: EventListenerID): void {
     if (this.exist() && this.marina) this.marina.off(listenerId);
   };
 
-  exist = (): boolean => typeof this.marina !== "undefined";
+  exist(): boolean {
+    return typeof this.marina !== "undefined";
+  }
 
-  isEnabled = (): Promise<boolean> => {
+  isEnabled(): Promise<boolean> {
     if (this.exist() && this.marina) return this.marina.isEnabled();
     // throw "Install Marina first";
     return Promise.resolve(false);
   };
 
-  enable = (): Promise<void> => {
+  enable(): Promise<void> {
     if (this.exist() && this.marina) return this.marina.enable();
     // else throw "Install Marina first";
     return Promise.resolve();
   };
 
-  disable = (): Promise<void> => {
+  disable(): Promise<void> {
     if (this.exist() && this.marina) return this.marina.disable();
     // else throw "Install Marina first";
     return Promise.resolve();
@@ -139,6 +141,10 @@ export default class Marina implements MarinaProvider {
   }
 
   useAccount(account: string): Promise<boolean> {
+    throw new Error("Method not implemented.");
+  }
+
+  importScript(accountName: string, scriptHex: string, blindingPrivateKey?: string | undefined): Promise<void> {
     throw new Error("Method not implemented.");
   }
 }
