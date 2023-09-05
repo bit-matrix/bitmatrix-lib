@@ -1,6 +1,6 @@
 import {
   AccountInfo,
-  AddressInterface,
+  Address,
   Balance,
   EventListenerID,
   MarinaEventType,
@@ -9,7 +9,6 @@ import {
   Recipient,
   SentTransaction,
   SignedMessage,
-  Template,
   Transaction,
   Utxo,
 } from "marina-provider";
@@ -20,11 +19,9 @@ export default class Marina implements MarinaProvider {
   constructor(marina: MarinaProvider) {
     this.marina = marina;
   }
-  importTemplate(template: Template<any>, changeTemplate?: Template<any> | undefined): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
   getAccountInfo(accountID: string): Promise<AccountInfo> {
-    throw new Error("Method not implemented.");
+    if (!this.exist() || !this.marina) throw new Error("Marina wallet disabled.");
+    return this.marina.getAccountInfo(accountID);
   }
 
   getAccountsIDs(): Promise<string[]> {
@@ -43,43 +40,45 @@ export default class Marina implements MarinaProvider {
     throw new Error("Marina wallet disabled.");
   }
 
-  on = (type: MarinaEventType, callback: (payload: any) => void): string => {
+  on(type: MarinaEventType, callback: (payload: any) => void): string {
     if (this.exist() && this.marina) return this.marina.on(type, callback);
 
     return "Marina wallet disabled.";
   };
 
-  off = (listenerId: EventListenerID): void => {
+  off(listenerId: EventListenerID): void {
     if (this.exist() && this.marina) this.marina.off(listenerId);
   };
 
-  exist = (): boolean => typeof this.marina !== "undefined";
+  exist(): boolean {
+    return typeof this.marina !== "undefined";
+  }
 
-  isEnabled = (): Promise<boolean> => {
+  isEnabled(): Promise<boolean> {
     if (this.exist() && this.marina) return this.marina.isEnabled();
     // throw "Install Marina first";
     return Promise.resolve(false);
   };
 
-  enable = (): Promise<void> => {
+  enable(): Promise<void> {
     if (this.exist() && this.marina) return this.marina.enable();
     // else throw "Install Marina first";
     return Promise.resolve();
   };
 
-  disable = (): Promise<void> => {
+  disable(): Promise<void> {
     if (this.exist() && this.marina) return this.marina.disable();
     // else throw "Install Marina first";
     return Promise.resolve();
   };
 
-  getNextAddress(): Promise<AddressInterface> {
+  getNextAddress(): Promise<Address> {
     if (this.exist() && this.marina) return this.marina.getNextAddress();
     // else throw "Install Marina first";
     throw new Error("Marina wallet disabled.");
   }
 
-  getAddresses(): Promise<AddressInterface[]> {
+  getAddresses(): Promise<Address[]> {
     if (this.exist() && this.marina) return this.marina.getAddresses();
     // else throw "Install Marina first";
     throw new Error("Marina wallet disabled.");
@@ -91,7 +90,7 @@ export default class Marina implements MarinaProvider {
     throw new Error("Marina wallet disabled.");
   }
 
-  getNextChangeAddress(): Promise<AddressInterface> {
+  getNextChangeAddress(): Promise<Address> {
     if (this.exist() && this.marina) return this.marina.getNextChangeAddress();
 
     throw new Error("Marina wallet disabled.");
@@ -101,12 +100,6 @@ export default class Marina implements MarinaProvider {
     if (this.exist() && this.marina) return this.marina.getBalances();
     // else throw "Install Marina first";
     throw new Error("Marina wallet disabled.");
-  }
-
-  reloadCoins(): Promise<void> {
-    if (this.exist() && this.marina) return this.marina.reloadCoins();
-
-    return Promise.reject("Marina wallet disabled.");
   }
 
   getCoins(): Promise<Utxo[]> {
@@ -119,12 +112,8 @@ export default class Marina implements MarinaProvider {
     return Promise.reject("Marina wallet disabled.");
   }
 
-  setAccount(/*account: number*/): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-
-  blindTransaction(/*pset: string*/): Promise<string> {
-    throw new Error("Method not implemented.");
+  blindTransaction(pset: string): Promise<string> {
+    return this.marina?.blindTransaction(pset) || Promise.reject("Marina wallet disabled.");
   }
 
   signMessage(/*message: string*/): Promise<SignedMessage> {
@@ -152,6 +141,10 @@ export default class Marina implements MarinaProvider {
   }
 
   useAccount(account: string): Promise<boolean> {
+    throw new Error("Method not implemented.");
+  }
+
+  importScript(accountName: string, scriptHex: string, blindingPrivateKey?: string | undefined): Promise<void> {
     throw new Error("Method not implemented.");
   }
 }

@@ -28,7 +28,7 @@ var models_1 = require("@bitmatrix/models");
 var wiz_data_1 = __importStar(require("@script-wiz/wiz-data"));
 var lib_core_1 = require("@script-wiz/lib-core");
 var commitmentOutput_1 = require("./commitmentOutput");
-var ldk_1 = require("./ldk");
+var signer_1 = require("./signer");
 var helper_1 = require("./utils/helper");
 var case1 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, config, publicKey, feeAssetHash, isTestnet) {
     if (isTestnet === void 0) { isTestnet = false; }
@@ -41,7 +41,7 @@ var case1 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
         ? (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.testnet
         : (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.mainnet;
     var totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
-    var receipents = [
+    var recipients = [
         {
             value: totalFee,
             address: address,
@@ -53,7 +53,7 @@ var case1 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
             asset: pool.quote.assetHash,
         },
     ];
-    return (0, ldk_1.signTx)(wallet, callData, receipents, isTestnet);
+    return (0, signer_1.signTx)(wallet, callData, recipients, feeAssetHash);
 };
 exports.case1 = case1;
 var case2 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, config, publicKey, feeAssetHash, isTestnet) {
@@ -67,7 +67,7 @@ var case2 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
         ? (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.testnet
         : (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.mainnet;
     var totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
-    var receipents = [
+    var recipients = [
         {
             value: totalFee,
             address: address,
@@ -79,7 +79,7 @@ var case2 = function (wallet, inputAmount, calculatedAmountWithSlippage, pool, c
             asset: pool.token.assetHash,
         },
     ];
-    return (0, ldk_1.signTx)(wallet, callData, receipents, isTestnet);
+    return (0, signer_1.signTx)(wallet, callData, recipients, feeAssetHash);
 };
 exports.case2 = case2;
 var case3 = function (wallet, inputAmountPair1, inputAmountPair2, pool, config, publicKey, feeAssetHash, isTestnet) {
@@ -95,7 +95,7 @@ var case3 = function (wallet, inputAmountPair1, inputAmountPair2, pool, config, 
         ? (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.testnet
         : (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.mainnet;
     var totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
-    var receipents = [
+    var recipients = [
         {
             value: totalFee,
             address: address,
@@ -112,7 +112,7 @@ var case3 = function (wallet, inputAmountPair1, inputAmountPair2, pool, config, 
             asset: pool.token.assetHash,
         },
     ];
-    return (0, ldk_1.signTx)(wallet, callData, receipents, isTestnet);
+    return (0, signer_1.signTx)(wallet, callData, recipients, feeAssetHash);
 };
 exports.case3 = case3;
 var case4 = function (wallet, lpAmount, pool, config, publicKey, feeAssetHash, isTestnet) {
@@ -126,7 +126,7 @@ var case4 = function (wallet, lpAmount, pool, config, publicKey, feeAssetHash, i
         ? (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.testnet
         : (0, commitmentOutput_1.commitmentOutputTapscript)(pool.id, publicKey).taprootResult.address.mainnet;
     var totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
-    var receipents = [
+    var recipients = [
         {
             value: totalFee,
             address: address,
@@ -138,7 +138,7 @@ var case4 = function (wallet, lpAmount, pool, config, publicKey, feeAssetHash, i
             asset: pool.lp.assetHash,
         },
     ];
-    return (0, ldk_1.signTx)(wallet, callData, receipents, isTestnet);
+    return (0, signer_1.signTx)(wallet, callData, recipients, feeAssetHash);
 };
 exports.case4 = case4;
 //# sourceMappingURL=commitmentSign.js.map

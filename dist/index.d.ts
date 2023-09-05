@@ -3,7 +3,7 @@ import * as commitmentOutput from "./commitmentOutput";
 import * as commitmentSign from "./commitmentSign";
 import * as commitmentTx from "./commitmentTx";
 import * as convertion from "./convertion";
-import * as ldk from "./ldk";
+import * as ldk from "./signer";
 import * as pool from "./pool";
 import * as poolDeployment from "./poolDeployment";
 import { validatePoolTx } from "./validatePoolTx";

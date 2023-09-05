@@ -1,3 +1,3 @@
-import { RecipientInterface } from "ldk";
 import { Wallet } from "./wallet";
-export declare const signTx: (marina: Wallet, callData: string, recipients: RecipientInterface[], isTestnet?: boolean) => Promise<string>;
+import { AddressRecipient } from "marina-provider";
+export declare const signTx: (marina: Wallet, callData: string, recipients: AddressRecipient[], isTestnet?: boolean) => Promise<string>;

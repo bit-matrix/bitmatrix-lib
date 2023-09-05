@@ -1,4 +1,4 @@
-import { AddressInterface, Balance, EventListenerID, MarinaEventType, NetworkString, Recipient, SentTransaction, Utxo } from "marina-provider";
+import { AccountInfo, Address, Balance, EventListenerID, MarinaEventType, NetworkString, Recipient, SentTransaction, Utxo } from "marina-provider";
 
 export interface IWallet {
   exist(): boolean;
@@ -13,17 +13,17 @@ export interface IWallet {
 
   disable(): Promise<void>;
 
-  getNextAddress(): Promise<AddressInterface>;
+  getNextAddress(): Promise<Address>;
 
-  getAddresses(): Promise<AddressInterface[]>;
+  getAddresses(): Promise<Address[]>;
 
   sendTransaction(recipients: Recipient[]): Promise<SentTransaction>;
 
   getBalances(): Promise<Balance[]>;
 
-  getNextChangeAddress(): Promise<AddressInterface>;
+  getNextChangeAddress(): Promise<Address>;
 
-  reloadCoins(): Promise<void>;
+  blindTransaction(pset: string): Promise<string>;
 
   getCoins(): Promise<Utxo[]>;
 
@@ -32,4 +32,6 @@ export interface IWallet {
   signTransaction(pset: string): Promise<string>;
 
   broadcastTransaction(signedTxHex: string): Promise<SentTransaction>;
+
+  getAccountInfo(accountID: string): Promise<AccountInfo>;
 }

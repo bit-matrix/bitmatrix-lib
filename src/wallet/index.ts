@@ -1,4 +1,4 @@
-import { AddressInterface, Balance, EventListenerID, MarinaEventType, MarinaProvider, NetworkString, Recipient, SentTransaction, Utxo } from "marina-provider";
+import { AccountInfo, Address, Balance, EventListenerID, MarinaEventType, MarinaProvider, NetworkString, Recipient, SentTransaction, Utxo } from "marina-provider";
 import { IWallet } from "./IWallet";
 import Marina from "./marina/marina";
 import { WALLET_NAME } from "./WALLET_NAME";
@@ -11,6 +11,8 @@ export class Wallet implements IWallet {
     // TODO default wallet
     else this.wallet = new Marina(marina);
   }
+  
+  public blindTransaction = (pset: string): Promise<string> => this.wallet.blindTransaction(pset);
 
   public signTransaction = (pset: string): Promise<string> => this.wallet.signTransaction(pset);
 
@@ -28,19 +30,19 @@ export class Wallet implements IWallet {
 
   public disable = (): Promise<void> => this.wallet.disable();
 
-  public getNextAddress = (): Promise<AddressInterface> => this.wallet.getNextAddress();
+  public getNextAddress = (): Promise<Address> => this.wallet.getNextAddress();
 
-  public getAddresses = (): Promise<AddressInterface[]> => this.wallet.getAddresses();
+  public getAddresses = (): Promise<Address[]> => this.wallet.getAddresses();
 
   public sendTransaction = (recipients: Recipient[]): Promise<SentTransaction> => this.wallet.sendTransaction(recipients);
 
   public getBalances = (): Promise<Balance[]> => this.wallet.getBalances();
 
-  public getNextChangeAddress = (): Promise<AddressInterface> => this.wallet.getNextChangeAddress();
-
-  public reloadCoins = (): Promise<void> => this.wallet.reloadCoins();
+  public getNextChangeAddress = (): Promise<Address> => this.wallet.getNextChangeAddress();
 
   public getCoins = (): Promise<Utxo[]> => this.wallet.getCoins();
 
   public getNetwork = (): Promise<NetworkString> => this.wallet.getNetwork();
+
+  public getAccountInfo = (accountID: string): Promise<AccountInfo> => this.wallet.getAccountInfo(accountID);
 }

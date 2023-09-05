@@ -46,16 +46,24 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signTx = void 0;
-var liquidjs_lib_1 = require("liquidjs-lib");
-var signTx = function (marina, callData, recipients, isTestnet) {
-    if (isTestnet === void 0) { isTestnet = false; }
-    return __awaiter(void 0, void 0, void 0, function () {
-        var network, lbtc, dataRecipient, sent;
+var LIQUID_LBTC = '6f0279e9ed041c3d710a9f57d0c02928416460c4b722ae3457a11eec381c526d';
+/**
+ * craft a transaction with OP_RETURN callData + recipients
+ * blind and sign the transaction
+ * broadcast the transaction via marina
+ * @param marina marina provider wallet
+ * @param callData data setup in OP_RETURN script
+ * @param recipients other recipients of the tx
+ * @param lbtc asset hash of the network lbtc asset (default: liquid lbtc)
+ * @returns the txid of the transaction
+ */
+function signTx(marina, callData, recipients, lbtc) {
+    if (lbtc === void 0) { lbtc = LIQUID_LBTC; }
+    return __awaiter(this, void 0, void 0, function () {
+        var dataRecipient, sent;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    network = isTestnet ? liquidjs_lib_1.networks.testnet : liquidjs_lib_1.networks.liquid;
-                    lbtc = network.assetHash;
                     dataRecipient = {
                         asset: lbtc,
                         value: 0,
@@ -68,6 +76,7 @@ var signTx = function (marina, callData, recipients, isTestnet) {
             }
         });
     });
-};
+}
 exports.signTx = signTx;
-//# sourceMappingURL=ldk.js.map
+;
+//# sourceMappingURL=signer.js.map

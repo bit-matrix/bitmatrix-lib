@@ -3,10 +3,10 @@ import { Wallet } from "./wallet";
 import WizData, { hexLE } from "@script-wiz/wiz-data";
 
 import { convertion } from "@script-wiz/lib-core";
-import { RecipientInterface } from "ldk";
 import { commitmentOutputTapscript } from "./commitmentOutput";
-import { signTx } from "./ldk";
+import { signTx } from "./signer";
 import { calculateAmountTotal } from "./utils/helper";
+import { AddressRecipient } from "marina-provider";
 
 export const case1 = (
   wallet: Wallet,
@@ -31,7 +31,7 @@ export const case1 = (
 
   const totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
 
-  const receipents: RecipientInterface[] = [
+  const recipients: AddressRecipient[] = [
     {
       value: totalFee,
       address,
@@ -44,7 +44,7 @@ export const case1 = (
     },
   ];
 
-  return signTx(wallet, callData, receipents, isTestnet);
+  return signTx(wallet, callData, recipients, feeAssetHash);
 };
 
 export const case2 = (
@@ -70,7 +70,7 @@ export const case2 = (
 
   const totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
 
-  const receipents: RecipientInterface[] = [
+  const recipients: AddressRecipient[] = [
     {
       value: totalFee,
       address,
@@ -83,7 +83,7 @@ export const case2 = (
     },
   ];
 
-  return signTx(wallet, callData, receipents, isTestnet);
+  return signTx(wallet, callData, recipients, feeAssetHash);
 };
 
 export const case3 = (
@@ -113,7 +113,7 @@ export const case3 = (
 
   const totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
 
-  const receipents: RecipientInterface[] = [
+  const recipients: AddressRecipient[] = [
     {
       value: totalFee,
       address,
@@ -131,7 +131,7 @@ export const case3 = (
     },
   ];
 
-  return signTx(wallet, callData, receipents, isTestnet);
+  return signTx(wallet, callData, recipients, feeAssetHash);
 };
 
 export const case4 = (wallet: Wallet, lpAmount: number, pool: Pool, config: BmConfig, publicKey: string, feeAssetHash: string, isTestnet = false): Promise<string> => {
@@ -149,7 +149,7 @@ export const case4 = (wallet: Wallet, lpAmount: number, pool: Pool, config: BmCo
 
   const totalFee = config.baseFee.number + config.commitmentTxFee.number + config.serviceFee.number + config.defaultOrderingFee.number;
 
-  const receipents: RecipientInterface[] = [
+  const recipients: AddressRecipient[] = [
     {
       value: totalFee,
       address,
@@ -162,5 +162,5 @@ export const case4 = (wallet: Wallet, lpAmount: number, pool: Pool, config: BmCo
     },
   ];
 
-  return signTx(wallet, callData, receipents, isTestnet);
+  return signTx(wallet, callData, recipients, feeAssetHash);
 };
